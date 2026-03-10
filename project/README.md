@@ -30,5 +30,5 @@ Verwendete **Technologien** werden
 
 ... **Datenbank** wird ungefähr so aussehen:
 
-<img src="./Images/ERD_Excalidraw.png" alt="grundlegendes ERD" style="max-width: 700px; height: auto;">
+<img src="../documentation//Images/ERD_Excalidraw.png" alt="grundlegendes ERD" style="max-width: 700px; height: auto;">
 
