@@ -13,6 +13,11 @@
     src: url('../../ressources/font/Satoshi_Complete/Fonts/OTF/Satoshi-Medium.otf');
 }
 
+@font-face {
+    font-family: 'KoHo';
+    src: url('../../ressources/font/koho-2/KoHo-Regular.ttf');
+}
+
 :root {
     --onyx: #0b0b0f;
     --dark-shadow-grey: #1A1A22;
@@ -24,19 +29,20 @@
 
     --linear-gradient-button-purple: linear-gradient(0deg, #4B1196 0%, #651FC0 74%);
     --linear-gradient-button-grey: linear-gradient(0deg, #1A1A22 0%, #24242E 100%);
-    --radial-gradient-background: radial-gradient(circle at 20% 70%, rgb(45, 24, 85) 20%, #0B0B0F 100%);
+    --radial-gradient-background: radial-gradient(circle at 20% 70%, rgb(29, 12, 61) 20%, #0B0B0F 100%);
 
     --font-headline: 'font-headline';
     --font-information-normal: 'font-information-normal';
     --font-information-medium: 'font-information-medium';
+    --font-KoHo: 'KoHo';
 }
 
-.login {
+.register {
     background-image: var(--linear-gradient-button-grey);
     width: 50%;
 }
 
-.register {
+.login {
     background-image: var(--linear-gradient-button-purple);
     width: 50%;
 }
@@ -58,4 +64,20 @@
     margin-left: auto;
     margin-right: auto;
     text-decoration: none;
+}
+
+input {
+    background-color: rgba(255, 255, 255, 0.20);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--dark-shadow-grey);
+    font-family: var(--font-KoHo);
+    font-size: 0.9em;
+    padding: 0.8em;
+    margin-bottom: 0.67em;
+    border-radius: 15px;
+    width: 65vw;
+}
+
+input::placeholder {
+    color: var(--dark-shadow-grey);
 }

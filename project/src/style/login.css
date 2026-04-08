@@ -6,3 +6,55 @@ body {
     background-repeat: no-repeat;
     background-color: black;
 }
+
+#headline {
+    font-family: var(--font-headline);
+    color: var(--white);
+    font-size: 3.5em;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 10vh;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em;
+}
+
+#headgap {
+    height: 10vh;
+}
+
+#forgot-password {
+    color: #838383b3;
+    font-family: var(--font-information-normal);
+    font-size: 0.7em;
+    text-decoration: none;
+    text-align: left;
+    align-self: flex-start;
+    margin-left: 16vw;
+    margin-bottom: 23vh;
+}
+
+#password {
+    margin-bottom: 0.5vh;
+}
+
+button {
+    border: none;
+    width: 40vw !important;
+}
+
+#no-account {
+    margin-top: 1%;
+    color: var(--text-information);
+    font-family: var(--font-information-normal);
+    font-size: 0.8em;
+}
+
+#no-account a {
+    color: #686876;
+    text-decoration: none;
+}
