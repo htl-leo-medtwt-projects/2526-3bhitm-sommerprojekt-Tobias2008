@@ -1,3 +1,66 @@
+body {
+    background-image: var(--radial-gradient-background);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-color: black;
+    margin: 0;
+}
+
 img {
-    width: 10%;
+    width: 17%;
+    margin: 0 2% 0 2%;
+    border-radius: 10px;
+}
+
+#profile-pictures {
+    overflow-x: scroll;
+    width: 100%;
+    display: flex;
+    margin-bottom: 3vh;
+}
+
+#profile-pictures::-webkit-scrollbar {
+    display: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#headline {
+    font-family: var(--font-headline);
+    color: var(--white);
+    font-size: 3.7em;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+
+#profile-pictures-text {
+    color: var(--white);
+    font-family: var(--font-information-medium);
+    font-size: 1.4em;
+    margin: 0.6em;
+    text-align: center;
+}
+
+#have-account {
+    margin-top: 1%;
+    color: var(--text-information);
+    font-family: var(--font-information-normal);
+    font-size: 0.8em;
+}
+
+#have-account a {
+    color: #686876;
+    text-decoration: none;
+}
+
+.register {
+    background-image: var(--linear-gradient-button-purple);
+    border: none;
+    width: 50%;
 }
