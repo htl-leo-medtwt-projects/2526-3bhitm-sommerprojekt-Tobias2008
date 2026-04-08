@@ -1,7 +1,32 @@
 body {
-    margin: 90% 5% 0% 5%;
+    text-align: center;
+    background-color: black;
+    color: white;
+    background-image: url(../../ressources/images/index/headgap_woman.png);
+    background-size: 100vw;
+    background-repeat: no-repeat;
+    background-position: top;
 }
 
 #headline {
+    font-size: 3.8em;
+    font-weight: bold;
+    color: var(--white);
+    font-family: var(--font-headline);
+    margin-bottom: 5%;
+}
 
+.information {
+    font-size: 1em;
+    color: var(--text-information);
+    margin-top: 0;
+    margin-bottom: 2em;
+    font-family: var(--font-information-normal);
+    width: 89%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#headgap {
+    height: 49vh;
 }

@@ -1,10 +1,58 @@
+@font-face {
+    font-family: 'font-headline';
+    src: url('../../ressources/font/DancingScript_Complete/Fonts/OTF/DancingScript-Bold.otf');
+}
+
+@font-face {
+    font-family: 'font-information-normal';
+    src: url('../../ressources/font/Satoshi_Complete/Fonts/OTF/Satoshi-Light.otf');
+}
+
+@font-face {
+    font-family: 'font-information-medium';
+    src: url('../../ressources/font/Satoshi_Complete/Fonts/OTF/Satoshi-Medium.otf');
+}
+
 :root {
-    --onyx: '0b0b0f';
-    --dark-shadow-grey: '1A1A22';
-    --light-shadow-grey: '262631';
+    --onyx: #0b0b0f;
+    --dark-shadow-grey: #1A1A22;
+    --light-shadow-grey: #262631;
+    --indigo: #4B1196;
+    --royal-violet: #7E2DC1;
+    --white: #FFFFFF;
+    --text-information: #838383;
 
-    --linear-gradient-button-pruple: linear-gradient(180deg, #4B1196 0%, #651FC0 74%, );
+    --linear-gradient-button-purple: linear-gradient(0deg, #4B1196 0%, #651FC0 74%);
+    --linear-gradient-button-grey: linear-gradient(0deg, #1A1A22 0%, #24242E 100%);
 
+    --font-headline: 'font-headline';
+    --font-information-normal: 'font-information-normal';
+    --font-information-medium: 'font-information-medium';
+}
 
-    
+.login {
+    background-image: var(--linear-gradient-button-grey);
+    width: 50%;
+}
+
+.register {
+    background-image: var(--linear-gradient-button-purple);
+    width: 50%;
+}
+
+.login-register {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.login, .register {
+    padding: 0.6em;
+    color: var(--white);
+    font-family: var(--font-information-medium);
+    font-size: 1.45em;
+    cursor: pointer;
+    width: 34vw;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
 }
