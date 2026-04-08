@@ -24,6 +24,7 @@
 
     --linear-gradient-button-purple: linear-gradient(0deg, #4B1196 0%, #651FC0 74%);
     --linear-gradient-button-grey: linear-gradient(0deg, #1A1A22 0%, #24242E 100%);
+    --radial-gradient-background: radial-gradient(circle at 20% 70%, rgb(45, 24, 85) 20%, #0B0B0F 100%);
 
     --font-headline: 'font-headline';
     --font-information-normal: 'font-information-normal';
@@ -45,7 +46,8 @@
     grid-template-columns: auto auto;
 }
 
-.login, .register {
+.login,
+.register {
     padding: 0.6em;
     color: var(--white);
     font-family: var(--font-information-medium);
