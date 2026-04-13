@@ -1,0 +1,91 @@
+
+
+#headline {
+    font-family: var(--font-headline);
+    color: var(--white);
+    font-size: 3.5em;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 10vh;
+}
+
+body {
+    font-family: var(--font-information-normal);
+    color: white;
+}
+
+.left {
+    width: 100%;
+
+}
+
+.image {
+    background-image: url('../../ressources/images/profile/pre-saved-images/blueMonster.jpg');
+    background-size: cover;
+    width: 96%;
+    height: 17vh;
+    border-radius: 10px;
+    background-position: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1em;
+}
+
+#eventSlider {
+    width: 85%;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    background-color: rgba(56, 33, 86, 0.4);
+    padding: 5%;
+}
+
+.eventTitle {
+    font-family: var(--font-information-medium);
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: left !important;
+
+}
+
+.title-text {
+    margin-top: 0;
+    color: white;
+    margin-bottom: 2%;
+    font-size: 1em;
+}
+
+.informationText {
+    margin-top: 0;
+    font-size: 0.85em;
+    color: var(--text-information-light);
+}
+
+.eventGridSystem {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
+
+.right {
+    font-size: 0.8em;
+}
+
+.messageUser {
+    background-color: var(--linear-gradient-button-grey);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 1em;
+}
+
+.viewMore {
+    background-color: var(--linear-gradient-button-purple);
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 1em;
+}

@@ -1,11 +1,4 @@
-body {
-    background-image: var(--radial-gradient-background);
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    background-repeat: no-repeat;
-    background-color: black;
-}
+
 
 #headline {
     font-family: var(--font-headline);

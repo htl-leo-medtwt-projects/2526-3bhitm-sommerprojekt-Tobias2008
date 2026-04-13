@@ -17,6 +17,6 @@ function fillProfilePictures() {
     ];
 
     for (let i = 0; i < profilePictureColors.length; i++) {
-        profilePictures.innerHTML += `<img class="profile-picture" src="../../../ressources/images/profile/pre-saved-images/${profilePictureColors[i]}Monster.jpg" alt="${profilePictureColors[i]}">`;
+        profilePictures.innerHTML += `<img class="profile-picture" onclick="selectProfilePicture('${profilePictureColors[i]}')" src="../../../ressources/images/profile/pre-saved-images/${profilePictureColors[i]}Monster.jpg" alt="${profilePictureColors[i]}">`;
     }
 }
