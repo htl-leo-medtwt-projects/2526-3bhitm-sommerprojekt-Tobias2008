@@ -32,13 +32,24 @@ body {
 }
 
 #eventSlider {
-    width: 85%;
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+    gap: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.event {
+width: 85%;
     border-radius: 15px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 2em;
     background-color: rgba(56, 33, 86, 0.4);
     padding: 5%;
+    margin-top: 2em;
+
+
 }
 
 .eventTitle {
@@ -56,6 +67,8 @@ body {
     color: white;
     margin-bottom: 2%;
     font-size: 1em;
+        white-space: nowrap;
+
 }
 
 .informationText {
@@ -72,10 +85,13 @@ body {
 
 .right {
     font-size: 0.8em;
+    white-space: nowrap;
+    text-align: right;
+    color: var(--text-information-light)
 }
 
 .messageUser {
-    background-color: var(--linear-gradient-button-grey);
+    background-image: var(--linear-gradient-button-grey);
     padding: 0.5em 1em;
     border-radius: 5px;
     text-align: center;
@@ -83,9 +99,14 @@ body {
 }
 
 .viewMore {
-    background-color: var(--linear-gradient-button-purple);
+    background-image: var(--linear-gradient-button-purple);
     padding: 0.5em 1em;
     border-radius: 5px;
     text-align: center;
     margin-top: 1em;
+}
+
+.buttons {
+    display: flex;
+    gap: 1em;
 }
