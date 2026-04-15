@@ -1,5 +1,3 @@
-
-
 #headline {
     font-family: var(--font-headline);
     color: var(--white);
@@ -12,11 +10,12 @@
 body {
     font-family: var(--font-information-normal);
     color: white;
+    overflow: hidden;
+
 }
 
 .left {
     width: 100%;
-
 }
 
 .image {
@@ -32,24 +31,23 @@ body {
 }
 
 #eventSlider {
-    width: 100%;
-    overflow-x: scroll;
     display: flex;
     gap: 5%;
-    margin-left: 5%;
-    margin-right: 5%;
+    overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+    scroll-snap-type: x mandatory;
 }
 
 .event {
-width: 85%;
+    flex: 0 0 85%;
     border-radius: 15px;
-    margin-left: auto;
-    margin-right: auto;
     background-color: rgba(56, 33, 86, 0.4);
     padding: 5%;
     margin-top: 2em;
+    box-sizing: border-box;
 
-
+    scroll-snap-align: start;
 }
 
 .eventTitle {
@@ -67,7 +65,7 @@ width: 85%;
     color: white;
     margin-bottom: 2%;
     font-size: 1em;
-        white-space: nowrap;
+    white-space: nowrap;
 
 }
 
@@ -109,4 +107,15 @@ width: 85%;
 .buttons {
     display: flex;
     gap: 1em;
+}
+
+#event-name {
+    display: flex;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#event-slider-padding {
+    padding: 0 4%;
 }
