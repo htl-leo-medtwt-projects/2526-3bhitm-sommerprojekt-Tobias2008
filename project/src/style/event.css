@@ -3,8 +3,8 @@
     color: var(--white);
     font-size: 3.5em;
     text-align: center;
-    margin-top: 0.5em;
-    margin-bottom: 10vh;
+    margin-top: 1.3em;
+    margin-bottom: 0.5vh;
 }
 
 body {
@@ -111,11 +111,30 @@ body {
 
 #event-name {
     display: flex;
-    
+
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0;
+    width: 90vw;
 }
 
 #event-slider-padding {
     padding: 0 4%;
+}
+
+#favourite-event {
+    font-size: 1.3em;
+    color: var(--text-information-light);
+    margin: 0;
+}
+
+#favourite-events {
+    display: flex;
+}
+
+.star {
+    display: inline-flex;
+    gap: 0.5em;
+    align-items: center;
+    margin-left: 2.3%;
 }
