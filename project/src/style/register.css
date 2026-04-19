@@ -22,14 +22,6 @@ form {
     align-items: center;
 }
 
-#headline {
-    font-family: var(--font-headline);
-    color: var(--white);
-    font-size: 3.7em;
-    margin-bottom: 0.5em;
-    text-align: center;
-}
-
 #profile-pictures-text {
     color: var(--white);
     font-family: var(--font-information-medium);

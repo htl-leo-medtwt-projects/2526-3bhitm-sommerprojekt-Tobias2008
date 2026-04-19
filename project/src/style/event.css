@@ -1,11 +1,4 @@
-#headline {
-    font-family: var(--font-headline);
-    color: var(--white);
-    font-size: 3.5em;
-    text-align: center;
-    margin-top: 1.3em;
-    margin-bottom: 0.5vh;
-}
+
 
 body {
     font-family: var(--font-information-normal);

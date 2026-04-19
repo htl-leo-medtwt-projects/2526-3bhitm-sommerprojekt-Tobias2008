@@ -1,13 +1,6 @@
 
 
-#headline {
-    font-family: var(--font-headline);
-    color: var(--white);
-    font-size: 3.5em;
-    text-align: center;
-    margin-top: 0.5em;
-    margin-bottom: 10vh;
-}
+
 
 form {
     display: flex;
