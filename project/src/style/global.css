@@ -26,7 +26,7 @@
     --royal-violet: #7E2DC1;
     --white: #FFFFFF;
     --text-information: #838383;
-    --text-information-light: rgba(255,255,255,0.7);
+    --text-information-light: rgba(255, 255, 255, 0.7);
 
     --linear-gradient-button-purple: linear-gradient(0deg, #4B1196 0%, #651FC0 74%);
     --linear-gradient-button-grey: linear-gradient(0deg, #1A1A22 0%, #24242E 100%);
@@ -38,11 +38,6 @@
     --font-KoHo: 'KoHo';
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
 body {
     background-image: var(--radial-gradient-background);
     background-size: cover;
@@ -51,6 +46,8 @@ body {
     background-repeat: no-repeat;
     background-color: black;
     margin: 0;
+    background-attachment: fixed;
+    overflow: hidden;
 }
 
 
@@ -97,4 +94,14 @@ input {
 
 input::placeholder {
     color: var(--dark-shadow-grey);
+}
+
+footer {
+    text-align: center;
+    color: var(--text-information-light);
+    font-family: var(--font-information-normal);
+    font-size: 0.8em;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
