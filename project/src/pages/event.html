@@ -10,33 +10,33 @@
 </head>
 
 <body>
+
+    <!-- Header -->
+
     <h1 id="headline">Events</h1>
     <form action="">
         <input type="text" placeholder="Search for..." id="event-name">
     </form>
 
-    <div id="favourite-events">
+    <!-- Favorite Events -->
 
-    <span class="star">
-    <svg viewBox="0 0 24 24" width="20" height="20">
-         <path d="M12 2 L15 9 L22 9 L17 14 L19 22 L12 18 L5 22 L7 14 L2 9 L9 9 Z"
-      fill="none"
-      stroke="white"
-      stroke-width="2"
-      stroke-linejoin="round"
-      stroke-linecap="round"
-    />
-    </svg>
-    <h1 id="favourite-event">Favorite</h1>
-</span>
-        
+    <div id="favorite-events">
+
+        <span class="star">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+                <path d="M12 2 L15 9 L22 9 L17 14 L19 22 L12 18 L5 22 L7 14 L2 9 L9 9 Z" fill="#B39500" stroke="#B39500"
+                    stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+            </svg>
+            <h1 class="favorite-event-category">Favorite Events</h1>
+        </span>
+
     </div>
 
 
     <div id="event-slider-padding">
         <div id="eventSlider">
-            <div class="event">
-                <div class="image"></div>
+            <div class="favorite-event">
+                <div class="favorite-event-image"></div>
 
                 <div class="eventGridSystem">
                     <div class="left">
@@ -62,36 +62,8 @@
                 </div>
             </div>
 
-            <div class="event">
-                <div class="image"></div>
-
-                <div class="eventGridSystem">
-                    <div class="left">
-                        <h1 class="eventTitle">Blue Monster Event</h1>
-                        <p class="title-text">Join us for the Blue Monster event!</p>
-                        <p class="informationText">This event promises to be a thrilling experience with exciting
-                            activities
-                            and
-                            surprises!</p>
-
-                    </div>
-                    <div class="right">
-                        <div class="creator">John Doe</div>
-                        <div class="date">6-7-2067</div>
-                        <div class="location">New York City</div>
-                        <div class="participants">6 / 7 Teilnehmer</div>
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <div class="messageUser">Message Blue Monster</div>
-                    <div class="viewMore">Read More...</div>
-                </div>
-
-            </div>
-
-            <div class="event">
-                <div class="image"></div>
+            <div class="favorite-event">
+                <div class="favorite-event-image"></div>
 
                 <div class="eventGridSystem">
                     <div class="left">
@@ -118,12 +90,116 @@
 
             </div>
 
-            
+            <div class="favorite-event">
+                <div class="favorite-event-image"></div>
 
-            
+                <div class="eventGridSystem">
+                    <div class="left">
+                        <h1 class="eventTitle">Blue Monster Event</h1>
+                        <p class="title-text">Join us for the Blue Monster event!</p>
+                        <p class="informationText">This event promises to be a thrilling experience with exciting
+                            activities
+                            and
+                            surprises!</p>
+
+                    </div>
+                    <div class="right">
+                        <div class="creator">John Doe</div>
+                        <div class="date">6-7-2067</div>
+                        <div class="location">New York City</div>
+                        <div class="participants">6 / 7 Teilnehmer</div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <div class="messageUser">Message Blue Monster</div>
+                    <div class="viewMore">Read More...</div>
+                </div>
+
+            </div>
+
+
+
+
 
         </div>
     </div>
+
+    <!-- All Events -->
+
+    <div id="event-for-user">
+
+        <span class="flame">
+
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M18.122 17.645a7.185 7.185 0 0 1-2.656 2.495 7.06 7.06 0 0 1-3.52.853 6.617 6.617 0 0 1-3.306-.718 6.73 6.73 0 0 1-2.54-2.266c-2.672-4.57.287-8.846.887-9.668A4.448 4.448 0 0 0 8.07 6.31 4.49 4.49 0 0 0 7.997 4c1.284.965 6.43 3.258 5.525 10.631 1.496-1.136 2.7-3.046 2.846-6.216 1.43 1.061 3.985 5.462 1.754 9.23Z" />
+            </svg>
+            <h1 class="event-for-you-category">Events for you</h1>
+        </span>
+
+    </div>
+
+    <div id="all-events">
+
+        <div class="single-event">
+            <div class="single-event-left">
+                <div class="single-event-image"></div>
+                <div class="single-event-owner">Owner: John Doe</div>
+            </div>
+
+            
+        <div class="single-event-right">
+                <div class="single-event-title">Party Time</div>
+                <div class="single-event-text-title">Join - it will be fun!</div>
+                <div class="single-event-information">Best Event in the whole Town! Please bring a good mood and...</div>
+                <div class="single-event-button">Read more...</div>
+            </div>
+
+        </div>
+
+        <div class="single-event">
+            <div class="single-event-left">
+                <div class="single-event-image"></div>
+                <div class="single-event-owner">Owner: John Doe</div>
+            </div>
+
+            
+        <div class="single-event-right">
+                <div class="single-event-title">Party Time</div>
+                <div class="single-event-text-title">Join - it will be fun!</div>
+                <div class="single-event-information">Best Event in the whole Town! Please bring a good mood and...</div>
+                <div class="single-event-button">Read more...</div>
+            </div>
+
+        </div>
+
+        <div class="single-event">
+            <div class="single-event-left">
+                <div class="single-event-image"></div>
+                <div class="single-event-owner">Owner: John Doe</div>
+            </div>
+
+            
+        <div class="single-event-right">
+                <div class="single-event-title">Party Time</div>
+                <div class="single-event-text-title">Join - it will be fun!</div>
+                <div class="single-event-information">Best Event in the whole Town! Please bring a good mood and...</div>
+                <div class="single-event-button">Read more...</div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div id="end-text">No more events available... <a href="./create-event.html">Wanna create one?</a></div>
+
+    <footer>
+        <p>&copy; 2026 Payreder Management. All rights reserved.</p>
+    </footer>
 
 </body>
 
