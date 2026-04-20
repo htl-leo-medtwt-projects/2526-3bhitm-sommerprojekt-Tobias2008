@@ -1,26 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Event</title>
     <link rel="stylesheet" href="../style/global.css">
     <link rel="stylesheet" href="../style/create-event.css">
+    <script src="../script/create-event.js" defer></script>
 </head>
+
 <body>
-    
+
     <h1 id="headline">Create your Event</h1>
-    <form action="">
-        <input type="text" placeholder="Event Name..." name="event-name" id="event-name">
-        <input type="date" placeholder="Event Date..." name="event-date" id="event-date">
-        <input type="text" placeholder="Location..." name="location" id="location">
-        <textarea placeholder="Description..." name="description" id="description"></textarea>
-        <button class="create-event" type="submit">Create Event</button>
+    <p id="titletext">Here you can create your own Event!<br> You can add as many friends as you want, set the location
+        you want, and even calculate the average costs. Have fun!</p>
+
+    <form action="" id="create-event-form">
+        <input type="text" placeholder="* Event Name..." name="event-name" id="event-name" required>
+        <input type="text" placeholder="* Title Text..." name="title-text" id="title-text" required>
+        <textarea placeholder="Information..." name="event-information" id="event-information"></textarea>
+        <input type="date" name="event-date" id="event-date">
+        <input type="text" placeholder="Location..." name="event-location" id="event-location">
+
+        <div id="member-box">
+            <div id="max-member-box"><label for="max-members">Max Members</label>
+                <input type="number" name="max-members" id="max-members" min="1" placeholder="1-99">
+            </div>
+
+            <div id="add-member-box">
+                <label for="add-member">Add Member</label>
+                <div id="add-members-box">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 2 21 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="input-field-image">
+            Datei hier klicken oder reinziehen
+            <input type="file" id="fileInput" hidden>
+        </div>
     </form>
 
-       <footer>
+    <footer>
         <p>&copy; 2026 Payreder Management. All rights reserved.</p>
     </footer>
-    
+
 </body>
+
 </html>
