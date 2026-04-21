@@ -1,0 +1,33 @@
+#textHeadline {
+    color: var(--text-information-light);
+    font-family: var(--font-information-normal);
+    font-size: 1.1em;
+    text-align: center;
+    margin-top: 0;
+}
+
+#headline {
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
+#event-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75vw;
+    height: 40vw;
+    border-radius: 15px;
+    background-image: url('../../ressources/images/profile/pre-saved-images/blackMonster.jpg');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#event-title {
+    color: var(--text-information-light);
+    font-family: var(--font-KoHo);
+    font-size: 1.5em;
+    text-align: center;
+    margin-top: 0.5em;
+}

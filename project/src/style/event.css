@@ -246,3 +246,8 @@ footer {
   pointer-events: none;
   color: var(--dark-shadow-grey);
 }
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
