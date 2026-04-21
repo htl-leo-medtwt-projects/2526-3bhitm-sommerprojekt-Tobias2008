@@ -1,3 +1,5 @@
+// Drag & Drop für Bild-Upload Beginn
+
 const box = document.getElementById("input-field-image");
 const input = document.getElementById("fileInput");
 
@@ -25,3 +27,42 @@ box.addEventListener("drop", (e) => {
 
   console.log(files);
 });
+
+// Drag & Drop für Bild-Upload Ende
+
+function createEvent() {
+
+  console.log("Erstelle Event...");
+
+fetch("../php/event.php?action=create", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+        eventName: "Geburtstag",
+        eventTitle: "Max Party",
+        eventDescription: "Geburtstagsfeier mit Freunden",
+        eventDate: "2026-05-01",
+        eventLocation: "Linz",
+        eventMaxMembers: "20",
+        eventImageSrc: ""
+    })
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Server Antwort:", data);
+
+    if (data.success) {
+        console.log("Event ID:", data.data.id);
+    } else {
+        console.error("Fehler:", data.error);
+    }
+})
+.catch(err => {
+    console.error("Fetch Fehler:", err);
+});
+
+}
+
+createEvent();
