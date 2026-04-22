@@ -3,7 +3,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-
 header('Content-Type: application/json');
 
 function jsonResponse($success, $data = null, $error = null)
@@ -94,6 +93,8 @@ function getEvent($selectedUser)
         jsonResponse(false, null, "Prepare fehlgeschlagen");
     }
 
+
+
     $stmt->bind_param("s", $selectedUser);
     $stmt->execute();
 
@@ -102,6 +103,30 @@ function getEvent($selectedUser)
     $events = [];
 
     while ($row = $result->fetch_assoc()) {
+
+        $statement = $conn->prepare("
+  SELECT username FROM attendance
+  WHERE event_id = ? AND is_creator = 1
+");
+
+        if ($statement) {
+            $statement->bind_param("i", $row['event_id']);
+
+            if ($statement->execute()) {
+                $ownerResult = $statement->get_result();
+
+                if ($ownerRow = $ownerResult->fetch_assoc()) {
+                    $row['owner'] = $ownerRow['username'];
+                } else {
+                    $row['owner'] = null;
+                }
+            } else {
+                $row['owner'] = null;
+            }
+        } else {
+            $row['owner'] = null;
+        }   
+
         $events[] = $row;
     }
 
