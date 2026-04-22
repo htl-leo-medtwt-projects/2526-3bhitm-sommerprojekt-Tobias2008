@@ -1,5 +1,9 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 header('Content-Type: application/json');
 
 function jsonResponse($success, $data = null, $error = null)
@@ -31,10 +35,10 @@ switch ($action) {
         break;
 
     case 'get':
-        if (!isset($_GET['userid'])) {
-            jsonResponse(false, null, "Benutzer-ID fehlt");
+        if (!isset($_GET['user'])) {
+            jsonResponse(false, null, "Benutzer fehlt");
         }
-        getEvent($_GET['userid']);
+        getEvent($_GET['user']);
         break;
 
     default:
@@ -53,8 +57,8 @@ function createEvent()
     $eventMaxMembers = $_POST['eventMaxMembers'] ?? null;
     $eventImageSrc = $_POST['eventImageSrc'] ?? null;
 
-    if (empty($eventName) || empty($eventDescription)) {
-        jsonResponse(false, null, "Event-Name und Beschreibung dürfen nicht leer sein");
+    if (empty($eventName) || empty($eventTitle)) {
+        jsonResponse(false, null, "Event-Name und Titel dürfen nicht leer sein");
     }
 
     $stmt = $conn->prepare("INSERT INTO event (name, title_text, information, event_date, location, max_members, image_src) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -77,17 +81,20 @@ function createEvent()
     $stmt->close();
 }
 
-function getEvent($userid)
+function getEvent($selectedUser)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT * FROM events WHERE user_id = ?");
+    $stmt = $conn->prepare("
+    SELECT e.* from event e
+    JOIN attendance a ON e.event_id = a.event_id
+    WHERE a.username = ?");
 
     if (!$stmt) {
         jsonResponse(false, null, "Prepare fehlgeschlagen");
     }
 
-    $stmt->bind_param("i", $userid);
+    $stmt->bind_param("s", $selectedUser);
     $stmt->execute();
 
     $result = $stmt->get_result();
