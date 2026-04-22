@@ -40,6 +40,12 @@ switch ($action) {
         getEvent($_GET['user']);
         break;
 
+        case 'getFavorite':
+            if (!isset($_GET['user'])) {
+                jsonResponse(false, null, "Benutzer fehlt");
+            }
+            getFavoriteEvent($_GET['user']);
+            break;
     default:
         jsonResponse(false, null, "Ungültige Aktion");
 }
@@ -128,6 +134,56 @@ function getEvent($selectedUser)
         }   
 
         $events[] = $row;
+    }
+
+    jsonResponse(true, $events, null);
+}
+
+function getFavoriteEvent($selectedUser)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("
+    SELECT e.* from event e
+    JOIN attendance a ON e.event_id = a.event_id
+    WHERE a.username = ? AND a.has_favorited = 1");
+
+    if (!$stmt) {
+        jsonResponse(false, null, "Prepare fehlgeschlagen");
+    }
+
+    $stmt->bind_param("s", $selectedUser);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    $events = [];
+
+    while ($row = $result->fetch_assoc()) {        
+        $statement = $conn->prepare("
+    SELECT username FROM attendance
+    WHERE event_id = ? AND is_creator = 1");
+        if ($statement) {
+            $statement->bind_param("i", $row['event_id']);
+
+            if ($statement->execute()) {
+                $ownerResult = $statement->get_result();
+
+                if ($ownerRow = $ownerResult->fetch_assoc()) {
+                    $row['owner'] = $ownerRow['username'];
+                } else {
+                    $row['owner'] = null;
+                }
+            } else {
+                $row['owner'] = null;
+            }
+        } else {
+            $row['owner'] = null;
+        }
+
+
+        $events[] = $row;
+
     }
 
     jsonResponse(true, $events, null);
