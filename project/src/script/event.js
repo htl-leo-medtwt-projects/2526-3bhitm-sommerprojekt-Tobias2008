@@ -155,6 +155,8 @@ function displayAllEvents(user) {
             document.querySelectorAll('.single-event-text-title')[num].innerHTML = event.title_text;
             document.querySelectorAll('.single-event-information')[num].innerHTML = event.information;
 
+            document.querySelectorAll('.single-event-button')[num].innerHTML = `<a href="./view-Event.html?event_id=${event.id}">Read more...</a>`;
+
         })
     })
 }

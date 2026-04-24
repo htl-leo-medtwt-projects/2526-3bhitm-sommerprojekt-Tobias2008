@@ -154,6 +154,7 @@ footer {
     margin-right: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    height: fit-content;
 }
 
 .single-event-image {
