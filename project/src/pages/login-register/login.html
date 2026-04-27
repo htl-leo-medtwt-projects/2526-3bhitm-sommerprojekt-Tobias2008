@@ -12,12 +12,14 @@
 <body>
     <div id="headgap"></div>
     <h1 id="headline">Login</h1>
-    <form action="">
+    <form action="../../php/user.php" method="POST">
         <input type="text" placeholder="Nickname..." name="username" id="username">
         <input type="password" placeholder="Password..." name="password" id="password">
         <Label id="forgot-password">Forgot Password?</Label>
         <button class="login" type="submit">Login</button>
         <Label id="no-account">You dont have an account? <a href="./register.html">Sign in</a></Label>
+
+        <input type="hidden" name="login" value="1">
     </form>
        <footer>
         <p>&copy; 2026 Payreder Management. All rights reserved.</p>
