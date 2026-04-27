@@ -33,12 +33,12 @@ switch ($action) {
         getEvent($_GET['user']);
         break;
 
-        case 'getFavorite':
-            if (!isset($_GET['user'])) {
-                jsonResponse(false, null, "Benutzer fehlt");
-            }
-            getFavoriteEvent($_GET['user']);
-            break;
+    case 'getFavorite':
+        if (!isset($_GET['user'])) {
+            jsonResponse(false, null, "Benutzer fehlt");
+        }
+        getFavoriteEvent($_GET['user']);
+        break;
     default:
         jsonResponse(false, null, "Ungültige Aktion");
 }
@@ -121,7 +121,7 @@ function getEvent($selectedUser)
             }
         } else {
             $row['owner'] = null;
-        }   
+        }
 
         $events[] = $row;
     }
@@ -149,7 +149,7 @@ function getFavoriteEvent($selectedUser)
 
     $events = [];
 
-    while ($row = $result->fetch_assoc()) {        
+    while ($row = $result->fetch_assoc()) {
         $statement = $conn->prepare("
     SELECT username FROM attendance
     WHERE event_id = ? AND is_creator = 1");

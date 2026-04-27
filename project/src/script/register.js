@@ -21,7 +21,7 @@ function fillProfilePictures() {
     }
 }
 function selectProfilePicture(path) {
-    fetch("../../php/user.php?action=selectProfilePicture" , {
+    fetch("../../php/user.php?action=selectProfilePicture", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"

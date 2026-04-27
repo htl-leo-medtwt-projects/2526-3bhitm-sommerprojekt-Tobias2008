@@ -1,6 +1,8 @@
+// CONSTANT PATTERNS
+
 
 const favoriteEventForm =
-                `<div class="favorite-event-image"></div>
+    `<div class="favorite-event-image"></div>
 
                 <div class="eventGridSystem">
                     <div class="left">
@@ -41,8 +43,29 @@ const normalEventForm =
 
 
 
+// REST CODE
 
-displayEvents("anna2");
+
+//initialize();
+
+displayEvents('Kussischek');
+
+
+function initialize() {
+    fetch("../php/user.php?getSession=?param=username")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Session Data:", data);
+            if (data.success) {
+                const username = data.data;
+            } else {
+                console.error("Fehler beim Abrufen der Session:", data.error);
+            }
+        })
+        .catch(err => {
+            console.error("Fetch Fehler:", err);
+        });
+}
 
 function getAllEventsFromDB(user) {
     console.log('../php/event.php?action=get&user=' + user);
@@ -66,7 +89,7 @@ function getAllEventsFromDB(user) {
 
 function getFavoriteEventsFromDB(user) {
     console.log('../php/event.php?action=getFavorite&user=' + user);
-    
+
     return fetch("../php/event.php?action=getFavorite&user=" + user)
         .then(response => response.json())
         .then(data => {
@@ -108,12 +131,12 @@ function displayFavoriteEvents(user) {
             }
 
             for (let i = 0; i < event.length; i++) {
-                if(!event[i] == undefined || event[i] == null || event[i] == "") {
+                if (!event[i] == undefined || event[i] == null || event[i] == "") {
                     event[i] = "-"
                 }
-                
+
             }
-            
+
             document.querySelectorAll('.eventTitle')[num].innerHTML = event.name;
             document.querySelectorAll('.title-text')[num].innerHTML = event.title_text;
             document.querySelectorAll('.informationText')[num].innerHTML = event.information;

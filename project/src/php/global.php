@@ -8,7 +8,8 @@ $response = [
     "error" => null
 ];
 
-function jsonResponse($success, $data, $error) {
+function jsonResponse($success, $data, $error)
+{
     global $response;
 
     $response['success'] = $success;
@@ -16,11 +17,24 @@ function jsonResponse($success, $data, $error) {
     $response['error'] = $error;
 }
 
-function jsonResponseAndExit($success, $data, $error) {
-    global $response;
-    jsonResponse($success, $data, $error);
-
-    header('Content-Type: application/json');
-    echo json_encode($response);
+if (isset($_POST['getSession'])) {
+    echo getSession($_POST['getSession']);
     exit();
+}
+
+function getSession($param)
+{
+    if ($param === "" || $param === null) {
+        return json_encode($_SESSION);
+    }
+
+    if (isset($_SESSION[$param])) {
+        return json_encode($_SESSION[$param]);
+    } else {
+
+        jsonResponse(false, null, "Session-Variable '$param' existiert nicht.");
+
+        global $response;
+        return json_encode($response);
+    }
 }

@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 if (isset($_POST['action'])) {
-    if($_POST['action'] === 'selectProfilePicture') {
+    if ($_POST['action'] === 'selectProfilePicture') {
         $_SESSION['selectedProfilePicture'] = $_POST['profile-picture'];
     }
 }
@@ -23,49 +23,51 @@ if (isset($_POST['register'])) {
     registerUser();
 }
 
-if(isset($_POST['login'])) {
+if (isset($_POST['login'])) {
     loginUser();
 }
 
 
-function registerUser() {
-global $conn;
+function registerUser()
+{
+    global $conn;
 
-        if (!isset($_POST['first-name'], $_POST['last-name'], $_POST['username'], $_POST['password'], $_POST['confirm-password'], $_POST['email'], $_POST['birthday'], $_SESSION['selectedProfilePicture'])) {
-            jsonResponse(false, null, "Bitte füllen Sie alle Felder aus.");
-            header("Location: ../pages/login-register/register.html");
-        }
+    if (!isset($_POST['first-name'], $_POST['last-name'], $_POST['username'], $_POST['password'], $_POST['confirm-password'], $_POST['email'], $_POST['birthday'], $_SESSION['selectedProfilePicture'])) {
+        jsonResponse(false, null, "Bitte füllen Sie alle Felder aus.");
+        header("Location: ../pages/login-register/register.html");
+    }
 
-        if ($_POST['password'] !== $_POST['confirm-password']) {
-            jsonResponse(false, null, "Die Passwörter stimmen nicht überein.");
-            header("Location: ../pages/login-register/register.html");
-        }
+    if ($_POST['password'] !== $_POST['confirm-password']) {
+        jsonResponse(false, null, "Die Passwörter stimmen nicht überein.");
+        header("Location: ../pages/login-register/register.html");
+    }
 
-        $firstName = $_POST['first-name'];
-        $lastName = $_POST['last-name'];
-        $username = $_POST['username'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $email = $_POST['email'];
-        $birthday = $_POST['birthday'];
+    $firstName = $_POST['first-name'];
+    $lastName = $_POST['last-name'];
+    $username = $_POST['username'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $email = $_POST['email'];
+    $birthday = $_POST['birthday'];
 
 
-        $stmt = $conn->prepare("INSERT INTO user (first_name, last_name, username, email, password, date_of_birth, image_src) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $password, $birthday, $_SESSION['selectedProfilePicture']);
+    $stmt = $conn->prepare("INSERT INTO user (first_name, last_name, username, email, password, date_of_birth, image_src) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $password, $birthday, $_SESSION['selectedProfilePicture']);
 
-        if ($stmt->execute()) {
-            jsonResponse(true, "Registrierung erfolgreich!", null);
-            header("Location: ../pages/login-register/login.html");
-        } else {
-            jsonResponse(false, null, "Fehler bei der Registrierung: " . $stmt->error);
-            header("Location: ../pages/login-register/register.html");
+    if ($stmt->execute()) {
+        jsonResponse(true, "Registrierung erfolgreich!", null);
+        header("Location: ../pages/login-register/login.html");
+    } else {
+        jsonResponse(false, null, "Fehler bei der Registrierung: " . $stmt->error);
+        header("Location: ../pages/login-register/register.html");
 
-        }
+    }
 
-        $stmt->close();
+    $stmt->close();
 }
 
 
-function loginUser() {
+function loginUser()
+{
     global $conn;
 
     if (!isset($_POST['username'], $_POST['password'])) {
@@ -83,7 +85,7 @@ function loginUser() {
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
-        jsonResponse(false, null, "Benutzername oder Passwort ist falsch.");
+        jsonResponse(false, null, "Benutzername ist falsch.");
         header("Location: ../pages/login-register/login.html");
         exit();
     }
@@ -91,12 +93,13 @@ function loginUser() {
     $user = $result->fetch_assoc();
 
     if (!password_verify($password, $user['password'])) {
-        jsonResponse(false, null, "Benutzername oder Passwort ist falsch.");
+        jsonResponse(false, null, "Passwort ist falsch.");
         header("Location: ../pages/login-register/login.html");
         exit();
     }
 
     jsonResponse(true, "Login erfolgreich!", null);
+    $_SESSION['username'] = $username;
     header("Location: ../pages/event.html");
     exit();
 }
@@ -104,4 +107,3 @@ function loginUser() {
 
 
 ?>
-
