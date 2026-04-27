@@ -1,21 +1,12 @@
 <?php
 
-session_start();
+require 'global.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 header('Content-Type: application/json');
 
-function jsonResponse($success, $data = null, $error = null)
-{
-    echo json_encode([
-        "success" => $success,
-        "data" => $data,
-        "error" => $error
-    ]);
-    exit;
-}
 
 $_db_host = 'db_server';
 $_db_username = 'PreGame';
@@ -77,10 +68,7 @@ function createEvent()
     $stmt->bind_param("sssssss", $eventName, $eventTitle, $eventDescription, $eventDate, $eventLocation, $eventMaxMembers, $eventImageSrc);
 
     if ($stmt->execute()) {
-        jsonResponse(true, [
-            "message" => "Event erstellt",
-            "id" => $stmt->insert_id
-        ]);
+        jsonResponse(true, "Event erfolgreich erstellt", null);
     } else {
         jsonResponse(false, null, $stmt->error);
     }

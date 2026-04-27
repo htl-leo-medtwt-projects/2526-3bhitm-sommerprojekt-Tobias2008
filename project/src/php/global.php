@@ -11,9 +11,16 @@ $response = [
 function jsonResponse($success, $data, $error) {
     global $response;
 
-    header('Content-Type: application/json');
     $response['success'] = $success;
     $response['data'] = $data;
     $response['error'] = $error;
+}
+
+function jsonResponseAndExit($success, $data, $error) {
+    global $response;
+    jsonResponse($success, $data, $error);
+
+    header('Content-Type: application/json');
     echo json_encode($response);
+    exit();
 }
