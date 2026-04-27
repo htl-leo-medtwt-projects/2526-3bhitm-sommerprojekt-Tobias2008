@@ -52,7 +52,7 @@ displayEvents('Kussischek');
 
 
 function initialize() {
-    fetch("../php/user.php?getSession=?param=username")
+    fetch("../php/user.php?getSession=username")
         .then(response => response.json())
         .then(data => {
             console.log("Session Data:", data);
@@ -88,8 +88,9 @@ function getAllEventsFromDB(user) {
 }
 
 function getFavoriteEventsFromDB(user) {
-    console.log('../php/event.php?action=getFavorite&user=' + user);
+    console.log('../php/event.php?action=getFavorite&user=' + user)
 
+    
     return fetch("../php/event.php?action=getFavorite&user=" + user)
         .then(response => response.json())
         .then(data => {
@@ -161,6 +162,7 @@ function displayAllEvents(user) {
     allEventsContainer.innerHTML = '';
 
     getAllEventsFromDB(user).then(events => {
+        console.log("Alle Events:", events);
         events.forEach((event, num) => {
             const eventElement = document.createElement('div');
             eventElement.classList.add('single-event');
