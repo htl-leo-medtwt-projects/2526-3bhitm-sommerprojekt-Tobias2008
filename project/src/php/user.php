@@ -1,5 +1,10 @@
 <?php
 
+/* TODO: 
+ * Exeptionhandling bei Login / Registrierung
+ * Fehlermeldungen auf der Seite anzeigen
+ */
+
 require 'global.php';
 
 $_db_host = 'db_server';
