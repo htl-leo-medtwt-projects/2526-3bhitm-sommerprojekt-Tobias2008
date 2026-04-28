@@ -48,8 +48,6 @@ const normalEventForm =
 
 //initialize();
 
-displayEvents('Kussischek');
-
 
 function initialize() {
     fetch("../php/user.php?getSession=username")
@@ -58,6 +56,8 @@ function initialize() {
             console.log("Session Data:", data);
             if (data.success) {
                 const username = data.data;
+                console.log("Aktueller Benutzer:", username);
+                getAllEventsFromDB(username);
             } else {
                 console.error("Fehler beim Abrufen der Session:", data.error);
             }
