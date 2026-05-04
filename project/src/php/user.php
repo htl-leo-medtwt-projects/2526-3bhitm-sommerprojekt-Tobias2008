@@ -32,6 +32,12 @@ if (isset($_POST['login'])) {
     loginUser();
 }
 
+if(!isset($_POST['action'], $_POST['register'], $_POST['login'])) {
+    jsonResponse(false, null, "Ungültige Anfrage.");
+    header("Location: ../pages/login-register/login.html");
+    exit();
+}
+
 
 function registerUser()
 {

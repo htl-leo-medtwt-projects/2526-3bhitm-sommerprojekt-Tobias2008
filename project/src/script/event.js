@@ -46,12 +46,13 @@ const normalEventForm =
 // REST CODE
 
 
-//initialize();
+
+initialize();
 
 
 function initialize() {
-    fetch("../php/user.php?getSession=username")
-        .then(response => response.json())
+    fetch("../php/global.php?getSession")
+        .then(response => response.text())
         .then(data => {
             console.log("Session Data:", data);
             if (data.success) {
