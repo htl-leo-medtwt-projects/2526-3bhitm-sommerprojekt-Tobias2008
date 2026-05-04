@@ -40,6 +40,12 @@ switch ($action) {
         }
         getFavoriteEvent($_GET['user']);
         break;
+        case 'getSingleEvent':
+            if(!isset($_GET['event_id'])) {
+                jsonResponse(false, null, "Event-ID fehlt");
+            }
+            getSingleEvent($_GET['event_id']);
+            break;
     default:
         jsonResponse(false, null, "Ungültige Aktion");
 }
@@ -178,4 +184,20 @@ function getFavoriteEvent($selectedUser)
     }
 
     jsonResponse(true, $events, null);
+}
+
+function getSingleEvent($eventID) {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM event where event_id = ?");
+    $stmt->bind_param('i', $eventID);
+
+    if($stmt->execute()) {
+        $event = $stmt->get_result()->fetch_assoc();
+        jsonResponse(true, $event, null);
+    } else {
+        jsonResponse(false, null, $stmt->error);
+        exit;
+    }
+
 }
