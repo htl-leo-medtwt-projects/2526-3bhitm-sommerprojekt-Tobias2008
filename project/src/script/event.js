@@ -21,7 +21,7 @@ const favoriteEventForm =
 
                 <div class="buttons">
                     <div class="messageUser"></div>
-                    <div class="viewMore"><a href="./view-Event.html">Read More...</a></div>
+                    <div class="viewMore"></div>
             </div>`;
 
 const normalEventForm =
@@ -40,16 +40,13 @@ const normalEventForm =
                 </div>`;
 
 
-
-
-
 // REST CODE
 
 
-//initialize();
+//getSessionData();
 
 
-function initialize() {
+function getSessionData() {
     fetch("../php/user.php?getSession=username")
         .then(response => response.json())
         .then(data => {
@@ -66,6 +63,10 @@ function initialize() {
             console.error("Fetch Fehler:", err);
         });
 }
+
+//TODO: remove hardcoded user
+
+displayEvents('admin');
 
 function getAllEventsFromDB(user) {
     console.log('../php/event.php?action=get&user=' + user);
@@ -149,12 +150,12 @@ function displayFavoriteEvents(user) {
             document.querySelectorAll('.participants')[num].innerHTML = `${event.participants} / ${event.max_members} Teilnehmer`;
 
             document.querySelectorAll('.messageUser')[num].innerHTML = `<a href="./message.html?user=${event.owner}">Message ${event.owner}</a>`;
+            document.querySelectorAll('.viewMore')[num].innerHTML = `<a href="./view-Event.html?event_id=${event.event_id}">Read more...</a>`;
         }
         )
     }
     )
 }
-
 
 function displayAllEvents(user) {
     const allEventsContainer = document.getElementById('all-events');
@@ -180,7 +181,7 @@ function displayAllEvents(user) {
             document.querySelectorAll('.single-event-text-title')[num].innerHTML = event.title_text;
             document.querySelectorAll('.single-event-information')[num].innerHTML = event.information;
 
-            document.querySelectorAll('.single-event-button')[num].innerHTML = `<a href="./view-Event.html?event_id=${event.id}">Read more...</a>`;
+            document.querySelectorAll('.single-event-button')[num].innerHTML = `<a href="./view-Event.html?event_id=${event.event_id}">Read more...</a>`;
 
         })
     })
