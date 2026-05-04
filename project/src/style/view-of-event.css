@@ -79,3 +79,15 @@ text-align: center;
     gap: 0.4em;
 
 }
+
+.item {
+    color: white;
+    font-family: var(--font-KoHo);
+    font-size: 1.5em;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 90vw;
+    margin-left: 1.35em;
+}

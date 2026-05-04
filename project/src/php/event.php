@@ -213,7 +213,7 @@ function getEventItems($eventID)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT * FROM item WHERE event_id = ?");
+    $stmt = $conn->prepare("SELECT * FROM attribute WHERE event_id = ?");
     $stmt->bind_param('i', $eventID);
 
     if ($stmt->execute()) {
