@@ -47,7 +47,22 @@ const normalEventForm =
 
 
 
-initialize();
+//initialize();
+
+fetch("../php/global.php?getSession=username")
+  .then(res => res.json())
+  .then(data => {
+
+    if (!data.success && data.error === "NOT_AUTHENTICATED") {
+      window.location.href = "../pages/index.html";
+      return;
+    }
+
+    console.log("User eingeloggt:", data);
+  })
+  .catch(err => {
+    console.error("Fehler:", err);
+  });
 
 
 function initialize() {
@@ -68,15 +83,17 @@ function initialize() {
         });
 }
 
+getAllEventsFromDB('anna2');
+
 function getAllEventsFromDB(user) {
     console.log('../php/event.php?action=get&user=' + user);
 
     return fetch("../php/event.php?action=get&user=" + user)
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
             console.log("Server Antwort:", data);
 
-            if (data.success) {
+             if (data.success) {
                 const events = data.data;
                 return events;
             } else {

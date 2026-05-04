@@ -2,22 +2,28 @@
 
 session_start();
 
+header('Content-Type: application/json');
 
-
-if (!isset($_SESSION['user'], $_SESSION['username'])) {
-    $base = dirname($_SERVER['SCRIPT_NAME'], 3);
-    header("Location: $base/src/pages/index.html");
-    exit();
-}
 
 function jsonResponse($success, $data = null, $error = null)
 {
+    // optional intern speichern (falls du es brauchst)
     $_SESSION['json_response'] = [
         "success" => $success,
         "data" => $data,
         "error" => $error
     ];
+
+    echo json_encode([
+        "success" => $success,
+        "data" => $data,
+        "error" => $error
+    ]);
+
+    exit();
 }
+
+
 
 if (isset($_GET['getSession'])) {
 
@@ -30,30 +36,10 @@ if (isset($_GET['getSession'])) {
     if ($param === "username") {
         if (isset($_SESSION['username'])) {
             jsonResponse(true, $_SESSION['username'], null);
-            returnSessionAndExit();
         } else {
-            jsonResponse(false, $_SESSION, "Username nicht in Session gesetzt");
-            returnSessionAndExit();
+            jsonResponse(false, null, "Username nicht in Session gesetzt");
         }
     }
 
     jsonResponse(false, null, "Session-Variable '$param' existiert nicht.");
-}
-
-function returnSessionAndExit()
-{
-
-    if (isset($_SESSION)) {
-        echo json_encode(
-            $_SESSION
-        );
-        exit;
-    } else {
-        echo json_encode([
-            "success" => false,
-            "data" => null,
-            "error" => "Keine Session-Antwort vorhanden."
-        ]);
-        exit;
-    }
 }
