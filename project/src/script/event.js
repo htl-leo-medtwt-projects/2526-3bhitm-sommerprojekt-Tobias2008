@@ -43,7 +43,7 @@ const normalEventForm =
 // REST CODE
 
 
-//initialize();
+//getSessionData();
 
 
 function getSessionData() {
@@ -72,7 +72,7 @@ function getAllEventsFromDB(user) {
     console.log('../php/event.php?action=get&user=' + user);
 
     return fetch("../php/event.php?action=get&user=" + user)
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
             console.log("Server Antwort:", data);
 
