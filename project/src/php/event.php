@@ -52,6 +52,12 @@ switch ($action) {
         }
         getEventItems($_GET['event_id']);
         break;
+        case 'getItemDetails':
+        if (!isset($_GET['event_id'])) {
+            jsonResponse(false, null, "Event-ID fehlt");
+        }
+        getItemDetails($_GET['event_id']);
+        break;
     default:
         jsonResponse(false, null, "Ungültige Aktion");
 }
@@ -214,6 +220,28 @@ function getEventItems($eventID)
     global $conn;
 
     $stmt = $conn->prepare("SELECT * FROM attribute WHERE event_id = ?");
+    $stmt->bind_param('i', $eventID);
+
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $items = [];
+        while ($row = $result->fetch_assoc()) {
+            $items[] = $row;
+        }
+        jsonResponse(true, $items, null);
+    } else {
+        jsonResponse(false, null, $stmt->error);
+        exit;
+    }
+
+}
+
+
+function getItemDetails($eventID)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT * FROM item WHERE event_id = ?");
     $stmt->bind_param('i', $eventID);
 
     if ($stmt->execute()) {

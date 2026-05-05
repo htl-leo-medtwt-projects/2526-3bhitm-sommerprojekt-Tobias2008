@@ -16,23 +16,26 @@
 let eventID = new URLSearchParams(window.location.search).get('event_id');
 let eventData = null;
 let items = null;
+let itemDetails = null;
 
 getData();
 
 async function getData() {
     eventData = await getEventData();
     items = await getEventItems();
+    itemDetails = await getItemDetails();
 
     console.log("Event Data:", eventData);
     console.log("Event Items:", items);
+    console.log("Item Details:", itemDetails);
 
     displayEvent();
 
 }
+
 async function getEventData() {
     const response = await fetch('../php/event.php?action=getSingleEvent&event_id=' + eventID);
     const data = await response.json();
-    console.log("Server Antwort:", data);
     if (data.success) {
         return data.data;
     } else {
@@ -44,7 +47,17 @@ async function getEventData() {
 async function getEventItems() {
     const response = await fetch('../php/event.php?action=getEventItems&event_id=' + eventID);
     const data = await response.json();
-    console.log("Server Antwort:", data);
+    if (data.success) {
+        return data.data;
+    } else {
+        console.error("Fehler:", data.error);
+    }
+    return null;
+}
+
+async function getItemDetails() {
+    const response = await fetch('../php/event.php?action=getItemDetails&event_id=' + eventID);
+    const data = await response.json();
     if (data.success) {
         return data.data;
     } else {
@@ -91,7 +104,13 @@ async function displayEvent() {
         itemName.innerText = item.name;
         const itemButton = document.createElement('div');
         itemButton.classList.add('item-button');
-        itemButton.innerHTML = `<a href="./view-item.html?item_id=${item.item_id}">View Item</a>`;
+        itemButton.innerHTML = `<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+</svg>`;
+
+        itemButton.addEventListener('click', () => {
+            loadItemDetails(item.id, eventID);
+        });
 
         itemElement.appendChild(itemName);
         itemElement.appendChild(itemButton);
@@ -105,3 +124,41 @@ async function displayEvent() {
 
 
 function getEventMembers(eventID) { }
+
+function loadItemDetails(itemID, eventID) {
+    document.getElementById('view-event').innerHTML = '';
+    const itemDetails = document.getElementById('item-details');
+    itemDetails.innerHTML = itemDetailTemplate;
+
+}
+
+
+const viewElementTemplate = `
+<div id="event-image"></div>
+
+    <h1 id="event-title"></h1>
+    <p id="title-text"></p>
+    <p id="information"></p>
+    <div id="viewMemberButton">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+</svg>
+
+        View Members</div>
+
+    <div id="items">
+    </div>`;
+
+
+    const itemDetailTemplate = `
+    <div id="event-image"></div>
+
+    <h1 id="event-title"></h1>
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+</svg>
+
+        View Members</div>
+
+    <div id="items">
+    </div>`;

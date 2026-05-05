@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,25 +9,36 @@
     <link rel="stylesheet" href="../style/view-of-event.css">
     <script src="../script/view-event.js" defer></script>
 </head>
+
 <body>
     <h1 id="headline">View of the Event</h1>
     <p id="textHeadline">Here you can view or Edit an Event!</p>
 
-    <div id="event-image"></div>
 
-    <h1 id="event-title"></h1>
-    <p id="title-text"></p>
-    <p id="information"></p>
-    <div id="viewMemberButton">
-        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
-</svg>
+    <div id="view-event">
+        <div id="event-image"></div>
 
-        View Members</div>
+        <h1 id="event-title"></h1>
+        <p id="title-text"></p>
+        <p id="information"></p>
+        <div id="viewMemberButton">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                    d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+            </svg>
 
-    <div id="items">
-        <div class="item">Test</div>
+            View Members
+        </div>
+
+        <div id="items">
+        </div>
     </div>
 
+    <div id="item-details"></div>
+
+
+
 </body>
+
 </html>
