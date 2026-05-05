@@ -80,7 +80,7 @@ text-align: center;
 
 }
 
-.item {
+.item, #item-details {
     color: var(--white);
     font-family: var(--font-KoHo);
     font-size: 1.4em;
@@ -97,7 +97,7 @@ text-align: center;
     gap: 1em;
 }
 
-#items {
+#items, #item-details {
     margin-top: 0em;
 }
 
