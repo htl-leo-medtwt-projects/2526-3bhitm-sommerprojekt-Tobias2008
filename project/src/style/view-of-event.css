@@ -15,7 +15,7 @@ text-align: center;
     text-align: center;
 }
 
-#event-image {
+#event-image, #item-image {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -97,8 +97,14 @@ text-align: center;
     gap: 1em;
 }
 
-#items, #item-details {
+#items {
     margin-top: 0em;
+}
+
+#item-details {
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
 }
 
 .item-name {
@@ -117,4 +123,24 @@ text-align: center;
     border-radius: 15px;
     text-decoration: none;
     border: solid 3px #211236;
+}
+
+#item-details {
+    text-align: left;
+}
+
+#item-title, #item-description {
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#item-wrapper {
+    margin-left: 0;
+    width: 75vw;
+}
+
+#item-wrapper h1 {
+    font-size: 1.5em;
 }

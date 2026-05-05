@@ -127,7 +127,8 @@ function getEventMembers(eventID) { }
 
 function loadItemDetails(attributeID, eventID) {
 
-    const selectedItem = items.find(item => item.attribute_id === attributeID);
+    const selectedItem = itemDetails.find(item => item.attribute_id === attributeID);
+    const selectedItemCategory = items.find(item => item.attribute_id === attributeID);
 
     if (!eventData) {
         console.error("Events konnten nicht geladen werden.");
@@ -146,17 +147,22 @@ function loadItemDetails(attributeID, eventID) {
     
     console.log("Attribute ID:", attributeID);
     console.log("Event ID:", eventID);
-    console.log("Item Details:", selectedItem);
+    console.log("Item Details:", itemDetails);
+    console.log("items", items);
+    console.log("Event Details:", eventData);
 
     document.getElementById('view-event').innerHTML = '';
     document.getElementById('view-event').style.display = 'none'
     const itemDetailsDiv = document.getElementById('item-details');
     itemDetailsDiv.innerHTML = itemDetailTemplate;
 
-
-    document.getElementById('item-image').style.backgroundImage = `url(${eventData.image_url})`;
-    document.getElementById('item-title').innerHTML = selectedItem.name;
-    document.getElementById('item-description').innerText = selectedItem.information;
+    if(eventData.image_src) {
+        document.getElementById('item-image').style.backgroundImage = `url(${eventData.image_src})`;
+    } else {
+        document.getElementById('item-image').style.backgroundImage = `url('../../ressources/images/profile/pre-saved-images/blackMonster.jpg')`;
+    }
+    document.getElementById('item-title').innerHTML = selectedItemCategory.name;
+    document.getElementById('single-items').innerHTML = `<div id="single-item">${selectedItem.name}</div>`;
 
 }
 
@@ -180,5 +186,8 @@ function loadItemDetails(attributeID, eventID) {
 const itemDetailTemplate = `
     <div id="item-image"></div>
 
+    <div id="item-wrapper">
     <h1 id="item-title"></h1>
-    <div id="item-description"></div>`;
+    <div id="item-description"></div>
+        <div id="single-items"></div>
+    </div>`;
