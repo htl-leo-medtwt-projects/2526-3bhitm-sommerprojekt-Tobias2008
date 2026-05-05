@@ -25,7 +25,7 @@ async function getData() {
     items = await getEventItems();
     itemDetails = await getItemDetails();
 
-    
+
 
     displayEvent();
 
@@ -81,7 +81,7 @@ async function displayEvent() {
         return;
     }
 
-   
+
 
     if (eventData.image_url) {
         document.getElementById('event-image').style.backgroundImage = `url(${eventData.image_url})`;
@@ -127,7 +127,7 @@ function getEventMembers(eventID) { }
 
 function loadItemDetails(attributeID, eventID) {
 
-    const selectedItem = itemDetails.find(item => item.attribute_id === attributeID);
+    const selectedItem = itemDetails.filter(item => item.attribute_id === attributeID);
     const selectedItemCategory = items.find(item => item.attribute_id === attributeID);
 
     if (!eventData) {
@@ -144,7 +144,7 @@ function loadItemDetails(attributeID, eventID) {
         console.error("Items konnten nicht geladen werden.");
         return;
     }
-    
+
     console.log("Attribute ID:", attributeID);
     console.log("Event ID:", eventID);
     console.log("Item Details:", itemDetails);
@@ -156,17 +156,30 @@ function loadItemDetails(attributeID, eventID) {
     const itemDetailsDiv = document.getElementById('item-details');
     itemDetailsDiv.innerHTML = itemDetailTemplate;
 
-    if(eventData.image_src) {
+    if (eventData.image_src) {
         document.getElementById('item-image').style.backgroundImage = `url(${eventData.image_src})`;
     } else {
         document.getElementById('item-image').style.backgroundImage = `url('../../ressources/images/profile/pre-saved-images/blackMonster.jpg')`;
     }
     document.getElementById('item-title').innerHTML = selectedItemCategory.name;
-    document.getElementById('single-items').innerHTML = `<div id="single-item">${selectedItem.name}</div>`;
 
+    //document.getElementById('single-items').innerHTML = `<div id="single-item">${selectedItem.name}</div>`;
+
+    selectedItem.forEach(item => {
+        const singleItem = document.createElement('div');
+        singleItem.id = 'single-item';
+        singleItem.innerHTML = `<p>${item.name}</p>`;
+        singleItem.innerHTML += `<div onclick="revealInfo()" class="item-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+</svg>
+</div>`;
+        singleItem.innerHTML += `<div class="item-already-done-button" onclick="changeButton(${item.id})"></div>`;
+
+        document.getElementById('single-items').appendChild(singleItem);
+    });
 }
 
-    const viewElementTemplate = `
+const viewElementTemplate = `
 <div id="event-image"></div>
 
     <h1 id="event-title"></h1>
@@ -191,3 +204,23 @@ const itemDetailTemplate = `
     <div id="item-description"></div>
         <div id="single-items"></div>
     </div>`;
+
+function changeButton(itemID) {
+    const button = document.querySelector(`.item-already-done-button[onclick="changeButton(${itemID})"]`);
+
+
+    if (button.classList.contains('done')) {
+        button.classList.remove('done');
+        button.style.backgroundColor = 'rgba(255, 0, 0, 0.6)';
+
+        fetch(`../php/event.php?action=markItemDone&item_id=${itemID}&event_id=${eventID}`, {
+            method: 'POST'
+        });
+
+
+    } else {
+        button.classList.add('done');
+        button.style.backgroundColor = 'rgba(0, 255, 0, 0.6)';
+    }
+
+}

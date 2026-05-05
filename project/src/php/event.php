@@ -52,11 +52,17 @@ switch ($action) {
         }
         getEventItems($_GET['event_id']);
         break;
-        case 'getItemDetails':
+    case 'getItemDetails':
         if (!isset($_GET['event_id'])) {
             jsonResponse(false, null, "Event-ID fehlt");
         }
         getItemDetails($_GET['event_id']);
+        break;
+    case 'markItemDone':
+        if (!isset($_POST['item_id']) || !isset($_POST['event_id'])) {
+            jsonResponse(false, null, "Item-ID oder Event-ID fehlt");
+        }
+        markItemDone($_POST['item_id'], $_POST['event_id']);
         break;
     default:
         jsonResponse(false, null, "Ungültige Aktion");
@@ -256,4 +262,27 @@ function getItemDetails($eventID)
         exit;
     }
 
+}
+
+function markItemDone($itemID, $eventID)
+{
+    global $conn;
+
+    $namestmt = $conn->prepare("SELECT name FROM item WHERE id = ?");
+    $namestmt->bind_param("i", $itemID);
+    $name = null;
+    if($namestmt->execute()) {
+        $name = $namestmt->get_result()->fetch_assoc()['name'];
+    }
+    
+
+
+    $stmt = $conn->prepare("INSERT INTO item (name, event_id, is_done, username) VALUES (?, ?, 1, ?)");
+    $stmt->bind_param('sis', $name, $eventID);
+
+    if ($stmt->execute()) {
+        jsonResponse(true, "Item als erledigt markiert", null);
+    } else {
+        jsonResponse(false, null, $stmt->error);
+    }
 }

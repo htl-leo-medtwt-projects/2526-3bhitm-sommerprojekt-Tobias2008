@@ -116,7 +116,7 @@ text-align: center;
 
 }
 
-.item-button {
+.item-button, #single-item p, .item-button {
     color: var(--white);
     background-color: #47385C;
     padding: 0.6em;
@@ -138,9 +138,28 @@ text-align: center;
 
 #item-wrapper {
     margin-left: 0;
-    width: 75vw;
+    margin-top: 0;
+    width: 85vw;
 }
 
 #item-wrapper h1 {
     font-size: 1.5em;
+    margin-bottom: 0;
+}
+
+#single-item {
+    margin-top: 0em;
+    display:flex;
+    align-items: center;
+}
+
+#single-item p {
+    flex: 1;
+}
+
+.item-already-done-button {
+    width: 10vw;
+    height: 10vw;
+    border-radius: 100%;
+    background-color: rgba(255, 0, 0, 0.6);
 }
