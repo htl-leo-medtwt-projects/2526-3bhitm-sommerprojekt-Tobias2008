@@ -16,7 +16,7 @@
     <p id="titletext">Here you can create your own Event!<br> You can add as many friends as you want, set the location
         you want, and even calculate the average costs. Have fun!</p>
 
-    <form action="" id="create-event-form">
+    <form action="../php/event.php?action=create" method="POST" id="create-event-form" enctype="multipart/form-data">
         <input type="text" placeholder="* Event Name..." name="event-name" id="event-name" required>
         <input type="text" placeholder="* Title Text..." name="title-text" id="title-text" required>
         <textarea placeholder="Information..." name="event-information" id="event-information"></textarea>
@@ -42,18 +42,18 @@
         </div>
 
         <div id="input-field-image">
-            <svg class="w-6 h-6 text-gray-800 dark:text-white image-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                width="150" height="150" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            <svg class="w-6 h-6 text-gray-800 dark:text-white image-icon" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"
                     d="m3 16 5-7 6 6.5m6.5 2.5L16 13l-4.286 6M14 10h.01M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
             </svg>
 
-            <input type="file" id="fileInput" hidden>
+            <input type="file" name="event-image" id="fileInput" accept="image/*" hidden>
         </div>
 
         <div id="buttons">
-            <button type="button">Cancel</button>
-        <button type="submit">Create</button>
+            <a href="./event.html"><button type="button">Cancel</button></a>
+            <button type="submit">Create</button>
         </div>
     </form>
 

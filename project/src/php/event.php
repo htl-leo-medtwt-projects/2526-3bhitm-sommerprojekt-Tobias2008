@@ -59,6 +59,7 @@ switch ($action) {
         getItemDetails($_GET['event_id']);
         break;
     case 'markItemDone':
+        var_dump('KUSS DAS GEHT');
         if (!isset($_POST['item_id']) || !isset($_POST['event_id'])) {
             jsonResponse(false, null, "Item-ID oder Event-ID fehlt");
         }
@@ -72,35 +73,61 @@ function createEvent()
 {
     global $conn;
 
-    $eventName = $_POST['eventName'] ?? '';
-    $eventTitle = $_POST['eventTitle'] ?? '';
-    $eventDescription = $_POST['eventDescription'] ?? null;
-    $eventDate = $_POST['eventDate'] ?? null;
-    $eventLocation = $_POST['eventLocation'] ?? null;
-    $eventMaxMembers = $_POST['eventMaxMembers'] ?? null;
-    $eventImageSrc = $_POST['eventImageSrc'] ?? null;
+    $eventName = $_POST['event-name'] ?? '';
+    $eventTitle = $_POST['title-text'] ?? '';
+    $eventDescription = $_POST['event-information'] ?? null;
+    $eventDate = $_POST['event-date'] ?? null;
+    $eventLocation = $_POST['event-location'] ?? null;
+    $eventMaxMembers = $_POST['max-members'] ?? null;
 
-    if (empty($eventName) || empty($eventTitle)) {
-        jsonResponse(false, null, "Event-Name und Titel dürfen nicht leer sein");
+    $eventImageSrc = null;
+
+    if (isset($_FILES['event-image']) && $_FILES['event-image']['error'] === 0) {
+
+        $uploadDir = "../../ressources/images/uploads/";
+
+        $fileName = basename($_FILES['event-image']['name']);
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (!in_array($fileExtension, $allowedExtensions)) {
+            die("Ungültiger Dateityp");
+        }
+
+        $newFileName = uniqid() . "." . $fileExtension;
+        $targetFile = $uploadDir . $newFileName;
+        
+        if (move_uploaded_file($_FILES['event-image']['tmp_name'], $targetFile)) {
+            $eventImageSrc = $targetFile;
+        } else {
+            die("Fehler beim Upload");
+        }
     }
 
-    $stmt = $conn->prepare("INSERT INTO event (name, title_text, information, event_date, location, max_members, image_src) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("
+        INSERT INTO event
+        (name, title_text, information, event_date, location, max_members, image_src)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
 
-    if (!$stmt) {
-        jsonResponse(false, null, "Prepare fehlgeschlagen");
-    }
-
-    $stmt->bind_param("sssssss", $eventName, $eventTitle, $eventDescription, $eventDate, $eventLocation, $eventMaxMembers, $eventImageSrc);
+    $stmt->bind_param(
+        "sssssis",
+        $eventName,
+        $eventTitle,
+        $eventDescription,
+        $eventDate,
+        $eventLocation,
+        $eventMaxMembers,
+        $eventImageSrc
+    );
 
     if ($stmt->execute()) {
-        jsonResponse(true, "Event erfolgreich erstellt", null);
+        header("Location: ../pages/event.html");
+        exit;
     } else {
-        jsonResponse(false, null, $stmt->error);
+        die($stmt->error);
     }
-
-    $stmt->close();
 }
-
 function getEvent($selectedUser)
 {
     global $conn;
@@ -268,13 +295,15 @@ function markItemDone($itemID, $eventID)
 {
     global $conn;
 
+    var_dump('erreicht');
+
     $namestmt = $conn->prepare("SELECT name FROM item WHERE id = ?");
     $namestmt->bind_param("i", $itemID);
     $name = null;
-    if($namestmt->execute()) {
+    if ($namestmt->execute()) {
         $name = $namestmt->get_result()->fetch_assoc()['name'];
     }
-    
+
 
 
     $stmt = $conn->prepare("INSERT INTO item (name, event_id, is_done, username) VALUES (?, ?, 1, ?)");
@@ -286,3 +315,4 @@ function markItemDone($itemID, $eventID)
         jsonResponse(false, null, $stmt->error);
     }
 }
+
