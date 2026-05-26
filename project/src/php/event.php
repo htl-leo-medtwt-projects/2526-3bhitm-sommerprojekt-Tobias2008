@@ -22,6 +22,8 @@ if ($conn->connect_error) {
 
 $action = $_GET['action'] ?? '';
 
+
+
 switch ($action) {
     case 'create':
         createEvent();
@@ -73,6 +75,8 @@ function createEvent()
 {
     global $conn;
 
+    
+
     $eventName = $_POST['event-name'] ?? '';
     $eventTitle = $_POST['title-text'] ?? '';
     $eventDescription = $_POST['event-information'] ?? null;
@@ -121,9 +125,17 @@ function createEvent()
         $eventImageSrc
     );
 
+    $eventIDstmt = $conn->prepare("SELECT MAX(event_id) FROM event;");
+    $eventID = $eventIDstmt->execute() ? $eventIDstmt->get_result()->fetch_row()[0] + 1 : 1;
+
     if ($stmt->execute()) {
-        header("Location: ../pages/event.html");
-        exit;
+        $stmtAttendance = $conn->prepare("
+            INSERT INTO attendance (username, event_id, is_creator, has_favorited)
+            VALUES (?, ?, 1, 0)
+        ");
+        $stmtAttendance->bind_param("si", $_POST['username'], $eventID);
+        $stmtAttendance->execute();
+        $stmtAttendance->close();
     } else {
         die($stmt->error);
     }
