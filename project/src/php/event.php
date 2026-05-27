@@ -81,7 +81,7 @@ function createEvent()
     $eventTitle = $_POST['title-text'] ?? '';
     $eventDescription = $_POST['event-information'] ?? null;
     $eventDate = $_POST['event-date'] ?? null;
-    $eventLocation = $_POST['event-location'] ?? null;
+    $eventLocation = $_POST['event-location9'] ?? null;
     $eventMaxMembers = $_POST['max-members'] ?? null;
 
     $eventImageSrc = null;

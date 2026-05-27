@@ -86,7 +86,8 @@ input {
     font-family: var(--font-KoHo);
     font-size: 0.9em;
     padding: 0.8em;
-    margin-bottom: 0.67em;
+    margin-bottom: 0.33em;
+    margin-top: 0.33em;
     border-radius: 15px;
     width: 65vw;
 }
@@ -112,4 +113,30 @@ footer {
     font-size: 3.7em;
     margin-bottom: 0.5em;
     text-align: center;
+}
+
+.error {
+    background: rgba(255, 70, 70, 0.12);
+    border: 1px solid rgba(255, 70, 70, 0.35);
+    color: #ff7b7b;
+
+    font-family: var(--font-information-medium);
+    font-size: 0.9em;
+
+    padding: 0.85em 1em;
+    border-radius: 14px;
+
+    width: 65vw;
+    box-sizing: border-box;
+
+    margin-top: 0.4em;
+    margin-bottom: 0.7em;
+
+    backdrop-filter: blur(8px);
+
+    box-shadow:
+        0 0 12px rgba(255, 70, 70, 0.08),
+        inset 0 0 10px rgba(255, 255, 255, 0.03);
+
+    animation: fadeInError 0.25s ease;
 }

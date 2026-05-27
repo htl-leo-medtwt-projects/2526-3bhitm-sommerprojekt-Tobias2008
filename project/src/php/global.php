@@ -2,25 +2,14 @@
 
 session_start();
 
-header('Content-Type: application/json');
-
-
 function jsonResponse($success, $data = null, $error = null)
 {
     // optional intern speichern (falls du es brauchst)
-    $_SESSION['json_response'] = [
+    $_SESSION['error'] = [
         "success" => $success,
         "data" => $data,
         "error" => $error
     ];
-
-    echo json_encode([
-        "success" => $success,
-        "data" => $data,
-        "error" => $error
-    ]);
-
-    exit();
 }
 
 

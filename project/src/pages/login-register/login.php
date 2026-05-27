@@ -1,3 +1,11 @@
+<?php
+
+include "../../php/global.php";
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,8 +22,16 @@
     <h1 id="headline">Login</h1>
     <form action="../../php/user.php" method="POST">
         <input type="text" placeholder="Nickname..." name="username" id="username">
+        <?php if (isset($_SESSION['error']) && $_SESSION['error']['success'] === false && $_SESSION['error']['error'] === "Username is not registered.") {
+                    echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
+                }
+        ?>
         <input type="password" placeholder="Password..." name="password" id="password">
         <Label id="forgot-password">Forgot Password?</Label>
+        <?php if (isset($_SESSION['error']) && $_SESSION['error']['success'] === false && $_SESSION['error']['error'] === "Password is wrong.") {
+                    echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
+                }
+        ?>
         <button class="login" type="submit">Login</button>
         <Label id="no-account">You dont have an account? <a href="./register.html">Sign in</a></Label>
 
