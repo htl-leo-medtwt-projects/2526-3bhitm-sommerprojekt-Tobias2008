@@ -74,7 +74,7 @@ function createEvent()
 {
     global $conn;
 
-    
+
 
     $eventName = $_POST['event-name'] ?? '';
     $eventTitle = $_POST['title-text'] ?? '';
@@ -99,7 +99,7 @@ function createEvent()
 
         $newFileName = uniqid() . "." . $fileExtension;
         $targetFile = $uploadDir . $newFileName;
-        
+
         if (move_uploaded_file($_FILES['event-image']['tmp_name'], $targetFile)) {
             $eventImageSrc = $targetFile;
         } else {
@@ -190,6 +190,11 @@ function getEvent($selectedUser)
     }
 
     jsonResponse(true, $events, null);
+    echo json_encode([
+            "success" => true,
+            "data" => $events,
+            "error" => null
+        ]);
 }
 
 function getFavoriteEvent($selectedUser)
@@ -240,6 +245,11 @@ function getFavoriteEvent($selectedUser)
     }
 
     jsonResponse(true, $events, null);
+    echo json_encode([
+            "success" => true,
+            "data" => $events,
+            "error" => null
+        ]);
 }
 
 function getSingleEvent($eventID)
@@ -252,6 +262,13 @@ function getSingleEvent($eventID)
     if ($stmt->execute()) {
         $event = $stmt->get_result()->fetch_assoc();
         jsonResponse(true, $event, null);
+        echo json_encode([
+            "success" => true,
+            "data" => $event,
+            "error" => null
+        ]);
+
+        exit;
     } else {
         jsonResponse(false, null, $stmt->error);
         exit;
@@ -316,7 +333,7 @@ function markItemDone($itemID, $eventID)
 
 
     $stmt = $conn->prepare("INSERT INTO item (name, event_id, is_done, username) VALUES (?, ?, 1, ?)");
-    $stmt->bind_param('sis', $name, $eventID);
+    $stmt->bind_param('sis', $name, $eventID, $_SESSION['username']);
 
     if ($stmt->execute()) {
         jsonResponse(true, "Item als erledigt markiert", null);

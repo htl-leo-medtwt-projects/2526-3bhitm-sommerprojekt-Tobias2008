@@ -48,7 +48,7 @@ const normalEventForm =
 
 function getSessionData() {
     fetch("../php/global.php?getSession")
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
             console.log("Session Data:", data);
             if (data.success) {
@@ -64,9 +64,9 @@ function getSessionData() {
         });
 }
 
-//TODO: remove hardcoded user
+console.log("Session Data:", getSessionData());
 
-displayEvents('admin');
+//TODO: remove hardcoded user
 
 function getAllEventsFromDB(user) {
     console.log('../php/event.php?action=get&user=' + user);
