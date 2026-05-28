@@ -20,8 +20,7 @@ form {
     text-decoration: none;
     text-align: left;
     align-self: flex-start;
-    margin-left: 16vw;
-    margin-bottom: 23vh;
+
 }
 
 #password {
@@ -43,4 +42,14 @@ button {
 #no-account a {
     color: #686876;
     text-decoration: none;
+}
+
+
+#password-actions {
+    display: flex;
+    flex-direction: column;
+
+    width: calc(65vw + 1.6em);
+
+    margin-bottom: 15em;
 }

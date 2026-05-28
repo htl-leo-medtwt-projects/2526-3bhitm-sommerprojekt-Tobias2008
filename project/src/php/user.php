@@ -121,7 +121,7 @@ function loginUser()
     jsonResponse(true, "Login successful!", null);
     $_SESSION['username'] = $username;
     $_SESSION['user'] = true;
-    header("Location: ../pages/event.php");
+    header("Location: ../pages/event.html");
     exit();
 }
 

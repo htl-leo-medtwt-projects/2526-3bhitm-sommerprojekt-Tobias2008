@@ -61,7 +61,6 @@ switch ($action) {
         getItemDetails($_GET['event_id']);
         break;
     case 'markItemDone':
-        var_dump('KUSS DAS GEHT');
         if (!isset($_POST['item_id']) || !isset($_POST['event_id'])) {
             jsonResponse(false, null, "Item-ID oder Event-ID fehlt");
         }
@@ -281,7 +280,6 @@ function getEventItems($eventID)
 
 }
 
-
 function getItemDetails($eventID)
 {
     global $conn;
@@ -307,7 +305,6 @@ function markItemDone($itemID, $eventID)
 {
     global $conn;
 
-    var_dump('erreicht');
 
     $namestmt = $conn->prepare("SELECT name FROM item WHERE id = ?");
     $namestmt->bind_param("i", $itemID);

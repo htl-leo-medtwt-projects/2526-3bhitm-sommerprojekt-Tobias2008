@@ -26,14 +26,17 @@ include "../../php/global.php";
                     echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
                 }
         ?>
+        <div id="password-actions">
         <input type="password" placeholder="Password..." name="password" id="password">
-        <Label id="forgot-password">Forgot Password?</Label>
         <?php if (isset($_SESSION['error']) && $_SESSION['error']['success'] === false && $_SESSION['error']['error'] === "Password is wrong.") {
                     echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
                 }
         ?>
+            <Label id="forgot-password">Forgot Password?</Label>
+        </div>
+
         <button class="login" type="submit">Login</button>
-        <Label id="no-account">You dont have an account? <a href="./register.html">Sign in</a></Label>
+        <Label id="no-account">You dont have an account? <a href="./register.php">Sign in</a></Label>
 
         <input type="hidden" name="login" value="1">
     </form>
