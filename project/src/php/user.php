@@ -14,7 +14,8 @@ $_db_datenbank = 'PreGame';
 
 $conn = new mysqli($_db_host, $_db_username, $_db_password, $_db_datenbank);
 
-if ($conn->connect_error) {jsonResponse(false, null, "DB Verbindung fehlgeschlagen");
+if ($conn->connect_error) {
+    saveSessionData(false, null, "DB Verbindung fehlgeschlagen");
 } 
 /*else if (isset($_SESSION['user'], $_SESSION['username']) && $_SESSION['user']) {
     header("Location: ../pages/index.html");
@@ -50,13 +51,13 @@ function registerUser()
     global $conn;
 
     if (!isset($_POST['first-name'], $_POST['last-name'], $_POST['username'], $_POST['password'], $_POST['confirm-password'], $_POST['email'], $_POST['birthday'], $_SESSION['selectedProfilePicture'])) {
-        jsonResponse(false, null, "Please fill in all fields.");
+    saveSessionData(false, null, "Please fill in all fields.");
         header("Location: ../pages/login-register/register.php");
         exit();
     }
 
     if ($_POST['password'] !== $_POST['confirm-password']) {
-        jsonResponse(false, null, "The passwords do not match.");
+    saveSessionData(false, null, "The passwords do not match.");
         header("Location: ../pages/login-register/register.php");
         exit();
     }
@@ -73,11 +74,11 @@ function registerUser()
     $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $password, $birthday, $_SESSION['selectedProfilePicture']);
 
     if ($stmt->execute()) {
-        jsonResponse(true, "Registration successful!", null);
+    saveSessionData(true, "Registration successful!", null);
         header("Location: ../pages/login-register/login.html");
         exit();
     } else {
-        jsonResponse(false, null, "Error during registration: " . $stmt->error);
+    saveSessionData(false, null, "Error during registration: " . $stmt->error);
         header("Location: ../pages/login-register/register.php");
 
     }
@@ -91,7 +92,7 @@ function loginUser()
     global $conn;
 
     if (!isset($_POST['username'], $_POST['password'])) {
-        jsonResponse(false, null, "Please fill in all fields.");
+    saveSessionData(false, null, "Please fill in all fields.");
         header("Location: ../pages/login-register/login.php");
         exit();
     }
@@ -105,7 +106,7 @@ function loginUser()
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
-        jsonResponse(false, null, "Username is not registered.");
+    saveSessionData(false, null, "Username is not registered.");
         header("Location: ../pages/login-register/login.php");
         exit();
     }
@@ -113,12 +114,12 @@ function loginUser()
     $user = $result->fetch_assoc();
 
     if (!password_verify($password, $user['password'])) {
-        jsonResponse(false, null, "Password is wrong.");
+    saveSessionData(false, null, "Password is wrong.");
         header("Location: ../pages/login-register/login.php");
         exit();
     }
 
-    jsonResponse(true, "Login successful!", null);
+saveSessionData(true, "Login successful!", null);
     $_SESSION['username'] = $username;
     $_SESSION['user'] = true;
     header("Location: ../pages/event.html");

@@ -46,9 +46,9 @@ const normalEventForm =
 //getSessionData();
 
 
-function getSessionData() {
+/*function getSessionData() {
     fetch("../php/global.php?getSession")
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
             console.log("Session Data:", data);
             if (data.success) {
@@ -62,9 +62,29 @@ function getSessionData() {
         .catch(err => {
             console.error("Fetch Fehler:", err);
         });
+}*/
+
+getUsernameAndCallEventloader();
+
+function getUsernameAndCallEventloader() {
+    fetch ("../php/event.php?action=getUsername")
+    .then(response => response.json())   
+    .then(data => {
+        console.log("Session Data:", data);
+        if (data.success) {
+            const username = data.data;
+            console.log("Aktueller Benutzer:", username);
+            displayEvents(username);
+        } else {
+            console.error("Fehler beim Abrufen der Session:", data.error);
+            window.location.href = "../pages/login-register/login.php";
+        }
+    })
+    .catch(err => {
+        console.error("Fetch Fehler:", err);
+    }); 
 }
 
-console.log("Session Data:", getSessionData());
 
 //TODO: remove hardcoded user
 
@@ -113,6 +133,8 @@ function displayEvents(user) {
     displayAllEvents(user);
 };
 
+
+
 function displayFavoriteEvents(user) {
     const favoriteEventsContainer = document.getElementById('eventSlider');
     favoriteEventsContainer.innerHTML = '';
@@ -126,10 +148,10 @@ function displayFavoriteEvents(user) {
 
             favoriteEventsContainer.appendChild(eventElement);
 
-            if (event.image_url) {
-                eventElement.querySelector('.favorite-event-image').style.backgroundImage = `url(${event.image_url})`;
+            if (event.image_src) {
+                eventElement.querySelector('.favorite-event-image').style.backgroundImage = `url(${event.image_src})`;
             } else {
-                eventElement.querySelector('.favorite-event-image').style.backgroundImage = 'url(../../ressources/images/profile/pre-saved-images/blackMonster.jpg)';
+                eventElement.querySelector('.favorite-event-image').style.backgroundImage = 'url(../../ressources/images/placeholder_event.jpg)';
             }
 
             for (let i = 0; i < event.length; i++) {
@@ -171,10 +193,10 @@ function displayAllEvents(user) {
 
             allEventsContainer.appendChild(eventElement);
 
-            if (event.image_url) {
-                eventElement.querySelector('.single-event-image').style.backgroundImage = `url(${event.image_url})`;
+            if (event.image_src) {
+                eventElement.querySelector('.single-event-image').style.backgroundImage = `url(${event.image_src})`;
             } else {
-                eventElement.querySelector('.single-event-image').style.backgroundImage = 'url(../../ressources/images/profile/pre-saved-images/blackMonster.jpg)';
+                eventElement.querySelector('.single-event-image').style.backgroundImage = 'url(../../ressources/images/placeholder_event.jpg)';
             }
             document.querySelectorAll('.single-event-owner')[num].innerHTML = `Owner: ${event.owner}`;
             document.querySelectorAll('.single-event-title')[num].innerHTML = event.name;

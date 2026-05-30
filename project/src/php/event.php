@@ -1,10 +1,9 @@
 <?php
 
+
 require 'global.php';
 require 'authcheck.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 header('Content-Type: application/json');
 
@@ -17,7 +16,7 @@ $_db_datenbank = 'PreGame';
 $conn = new mysqli($_db_host, $_db_username, $_db_password, $_db_datenbank);
 
 if ($conn->connect_error) {
-    jsonResponse(false, null, "DB Verbindung fehlgeschlagen");
+    saveSessionData(false, null, "DB Verbindung fehlgeschlagen");
 }
 
 $action = $_GET['action'] ?? '';
@@ -31,43 +30,46 @@ switch ($action) {
 
     case 'get':
         if (!isset($_GET['user'])) {
-            jsonResponse(false, null, "Benutzer fehlt");
+            saveSessionData(false, null, "Benutzer fehlt");
         }
         getEvent($_GET['user']);
         break;
 
     case 'getFavorite':
         if (!isset($_GET['user'])) {
-            jsonResponse(false, null, "Benutzer fehlt");
+            saveSessionData(false, null, "Benutzer fehlt");
         }
         getFavoriteEvent($_GET['user']);
         break;
     case 'getSingleEvent':
         if (!isset($_GET['event_id'])) {
-            jsonResponse(false, null, "Event-ID fehlt");
+            saveSessionData(false, null, "Event-ID fehlt");
         }
         getSingleEvent($_GET['event_id']);
         break;
     case 'getEventItems':
         if (!isset($_GET['event_id'])) {
-            jsonResponse(false, null, "Event-ID fehlt");
+            saveSessionData(false, null, "Event-ID fehlt");
         }
         getEventItems($_GET['event_id']);
         break;
     case 'getItemDetails':
         if (!isset($_GET['event_id'])) {
-            jsonResponse(false, null, "Event-ID fehlt");
+            saveSessionData(false, null, "Event-ID fehlt");
         }
         getItemDetails($_GET['event_id']);
         break;
     case 'markItemDone':
         if (!isset($_POST['item_id']) || !isset($_POST['event_id'])) {
-            jsonResponse(false, null, "Item-ID oder Event-ID fehlt");
+            saveSessionData(false, null, "Item-ID oder Event-ID fehlt");
         }
         markItemDone($_POST['item_id'], $_POST['event_id']);
         break;
+    case 'getUsername':
+        getUsername();
+        break;
     default:
-        jsonResponse(false, null, "Ungültige Aktion");
+        saveSessionData(false, null, "Ungültige Aktion");
 }
 
 function createEvent()
@@ -132,12 +134,14 @@ function createEvent()
             INSERT INTO attendance (username, event_id, is_creator, has_favorited)
             VALUES (?, ?, 1, 0)
         ");
-        $stmtAttendance->bind_param("si", $_POST['username'], $eventID);
+        $stmtAttendance->bind_param("si", $_SESSION['username'], $eventID);
         $stmtAttendance->execute();
         $stmtAttendance->close();
     } else {
         die($stmt->error);
     }
+
+    header("Location: ../pages/event.html");
 }
 function getEvent($selectedUser)
 {
@@ -149,7 +153,7 @@ function getEvent($selectedUser)
     WHERE a.username = ?");
 
     if (!$stmt) {
-        jsonResponse(false, null, "Prepare fehlgeschlagen");
+        saveSessionData(false, null, "Prepare fehlgeschlagen");
     }
 
 
@@ -189,12 +193,8 @@ function getEvent($selectedUser)
         $events[] = $row;
     }
 
-    jsonResponse(true, $events, null);
-    echo json_encode([
-            "success" => true,
-            "data" => $events,
-            "error" => null
-        ]);
+    saveSessionData(true, $events, null);
+    returnJSON(true, $events, null);
 }
 
 function getFavoriteEvent($selectedUser)
@@ -207,7 +207,7 @@ function getFavoriteEvent($selectedUser)
     WHERE a.username = ? AND a.has_favorited = 1");
 
     if (!$stmt) {
-        jsonResponse(false, null, "Prepare fehlgeschlagen");
+        saveSessionData(false, null, "Prepare fehlgeschlagen");
     }
 
     $stmt->bind_param("s", $selectedUser);
@@ -244,12 +244,8 @@ function getFavoriteEvent($selectedUser)
 
     }
 
-    jsonResponse(true, $events, null);
-    echo json_encode([
-            "success" => true,
-            "data" => $events,
-            "error" => null
-        ]);
+    saveSessionData(true, $events, null);
+    returnJSON(true, $events, null);
 }
 
 function getSingleEvent($eventID)
@@ -261,16 +257,12 @@ function getSingleEvent($eventID)
 
     if ($stmt->execute()) {
         $event = $stmt->get_result()->fetch_assoc();
-        jsonResponse(true, $event, null);
-        echo json_encode([
-            "success" => true,
-            "data" => $event,
-            "error" => null
-        ]);
+        saveSessionData(true, $event, null);
+        returnJSON(true, $event, null);
 
         exit;
     } else {
-        jsonResponse(false, null, $stmt->error);
+        returnJSON(false, null, $stmt->error);
         exit;
     }
 
@@ -289,9 +281,10 @@ function getEventItems($eventID)
         while ($row = $result->fetch_assoc()) {
             $items[] = $row;
         }
-        jsonResponse(true, $items, null);
+        saveSessionData(true, $items, null);
+        returnJSON(true, $items, null); 
     } else {
-        jsonResponse(false, null, $stmt->error);
+        saveSessionData(false, null, $stmt->error);
         exit;
     }
 
@@ -310,9 +303,9 @@ function getItemDetails($eventID)
         while ($row = $result->fetch_assoc()) {
             $items[] = $row;
         }
-        jsonResponse(true, $items, null);
+        saveSessionData(true, $items, null);
     } else {
-        jsonResponse(false, null, $stmt->error);
+        saveSessionData(false, null, $stmt->error);
         exit;
     }
 
@@ -336,9 +329,20 @@ function markItemDone($itemID, $eventID)
     $stmt->bind_param('sis', $name, $eventID, $_SESSION['username']);
 
     if ($stmt->execute()) {
-        jsonResponse(true, "Item als erledigt markiert", null);
+        saveSessionData(true, "Item als erledigt markiert", null);
     } else {
-        jsonResponse(false, null, $stmt->error);
+        saveSessionData(false, null, $stmt->error);
     }
 }
 
+
+
+function getUsername() {
+    if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+        saveSessionData(true, $_SESSION['username'], null);
+        returnJSON(true, $_SESSION['username'], null);
+    } else {
+        saveSessionData(false, null, "Benutzer nicht angemeldet");
+        returnJSON(false, null, "Benutzer nicht angemeldet");
+    }
+}
