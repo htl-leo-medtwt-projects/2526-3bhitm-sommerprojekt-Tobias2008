@@ -142,3 +142,79 @@ footer {
     margin-left: auto;
     margin-right: auto;
 }
+
+
+#bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 70px;
+
+    background: var(--dark-shadow-grey);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    z-index: 9999;
+
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.nav-item {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    color: var(--text-information-light);
+
+    transition: all 0.2s ease;
+
+    text-decoration: none;
+}
+
+.nav-item svg {
+    width: 24px;
+    height: 24px;
+
+    stroke: currentColor;
+}
+
+/* Hover / Active feeling */
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--white);
+}
+
+/* CREATE BUTTON (Main Action) */
+.nav-item.create {
+    background: var(--linear-gradient-button-purple);
+    color: var(--white);
+
+    border-radius: 16px;
+
+    box-shadow: 0 0 18px rgba(126, 45, 193, 0.35);
+}
+
+.nav-item.create:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(126, 45, 193, 0.5);
+}
+
+/* BACK button subtle */
+.nav-item.back {
+    opacity: 0.6;
+}
+
+/* IMPORTANT: prevent content hiding behind navbar */
+body {
+    padding-bottom: 90px;
+}
