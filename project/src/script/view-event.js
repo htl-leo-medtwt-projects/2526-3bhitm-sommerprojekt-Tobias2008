@@ -1,3 +1,4 @@
+
 /*
 
 <div id="event-image"></div>
@@ -123,7 +124,6 @@ async function displayEvent() {
 }
 
 
-function getEventMembers(eventID) { }
 
 function loadItemDetails(attributeID, eventID) {
 
@@ -223,4 +223,93 @@ function changeButton(itemID) {
         button.style.backgroundColor = 'rgba(0, 255, 0, 0.6)';
     }
 
+}
+
+const viewMemberButton =
+    document.getElementById("viewMemberButton");
+
+const popupOverlay =
+    document.getElementById("member-popup-overlay");
+
+const popupClose =
+    document.getElementById("popup-close");
+
+/* OPEN POPUP */
+
+viewMemberButton.addEventListener("click", () => {
+
+    popupOverlay.classList.add("active");
+
+});
+
+/* CLOSE BUTTON */
+
+popupClose.addEventListener("click", () => {
+
+    popupOverlay.classList.remove("active");
+
+});
+
+/* CLOSE WHEN CLICKING OUTSIDE */
+
+popupOverlay.addEventListener("click", (e) => {
+
+    if (e.target === popupOverlay) {
+
+        popupOverlay.classList.remove("active");
+
+    }
+
+});
+
+let memberPreset = `
+<div class="member">
+                    <div class="member-avatar"></div>
+                    <span class="member-name"></span>
+                </div>
+`;
+
+function getMembers(eventID) {
+    return fetch("../php/event.php?action=getMembers&event_id=" + eventID)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Server Antwort:", data);
+            if (data.success) {
+                const members = data.data;
+                return members;
+            } else {
+                console.error("Fehler:", data.error);
+            }
+        })
+        .catch(err => {
+            console.error("Fetch Fehler:", err);
+        }); 
+}
+
+function displayMembers() {
+    const membersContainer = document.getElementById('member-list');
+    const eventID = new URLSearchParams(window.location.search).get('event_id');
+
+    if (!eventID) {
+        console.error("Event-ID fehlt in der URL.");
+        window.location.href = '../pages/event.html';
+    }
+
+    membersContainer.innerHTML = '';
+    
+    getMembers(eventID).then(members => {
+        members.forEach(member => {
+            const memberElement = document.createElement('div');
+            memberElement.classList.add('member');
+            memberElement.innerHTML = memberPreset;
+            console.log("Member Data:", member);
+            memberElement.querySelector('.member-name').innerText = member;
+            if (member.image_src) {
+                memberElement.querySelector('.member-avatar').style.backgroundImage = `url(${member.image_src})`;
+            } else {
+                memberElement.querySelector('.member-avatar').style.backgroundImage = 'url(../../ressources/images/profile/pre-saved-images/blackMonster.jpg)';
+            }
+            membersContainer.appendChild(memberElement);
+        });
+    });
 }

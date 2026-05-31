@@ -68,6 +68,12 @@ switch ($action) {
     case 'getUsername':
         getUsername();
         break;
+        case 'getMembers':
+            if (!isset($_GET['event_id'])) {
+                saveSessionData(false, null, "Event-ID fehlt");
+            }
+            getMembers($_GET['event_id']);
+            break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -304,6 +310,7 @@ function getItemDetails($eventID)
             $items[] = $row;
         }
         saveSessionData(true, $items, null);
+        returnJSON(true, $items, null);
     } else {
         saveSessionData(false, null, $stmt->error);
         exit;
@@ -344,5 +351,25 @@ function getUsername() {
     } else {
         saveSessionData(false, null, "Benutzer nicht angemeldet");
         returnJSON(false, null, "Benutzer nicht angemeldet");
+    }
+}
+
+function getMembers($eventID) {
+    global $conn;
+
+    $stmt = $conn->prepare("SELECT username FROM attendance WHERE event_id = ?");
+    $stmt->bind_param("i", $eventID);
+
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $members = [];
+        while ($row = $result->fetch_assoc()) {
+            $members[] = $row['username'];
+        }
+        saveSessionData(true, $members, null);
+        returnJSON(true, $members, null);
+    } else {
+        saveSessionData(false, null, $stmt->error);
+        returnJSON(false, null, $stmt->error);
     }
 }
