@@ -97,15 +97,15 @@ input::placeholder {
 }
 
 footer {
+    margin-top: auto;
+
     text-align: center;
     color: var(--text-information-light);
     font-family: var(--font-information-normal);
     font-size: 0.8em;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
 
+    padding: 1em 0 5.5rem;
+}
 
 #headline {
     font-family: var(--font-headline);

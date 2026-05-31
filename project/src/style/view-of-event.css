@@ -30,56 +30,30 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#event-title {
-    color: var(--text-information-light);
-    font-family: var(--font-KoHo);
-    font-size: 1.6em;
-    margin-top: 0.5em;
-    width: 90vw;
-    margin-left: 0.89em;
-    margin-bottom: 0.1em;
-}
-
-#title-text {
-    color: var(--white);
-    font-family: var(--font-information-normal);
-    font-size: 1.1em;
-    margin-top: 0.1em;
-    margin-bottom: 0;
-    width: 90vw;
-    margin-left: 1.35em;
-}
-
-#information {
-    color: var(--text-information-light);
-    font-family: var(--font-information-normal);
-    font-size: 1.1em;
-    margin-top: 0;
-    margin-bottom: 0;
-    width: 90vw;
-    margin-left: 1.35em;
-}
 
 #viewMemberButton {
-    margin-top: 1em;
-    margin-bottom: 1em;
-    width: 35vw;
-    margin-left: 1.35em;
-    padding: 0.5em;
-    background-color: var(--primary-color);
+    margin: 1.2em auto 1.5em auto;
+
+    width: 72vw;
+    min-width: 180px;
+
+    padding: 0.7em 1.2em;
+
+    background-image: var(--linear-gradient-button-purple);
     color: var(--white);
+
     font-family: var(--font-information-normal);
     font-size: 1.1em;
-    text-align: center;
-    border-radius: 10px;
+
+    border-radius: 15px;
     cursor: pointer;
-    background-image: var(--linear-gradient-button-purple);
-    white-space: nowrap;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4em;
+    gap: 0.6em;
 
+    white-space: nowrap;
 }
 
 .item,
@@ -282,4 +256,76 @@ body {
 
 .member .member {
     width: 100%;
+}
+
+#event-header {
+    width: 75vw;
+    margin: 1em auto 0 auto;
+}
+
+#event-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+#event-title {
+    margin: 0;
+
+    color: var(--white);
+    font-family: var(--font-KoHo);
+    font-size: 2em;
+    line-height: 1;
+}
+
+#title-text {
+    margin: 0.25em 0 0 0;
+
+    color: var(--white);
+    font-family: var(--font-information-normal);
+    font-size: 1.15em;
+}
+
+#information {
+    margin: 0;
+
+    color: var(--text-information-light);
+    font-family: var(--font-information-normal);
+    font-size: 1.1em;
+}
+
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+#favorite-star {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transform: translateY(2px);
+}
+
+#favorite-star svg path {
+    fill: transparent;
+    stroke: #777;
+    stroke-width: 2;
+
+    transition: all 0.2s ease;
+}
+
+#favorite-star.active svg path {
+    fill: #B39500;
+    stroke: #B39500;
+}
+
+.speacialfooter {
+    padding: 1em 0 0rem;
+}
+
+body {
+    padding: 0%;
 }

@@ -11,6 +11,42 @@
 </head>
 
 <body>
+
+
+    <nav id="bottom-nav">
+        <a href="./event.html" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+            </svg>
+        </a>
+
+        <a href="./create-event.html" class="nav-item create">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14" />
+            </svg>
+        </a>
+
+        <a href="./settings.html" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065Z" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+            </svg>
+        </a>
+
+        <!-- 
+    
+    <a href="javascript:history.back()" class="nav-item back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                d="M15 18l-6-6 6-6" />
+        </svg>
+    </a>
+    
+    -->
+    </nav>
+
     <h1 id="headline">View of the Event</h1>
     <p id="textHeadline">Here you can view or Edit an Event!</p>
 
@@ -18,9 +54,24 @@
     <div id="view-event">
         <div id="event-image"></div>
 
-        <h1 id="event-title"></h1>
-        <p id="title-text"></p>
-        <p id="information"></p>
+
+        <div id="event-header">
+
+            <div id="event-title-wrapper">
+                <h1 id="event-title"></h1>
+
+                <div id="favorite-star">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                        <path d="M12 2 L15 9 L22 9 L17 14 L19 22 L12 18 L5 22 L7 14 L2 9 L9 9 Z" stroke-width="2"
+                            stroke-linejoin="round" stroke-linecap="round" />
+                    </svg>
+                </div>
+            </div>
+
+            <p id="title-text"></p>
+            <p id="information"></p>
+
+        </div>
         <div id="viewMemberButton" onclick="displayMembers()">
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -47,7 +98,7 @@
 
             <div id="member-list">
 
-                
+
 
             </div>
 
@@ -55,7 +106,9 @@
 
     </div>
 
-
+<footer class="speacialfooter">
+        <p>&copy; 2026 Payreder Management. All rights reserved.</p>
+    </footer>
 </body>
 
 </html>

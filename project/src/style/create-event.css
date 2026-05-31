@@ -161,3 +161,12 @@ button[type="submit"] {
     flex-wrap: nowrap;
     margin-top: 4vh;
 }
+
+
+.speacialfooter {
+    padding: 1em 0 0rem;
+}
+
+body {
+    padding: 0%;
+}

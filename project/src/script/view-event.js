@@ -237,17 +237,15 @@ const popupClose =
 /* OPEN POPUP */
 
 viewMemberButton.addEventListener("click", () => {
-
     popupOverlay.classList.add("active");
-
+    document.body.classList.add("no-scroll");
 });
 
 /* CLOSE BUTTON */
 
 popupClose.addEventListener("click", () => {
-
     popupOverlay.classList.remove("active");
-
+    document.body.classList.remove("no-scroll");
 });
 
 /* CLOSE WHEN CLICKING OUTSIDE */
@@ -313,3 +311,11 @@ function displayMembers() {
         });
     });
 }
+
+document.addEventListener("click", (e) => {
+    const star = e.target.closest("#favorite-star");
+
+    if (!star) return;
+
+    star.classList.toggle("active");
+});
