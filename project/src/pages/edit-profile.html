@@ -1,32 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../style/global.css">
+<link rel="stylesheet" href="../style/edit-profile.css">
+<script src="../script/edit-profile.js" defer></script>
 
-    <link rel="stylesheet" href="../style/global.css">
-    <link rel="stylesheet" href="../style/settings.css">
+<title>Edit Profile</title>
 
-    <script src="../script/edit-profile.js" defer></script>
 </head>
+
 <body>
 
-<h1>Edit Profile</h1>
+<h1 id="headline">Edit Profile</h1>
 
-<section class="settings-card">
+<section class="profile-card">
 
-    <input type="text" id="firstName" placeholder="First Name">
+    <div class="profile-picture">
+        <img id="profilePicture">
+    </div>
 
-    <input type="text" id="lastName" placeholder="Last Name">
-
-    <input type="email" id="email" placeholder="Email">
-
-    <button id="saveProfile">
-        Save Profile
-    </button>
+    <div class="profile-title">
+        Personal Information
+    </div>
 
 </section>
 
+<section class="form-card">
+
+    <input
+        type="text"
+        id="firstName"
+        placeholder="First Name">
+
+    <input
+        type="text"
+        id="lastName"
+        placeholder="Last Name">
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Email">
+
+    <button
+        class="save-btn"
+        id="saveProfile">
+        Save Changes
+    </button>
+
+</section>
 </body>
 </html>
