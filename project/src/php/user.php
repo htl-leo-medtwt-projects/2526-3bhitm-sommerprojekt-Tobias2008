@@ -26,6 +26,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'changePassword') {
     changePassword();
 }
 
+if (isset($_GET['action']) && $_GET['action'] === 'changeEmail') {
+    changeEmail();
+}
+
 if (isset($_POST['action']) && $_POST['action'] === 'updateProfile') {
     updateProfile();
 }
@@ -243,6 +247,48 @@ function changePassword()
     }
 
     returnJSON(true, "Password updated");
+}
+
+function changeEmail()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Not logged in");
+    }
+
+    if (!isset($_POST['email']) || empty(trim($_POST['email']))) {
+        returnJSON(false, null, "Email is required");
+    }
+
+    $email = trim($_POST['email']);
+    $username = $_SESSION['username'];
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        returnJSON(false, null, "Invalid email format");
+    }
+
+    $check = $conn->prepare("SELECT username FROM user WHERE email = ?");
+    $check->bind_param("s", $email);
+
+    if (!$check->execute()) {
+        returnJSON(false, null, "Database error");
+    }
+
+    $result = $check->get_result();
+
+    if ($result->num_rows > 0) {
+        returnJSON(false, null, "Email already in use");
+    }
+
+    $stmt = $conn->prepare("UPDATE user SET email = ? WHERE username = ?");
+    $stmt->bind_param("ss", $email, $username);
+
+    if (!$stmt->execute()) {
+        returnJSON(false, null, "Could not update email");
+    }
+
+    returnJSON(true, "Email updated successfully");
 }
 
 ?>

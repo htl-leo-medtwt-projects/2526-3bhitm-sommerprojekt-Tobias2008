@@ -17,15 +17,29 @@ document.getElementById("saveEmail")
             .then(r => r.json())
             .then(data => {
 
+console.log(data);
+
                 if (data.success) {
-                    alert("Email updated");
-                    window.location =
-                        "./settings.html";
+                    showPopup("Email updated", "success");
                 }
                 else {
-                    alert(data.error);
+                    showPopup(data.error, "error");
                 }
 
             });
 
     });
+
+
+    function showPopup(message, type = "success") {
+    const popup = document.getElementById("popup");
+
+    popup.className = `popup ${type}`;
+    popup.textContent = message;
+
+    popup.classList.remove("hidden");
+
+    setTimeout(() => {
+        popup.classList.add("hidden");
+    }, 2500);
+}
