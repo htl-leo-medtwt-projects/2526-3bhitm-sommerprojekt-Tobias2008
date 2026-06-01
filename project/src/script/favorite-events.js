@@ -1,27 +1,44 @@
 fetch("../php/event.php?action=getUsername")
-.then(response => response.json())
-.then(data => {
+.then(r=>r.json())
+.then(user=>{
 
-    if (!data.success) return;
-
-    fetch(
-        "../php/event.php?action=getFavorite&user=" +
-        data.data
-    )
-    .then(response => response.json())
-    .then(eventData => {
+    fetch("../php/event.php?action=getFavorite&user="+user.data)
+    .then(r=>r.json())
+    .then(data=>{
 
         const container =
-            document.getElementById("favoritesContainer");
+        document.getElementById("favoriteContainer");
 
-        eventData.data.forEach(event => {
+        data.data.forEach(event=>{
 
             container.innerHTML += `
-                <div class="settings-card">
-                    <h3>${event.name}</h3>
-                    <p>${event.title_text}</p>
+            <div class="favorite-card">
+
+                <div class="favorite-image"
+                style="background-image:url('${event.image_src || "../../ressources/images/placeholder_event.jpg"}')">
                 </div>
-            `;
+
+                <div class="favorite-content">
+
+                    <div class="favorite-name">
+                        ${event.name}
+                    </div>
+
+                    <div class="favorite-title">
+                        ${event.title_text}
+                    </div>
+
+                    <a
+                    class="favorite-btn"
+                    href="./view-Event.html?event_id=${event.event_id}">
+                    Open Event
+                    </a>
+
+                </div>
+
+            </div>`;
         });
+
     });
+
 });
