@@ -15,18 +15,22 @@ $_db_datenbank = 'PreGame';
 $conn = new mysqli($_db_host, $_db_username, $_db_password, $_db_datenbank);
 
 if ($conn->connect_error) {
-    saveSessionData(false, null, "DB Verbindung fehlgeschlagen");
-} 
+    returnJSON(false, null, "DB Verbindung fehlgeschlagen");
+}
 /*else if (isset($_SESSION['user'], $_SESSION['username']) && $_SESSION['user']) {
     header("Location: ../pages/index.html");
     exit();
 }
 */
 
-if (isset($_POST['action'])) {
-    if ($_POST['action'] === 'selectProfilePicture') {
-        $_SESSION['selectedProfilePicture'] = $_POST['profile-picture'];
-    }
+// GET
+if (isset($_GET['action']) && $_GET['action'] === 'getProfile') {
+    getProfile();
+}
+
+// POST
+if (isset($_POST['action']) && $_POST['action'] === 'updateProfile') {
+    updateProfile();
 }
 
 if (isset($_POST['register'])) {
@@ -47,17 +51,17 @@ function registerUser()
 {
 
 
-    
+
     global $conn;
 
     if (!isset($_POST['first-name'], $_POST['last-name'], $_POST['username'], $_POST['password'], $_POST['confirm-password'], $_POST['email'], $_POST['birthday'], $_SESSION['selectedProfilePicture'])) {
-    saveSessionData(false, null, "Please fill in all fields.");
+        saveSessionData(false, null, "Please fill in all fields.");
         header("Location: ../pages/login-register/register.php");
         exit();
     }
 
     if ($_POST['password'] !== $_POST['confirm-password']) {
-    saveSessionData(false, null, "The passwords do not match.");
+        saveSessionData(false, null, "The passwords do not match.");
         header("Location: ../pages/login-register/register.php");
         exit();
     }
@@ -74,11 +78,11 @@ function registerUser()
     $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $password, $birthday, $_SESSION['selectedProfilePicture']);
 
     if ($stmt->execute()) {
-    saveSessionData(true, "Registration successful!", null);
+        saveSessionData(true, "Registration successful!", null);
         header("Location: ../pages/login-register/login.html");
         exit();
     } else {
-    saveSessionData(false, null, "Error during registration: " . $stmt->error);
+        saveSessionData(false, null, "Error during registration: " . $stmt->error);
         header("Location: ../pages/login-register/register.php");
 
     }
@@ -92,7 +96,7 @@ function loginUser()
     global $conn;
 
     if (!isset($_POST['username'], $_POST['password'])) {
-    saveSessionData(false, null, "Please fill in all fields.");
+        saveSessionData(false, null, "Please fill in all fields.");
         header("Location: ../pages/login-register/login.php");
         exit();
     }
@@ -106,7 +110,7 @@ function loginUser()
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
-    saveSessionData(false, null, "Username is not registered.");
+        saveSessionData(false, null, "Username is not registered.");
         header("Location: ../pages/login-register/login.php");
         exit();
     }
@@ -114,12 +118,12 @@ function loginUser()
     $user = $result->fetch_assoc();
 
     if (!password_verify($password, $user['password'])) {
-    saveSessionData(false, null, "Password is wrong.");
+        saveSessionData(false, null, "Password is wrong.");
         header("Location: ../pages/login-register/login.php");
         exit();
     }
 
-saveSessionData(true, "Login successful!", null);
+    saveSessionData(true, "Login successful!", null);
     $_SESSION['username'] = $username;
     $_SESSION['user'] = true;
     header("Location: ../pages/event.html");
@@ -127,5 +131,77 @@ saveSessionData(true, "Login successful!", null);
 }
 
 
+
+
+
+function getProfile()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Not logged in");
+    }
+
+    $username = $_SESSION['username'];
+
+    $stmt = $conn->prepare("
+        SELECT first_name, last_name, date_of_birth, image_src
+        FROM user
+        WHERE username = ?
+    ");
+
+    if (!$stmt) {
+        returnJSON(false, null, "SQL prepare failed: " . $conn->error);
+    }
+
+    $stmt->bind_param("s", $username);
+
+    if (!$stmt->execute()) {
+        returnJSON(false, null, "SQL execute failed: " . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        returnJSON(false, null, "User not found");
+    }
+
+    $user = $result->fetch_assoc();
+
+    returnJSON(true, $user);
+}
+
+
+function updateProfile()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Not logged in");
+    }
+
+    $username = $_SESSION['username'];
+    $first = $_POST['first_name'] ?? null;
+    $last = $_POST['last_name'] ?? null;
+    $dob = $_POST['date_of_birth'] ?? null;
+
+    if (!$first || !$last || !$dob) {
+        returnJSON(false, null, "Missing fields");
+    }
+
+    $stmt = $conn->prepare("
+        UPDATE user 
+        SET first_name=?, last_name=?, date_of_birth=?
+        WHERE username=?
+    ");
+
+    $stmt->bind_param("ssss", $first, $last, $dob, $username);
+
+    if (!$stmt->execute()) {
+        returnJSON(false, null, $stmt->error);
+    }
+
+    returnJSON(true, "Updated");
+}
 
 ?>

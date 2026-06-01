@@ -3,29 +3,66 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Account</title>
 
     <link rel="stylesheet" href="../style/global.css">
-    <link rel="stylesheet" href="../style/settings.css">
-
+    <link rel="stylesheet" href="../style/delete-account.css">
     <script src="../script/delete-account.js" defer></script>
 </head>
 
 <body>
 
-    <h1>Delete Account</h1>
+    
 
-    <section class="settings-card">
+    <h1 id="headline">Delete Account</h1>
 
-        <p>
-            This action cannot be undone.
-        </p>
+    <div class="center-wrapper">
 
-        <button id="deleteAccount" class="danger">
-            Delete Account
-        </button>
+        <div class="danger-card">
 
-    </section>
+            <div class="danger-title">Are you sure?</div>
+
+            <div class="danger-text">
+                This action is irreversible. Your account, events and all data will be permanently deleted.
+            </div>
+
+            <button class="danger-button" id="deleteBtn">
+                Delete my account
+            </button>
+
+            <a class="cancel-link" href="./settings.html">
+                Cancel
+            </a>
+
+        </div>
+
+    </div>
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+        <h2>Account wirklich löschen?</h2>
+        <p>Diese Aktion kann nicht rückgängig gemacht werden.</p>
+
+        <div class="modal-actions">
+            <button id="cancelDelete">Abbrechen</button>
+            <button id="confirmDelete">Ja, löschen</button>
+        </div>
+    </div>
+</div>
+
+<!-- ERROR / INFO MODAL -->
+<div class="modal-overlay" id="infoModal">
+    <div class="modal">
+        <h2 id="infoTitle">Info</h2>
+        <p id="infoText"></p>
+
+        <div class="modal-actions">
+            <button id="closeInfo">OK</button>
+        </div>
+    </div>
+</div>
+    
 
 </body>
 
