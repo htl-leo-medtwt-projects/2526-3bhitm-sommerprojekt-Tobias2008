@@ -1,10 +1,5 @@
 <?php
 
-/* TODO: 
- * Exeptionhandling bei Login / Registrierung
- * Fehlermeldungen auf der Seite anzeigen
- */
-
 require 'global.php';
 
 $_db_host = 'db_server';
@@ -23,12 +18,14 @@ if ($conn->connect_error) {
 }
 */
 
-// GET
 if (isset($_GET['action']) && $_GET['action'] === 'getProfile') {
     getProfile();
 }
 
-// POST
+if (isset($_GET['action']) && $_GET['action'] === 'changePassword') {
+    changePassword();
+}
+
 if (isset($_POST['action']) && $_POST['action'] === 'updateProfile') {
     updateProfile();
 }
@@ -41,11 +38,6 @@ if (isset($_POST['login'])) {
     loginUser();
 }
 
-/*if (!isset($_POST['action'], $_POST['register'], $_POST['login'])) {
-    header("Location: ../pages/login-register/login.html");
-    exit();
-}
-*/
 
 function registerUser()
 {
@@ -202,6 +194,55 @@ function updateProfile()
     }
 
     returnJSON(true, "Updated");
+}
+
+
+
+function changePassword()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Not logged in");
+    }
+
+    if (!isset($_POST['oldPassword'], $_POST['newPassword'])) {
+        returnJSON(false, null, "Missing fields");
+    }
+
+    $username = $_SESSION['username'];
+    $oldPassword = $_POST['oldPassword'];
+    $newPassword = $_POST['newPassword'];
+
+    $stmt = $conn->prepare("SELECT password FROM user WHERE username = ?");
+    $stmt->bind_param("s", $username);
+
+    if (!$stmt->execute()) {
+        returnJSON(false, null, "DB error");
+    }
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        returnJSON(false, null, "User not found");
+    }
+
+    $user = $result->fetch_assoc();
+
+    if (!password_verify($oldPassword, $user['password'])) {
+        returnJSON(false, null, "Old password is incorrect");
+    }
+
+    $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $update = $conn->prepare("UPDATE user SET password = ? WHERE username = ?");
+    $update->bind_param("ss", $newHashedPassword, $username);
+
+    if (!$update->execute()) {
+        returnJSON(false, null, "Could not update password");
+    }
+
+    returnJSON(true, "Password updated");
 }
 
 ?>
