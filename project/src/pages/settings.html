@@ -1,11 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Settings</title>
+
+    <link rel="stylesheet" href="../style/global.css">
+    <link rel="stylesheet" href="../style/settings.css">
+    <script src="../script/settings.js" defer></script>
 </head>
+
 <body>
-    Settings
+
+
+<nav id="bottom-nav">
+        <a href="./event.html" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+            </svg>
+        </a>
+
+        <a href="./create-event.html" class="nav-item create">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14" />
+            </svg>
+        </a>
+
+        <a href="./settings.html" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065Z" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+            </svg>
+        </a>
+
+        <!-- 
+    
+    <a href="javascript:history.back()" class="nav-item back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                d="M15 18l-6-6 6-6" />
+        </svg>
+    </a>
+    
+    -->
+    </nav>
+
+    <h1 id="headline">Settings</h1>
+
+    <!-- PROFILE -->
+
+    <section class="settings-card profile-card">
+
+        <div class="profile-image">
+            <img id="profilePicture">
+        </div>
+
+        <div class="profile-info">
+
+            <h2 id="username">Loading...</h2>
+
+            <p id="email"></p>
+
+        </div>
+
+    </section>
+
+    <!-- ACCOUNT -->
+
+    <h2 class="settings-category">Account</h2>
+
+    <section class="settings-card">
+
+        <a class="setting-item" href="./edit-profile.html">
+            <span>Edit Profile</span>
+            <span>›</span>
+        </a>
+
+        <a class="setting-item" href="./change-password.html">
+            <span>Change Password</span>
+            <span>›</span>
+        </a>
+
+        <a class="setting-item" href="./change-email.html">
+            <span>Change Email</span>
+            <span>›</span>
+        </a>
+
+    </section>
+
+    <!-- EVENTS -->
+
+    <h2 class="settings-category">Events</h2>
+
+    <section class="settings-card">
+
+        <a class="setting-item" href="./my-events.html">
+            <span>My Events</span>
+            <span>›</span>
+        </a>
+
+        <a class="setting-item" href="./favorite-events.html">
+            <span>Favorite Events</span>
+            <span>›</span>
+        </a>
+
+    </section>
+
+    <!-- DANGER -->
+
+    <h2 class="settings-category">Danger Zone</h2>
+
+    <section class="settings-card">
+
+        <a class="setting-item danger" href="../php/logout.php">
+            <span>Logout</span>
+        </a>
+
+        <a class="setting-item danger" href="./delete-account.html">
+            <span>Delete Account</span>
+        </a>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Payreder Management. All rights reserved.</p>
+    </footer>
+
 </body>
+
 </html>

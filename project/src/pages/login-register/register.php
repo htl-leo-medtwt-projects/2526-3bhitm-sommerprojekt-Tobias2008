@@ -30,7 +30,7 @@
 
 
         <button class="register" type="submit">Register</button>
-        <Label id="have-account">Already have an account? <a href="./login.html">Login</a></Label>
+        <Label id="have-account">Already have an account? <a href="./login.php">Login</a></Label>
     </form>
 
     <footer>

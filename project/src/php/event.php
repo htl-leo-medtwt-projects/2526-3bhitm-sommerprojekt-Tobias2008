@@ -68,12 +68,18 @@ switch ($action) {
     case 'getUsername':
         getUsername();
         break;
-        case 'getMembers':
-            if (!isset($_GET['event_id'])) {
-                saveSessionData(false, null, "Event-ID fehlt");
-            }
-            getMembers($_GET['event_id']);
-            break;
+    case 'getMembers':
+        if (!isset($_GET['event_id'])) {
+            saveSessionData(false, null, "Event-ID fehlt");
+        }
+        getMembers($_GET['event_id']);
+        break;
+    case 'getProfile':
+        getProfile();
+        break;
+    case 'updateProfile':
+        updateProfile();
+        break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -288,7 +294,7 @@ function getEventItems($eventID)
             $items[] = $row;
         }
         saveSessionData(true, $items, null);
-        returnJSON(true, $items, null); 
+        returnJSON(true, $items, null);
     } else {
         saveSessionData(false, null, $stmt->error);
         exit;
@@ -344,7 +350,8 @@ function markItemDone($itemID, $eventID)
 
 
 
-function getUsername() {
+function getUsername()
+{
     if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
         saveSessionData(true, $_SESSION['username'], null);
         returnJSON(true, $_SESSION['username'], null);
@@ -354,7 +361,8 @@ function getUsername() {
     }
 }
 
-function getMembers($eventID) {
+function getMembers($eventID)
+{
     global $conn;
 
     $stmt = $conn->prepare("SELECT username FROM attendance WHERE event_id = ?");
@@ -370,6 +378,79 @@ function getMembers($eventID) {
         returnJSON(true, $members, null);
     } else {
         saveSessionData(false, null, $stmt->error);
+        returnJSON(false, null, $stmt->error);
+    }
+}
+
+
+function getProfile()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Nicht eingeloggt");
+        exit();
+    }
+
+    $stmt = $conn->prepare("
+        SELECT
+            first_name,
+            last_name,
+            username,
+            email,
+            date_of_birth,
+            image_src
+        FROM user
+        WHERE username = ?
+    ");
+
+    $stmt->bind_param("s", $_SESSION['username']);
+
+    if ($stmt->execute()) {
+
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        returnJSON(true, $user, null);
+
+    } else {
+        returnJSON(false, null, $stmt->error);
+    }
+}
+
+
+function updateProfile()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Nicht eingeloggt");
+        exit();
+    }
+
+    $firstName = $_POST['first_name'];
+    $lastName = $_POST['last_name'];
+    $email = $_POST['email'];
+
+    $stmt = $conn->prepare("
+        UPDATE user
+        SET first_name = ?,
+            last_name = ?,
+            email = ?
+        WHERE username = ?
+    ");
+
+    $stmt->bind_param(
+        "ssss",
+        $firstName,
+        $lastName,
+        $email,
+        $_SESSION['username']
+    );
+
+    if ($stmt->execute()) {
+        returnJSON(true, "Profil gespeichert", null);
+    } else {
         returnJSON(false, null, $stmt->error);
     }
 }
