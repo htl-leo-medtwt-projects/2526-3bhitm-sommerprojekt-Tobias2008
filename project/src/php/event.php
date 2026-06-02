@@ -80,6 +80,24 @@ switch ($action) {
     case 'updateProfile':
         updateProfile();
         break;
+    case 'toggleFavorite':
+        if (!isset($_POST['event_id'])) {
+            returnJSON(false, null, "Event-ID fehlt");
+        }
+        toggleFavorite($_POST['event_id']);
+        break;
+    case 'getParticipants':
+        if (!isset($_GET['event_id'])) {
+            saveSessionData(false, null, "Event-ID fehlt");
+        }
+        getMembers($_GET['event_id']);
+        break;
+    case 'getFavoriteStatus':
+        if (!isset($_GET['event_id'])) {
+            returnJSON(false, null, "Event-ID fehlt");
+        }
+        getFavoriteStatus($_GET['event_id']);
+        break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -453,4 +471,52 @@ function updateProfile()
     } else {
         returnJSON(false, null, $stmt->error);
     }
+}
+
+function toggleFavorite($eventID)
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Nicht eingeloggt");
+        exit();
+    }
+
+    // Aktuellen Status holen
+    $stmt = $conn->prepare("SELECT has_favorited FROM attendance WHERE username = ? AND event_id = ?");
+    $stmt->bind_param("si", $_SESSION['username'], $eventID);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    if (!$result) {
+        returnJSON(false, null, "Attendance-Eintrag nicht gefunden");
+        exit();
+    }
+
+    $newStatus = $result['has_favorited'] ? 0 : 1;
+
+    $update = $conn->prepare("UPDATE attendance SET has_favorited = ? WHERE username = ? AND event_id = ?");
+    $update->bind_param("isi", $newStatus, $_SESSION['username'], $eventID);
+
+    if ($update->execute()) {
+        returnJSON(true, $newStatus, null);
+    } else {
+        returnJSON(false, null, $update->error);
+    }
+}
+
+function getFavoriteStatus($eventID) {
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Nicht eingeloggt");
+        exit();
+    }
+
+    $stmt = $conn->prepare("SELECT has_favorited FROM attendance WHERE username = ? AND event_id = ?");
+    $stmt->bind_param("si", $_SESSION['username'], $eventID);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    returnJSON(true, $result['has_favorited'] ?? 0, null);
 }

@@ -85,25 +85,27 @@ footer {
     color: var(--text-information-light)
 }
 
-.messageUser {
-    background-image: var(--linear-gradient-button-grey);
-    padding: 0.5em 1em;
-    border-radius: 5px;
-    text-align: center;
-    margin-top: 1em;
-}
-
 .viewMore {
+    display: block;
     background-image: var(--linear-gradient-button-purple);
     padding: 0.5em 1em;
     border-radius: 5px;
     text-align: center;
-    margin-top: 1em;
+    margin: 1em auto 0 auto;
+    width: 100%;
+    flex: 1;
+    box-sizing: border-box;
 }
+
+.view {
+    width: 100%;
+}
+
 
 .buttons {
     display: flex;
-    gap: 1em;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #event-name {

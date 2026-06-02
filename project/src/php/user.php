@@ -30,6 +30,16 @@ if (isset($_GET['action']) && $_GET['action'] === 'changeEmail') {
     changeEmail();
 }
 
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    session_destroy();
+    header("Location: ../pages/login-register/login.php");
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] === 'deleteAccount') {
+    deleteAccount();
+}
+
 if (isset($_POST['action']) && $_POST['action'] === 'updateProfile') {
     updateProfile();
 }
@@ -291,4 +301,115 @@ function changeEmail()
     returnJSON(true, "Email updated successfully");
 }
 
-?>
+function deleteAccount()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Not logged in");
+    }
+
+    $username = $_SESSION['username'];
+
+    $conn->begin_transaction();
+
+    try {
+
+        // 1. Events holen, die der User erstellt hat
+        $stmtSelectEvents = $conn->prepare("
+            SELECT event.event_id
+            FROM event
+            JOIN attendance ON event.event_id = attendance.event_id
+            WHERE attendance.is_creator = 1
+              AND attendance.username = ?
+        ");
+
+        $stmtSelectEvents->bind_param("s", $username);
+        $stmtSelectEvents->execute();
+
+        $result = $stmtSelectEvents->get_result();
+
+        $eventIds = [];
+        while ($row = $result->fetch_assoc()) {
+            $eventIds[] = $row['event_id'];
+        }
+
+        $result->free();
+        $stmtSelectEvents->close();
+
+        // 2. Alle Event-bezogenen Daten löschen
+        foreach ($eventIds as $eventId) {
+
+            $stmt = $conn->prepare("DELETE FROM vote WHERE event_id = ?");
+            $stmt->bind_param("i", $eventId);
+            $stmt->execute();
+            $stmt->close();
+
+            $stmt = $conn->prepare("DELETE FROM vote_option WHERE event_id = ?");
+            $stmt->bind_param("i", $eventId);
+            $stmt->execute();
+            $stmt->close();
+
+            $stmt = $conn->prepare("DELETE FROM attendance WHERE event_id = ?");
+            $stmt->bind_param("i", $eventId);
+            $stmt->execute();
+            $stmt->close();
+
+            $stmt = $conn->prepare("DELETE FROM purchase WHERE event_id = ?");
+            $stmt->bind_param("i", $eventId);
+            $stmt->execute();
+            $stmt->close();
+
+            $stmt = $conn->prepare("DELETE FROM item WHERE event_id = ?");
+            $stmt->bind_param("i", $eventId);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // 3. User-Teilnahmen löschen
+        $stmt = $conn->prepare("
+            DELETE FROM attendance
+            WHERE username = ?
+        ");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->close();
+
+        // 4. Freundschaften löschen
+        $stmt = $conn->prepare("
+            DELETE FROM friend
+            WHERE user_a = ?
+               OR user_b = ?
+        ");
+        $stmt->bind_param("ss", $username, $username);
+        $stmt->execute();
+        $stmt->close();
+
+        // 5. User löschen
+        $stmt = $conn->prepare("
+            DELETE FROM user
+            WHERE username = ?
+        ");
+        $stmt->bind_param("s", $username);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Could not delete user");
+        }
+
+        $stmt->close();
+
+        // 6. Session zerstören
+        $_SESSION = [];
+        session_destroy();
+
+        $conn->commit();
+
+        returnJSON(true, "Account deleted");
+
+    } catch (Exception $e) {
+
+        $conn->rollback();
+
+        returnJSON(false, null, $e->getMessage());
+    }
+}

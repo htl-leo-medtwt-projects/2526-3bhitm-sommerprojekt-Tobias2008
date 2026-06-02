@@ -20,8 +20,7 @@ const favoriteEventForm =
                 </div>
 
                 <div class="buttons">
-                    <div class="messageUser"></div>
-                    <div class="viewMore"></div>
+                    <div class="view"></div>
             </div>`;
 
 const normalEventForm =
@@ -85,8 +84,6 @@ function getUsernameAndCallEventloader() {
     }); 
 }
 
-
-//TODO: remove hardcoded user
 
 function getAllEventsFromDB(user) {
     console.log('../php/event.php?action=get&user=' + user);
@@ -168,11 +165,9 @@ function displayFavoriteEvents(user) {
             document.querySelectorAll('.creator')[num].innerHTML = `Creator: ${event.owner}`;
             document.querySelectorAll('.date')[num].innerHTML = `Date: ${event.event_date}`;
             document.querySelectorAll('.location')[num].innerHTML = `Location: ${event.location}`;
-            // TODO: count participants
-            document.querySelectorAll('.participants')[num].innerHTML = `${event.participants} / ${event.max_members} Teilnehmer`;
 
-            document.querySelectorAll('.messageUser')[num].innerHTML = `<a href="./message.html?user=${event.owner}">Message ${event.owner}</a>`;
-            document.querySelectorAll('.viewMore')[num].innerHTML = `<a href="./view-Event.html?event_id=${event.event_id}">Read more...</a>`;
+            getMaxMembers(num,event.max_members,event.event_id);
+            document.querySelectorAll('.view')[num].innerHTML = `<a class="viewMore" href="./view-Event.html?event_id=${event.event_id}">Read more...</a>`;
         }
         )
     }
@@ -209,3 +204,21 @@ function displayAllEvents(user) {
     })
 }
 
+function getMaxMembers(num, max_members, eventID) {
+
+
+    fetch("../php/event.php?action=getParticipants&event_id=" + eventID)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Teilnehmerzahl:", data);
+            if (data.success) {
+                const participants = data.data;
+                document.querySelectorAll('.participants')[num].innerHTML = `${participants.length} / ${max_members} Teilnehmer`;
+
+            } else {
+            }
+
+
+        })        .catch(err => {
+        });
+}

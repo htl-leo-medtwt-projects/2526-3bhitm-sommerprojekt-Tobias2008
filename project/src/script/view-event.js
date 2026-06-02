@@ -82,6 +82,14 @@ async function displayEvent() {
         return;
     }
 
+    fetch("../php/event.php?action=getFavoriteStatus&event_id=" + eventID)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data === 1) {
+                document.getElementById('favorite-star').classList.add('active');
+            }
+        });
+
 
 
     if (eventData.image_url) {
@@ -90,7 +98,7 @@ async function displayEvent() {
         document.getElementById('event-image').style.backgroundImage = `url('../../ressources/images/profile/pre-saved-images/blackMonster.jpg')`;
     }
 
-    document.getElementById('event-title').innerText = eventData.title_text;
+    document.getElementById('event-title').innerText = eventData.name;
     document.getElementById('title-text').innerText = eventData.title_text;
     document.getElementById('information').innerText = eventData.information;
 
@@ -281,7 +289,7 @@ function getMembers(eventID) {
         })
         .catch(err => {
             console.error("Fetch Fehler:", err);
-        }); 
+        });
 }
 
 function displayMembers() {
@@ -294,7 +302,7 @@ function displayMembers() {
     }
 
     membersContainer.innerHTML = '';
-    
+
     getMembers(eventID).then(members => {
         members.forEach(member => {
             const memberElement = document.createElement('div');
@@ -314,8 +322,24 @@ function displayMembers() {
 
 document.addEventListener("click", (e) => {
     const star = e.target.closest("#favorite-star");
-
     if (!star) return;
 
-    star.classList.toggle("active");
+    fetch("../php/event.php?action=toggleFavorite", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `event_id=${eventID}`
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (data.data === 1) {
+                    star.classList.add("active");
+                } else {
+                    star.classList.remove("active");
+                }
+            } else {
+                console.error("Fehler beim Favorisieren:", data.error);
+            }
+        })
+        .catch(err => console.error("Fetch Fehler:", err));
 });

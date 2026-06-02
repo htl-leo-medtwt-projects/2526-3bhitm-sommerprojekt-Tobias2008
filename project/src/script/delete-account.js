@@ -38,7 +38,6 @@ confirmDelete.addEventListener("click", async () => {
         });
 
         const data = await res.json();
-
         if (data.success) {
             window.location.href = "../pages/login-register/login.php";
         } else {
