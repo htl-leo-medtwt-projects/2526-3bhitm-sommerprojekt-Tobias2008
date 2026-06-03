@@ -27,7 +27,7 @@ fetch("../php/event.php?action=getUsername")
                     </div>
 
                     <div class="event-info">
-                        ${event.information || ""}
+                        ${event.information}
                     </div>
 
                     <a class="event-btn"

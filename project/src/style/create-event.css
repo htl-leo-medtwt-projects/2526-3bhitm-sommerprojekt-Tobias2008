@@ -21,10 +21,11 @@ textarea {
     font-family: var(--font-KoHo);
     font-size: 0.9em;
     padding: 0.8em;
-    margin-bottom: 0.67em;
     border-radius: 15px;
     width: 80vw;
     resize: none;
+    margin: 0.3em 0;
+
 }
 
 textarea::placeholder {

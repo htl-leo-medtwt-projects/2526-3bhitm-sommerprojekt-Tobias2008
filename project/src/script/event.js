@@ -160,7 +160,7 @@ function displayFavoriteEvents(user) {
 
             document.querySelectorAll('.eventTitle')[num].innerHTML = event.name;
             document.querySelectorAll('.title-text')[num].innerHTML = event.title_text;
-            document.querySelectorAll('.informationText')[num].innerHTML = event.information;
+            document.querySelectorAll('.informationText')[num].innerHTML = getEventInfo(event);
             console.log('Event', event);
             document.querySelectorAll('.creator')[num].innerHTML = `Creator: ${event.owner}`;
             document.querySelectorAll('.date')[num].innerHTML = `Date: ${event.event_date}`;
@@ -196,7 +196,7 @@ function displayAllEvents(user) {
             document.querySelectorAll('.single-event-owner')[num].innerHTML = `Owner: ${event.owner}`;
             document.querySelectorAll('.single-event-title')[num].innerHTML = event.name;
             document.querySelectorAll('.single-event-text-title')[num].innerHTML = event.title_text;
-            document.querySelectorAll('.single-event-information')[num].innerHTML = event.information;
+            document.querySelectorAll('.single-event-information')[num].innerHTML = getEventInfo(event);
 
             document.querySelectorAll('.single-event-button')[num].innerHTML = `<a href="./view-Event.html?event_id=${event.event_id}">Read more...</a>`;
 
@@ -222,3 +222,18 @@ function getMaxMembers(num, max_members, eventID) {
         })        .catch(err => {
         });
 }
+
+
+function getEventInfo(event){
+
+    let info = "";
+
+    if(event.information.length > 60){
+        info = event.information.substring(0, 60) + "...";
+    } else {
+        info = event.information;
+    }
+
+    return info;
+}
+
