@@ -254,3 +254,47 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+
+    width: 90%;
+    max-width: 600px;
+
+    margin: 0 auto;
+}
+
+.search-wrapper {
+    flex: 1;
+    margin: 0;
+}
+
+.friends-button {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 15px;
+
+    background-image: var(--linear-gradient-button-purple);
+
+    color: white;
+
+    box-shadow: 0 0 15px rgba(126, 45, 193, 0.35);
+
+    transition: all 0.2s ease;
+}
+
+.friends-button:hover {
+    transform: scale(1.05);
+}
+
+.friends-button svg {
+    width: 24px;
+    height: 24px;
+}

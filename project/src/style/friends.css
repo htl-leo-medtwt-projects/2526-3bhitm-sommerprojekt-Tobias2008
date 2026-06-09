@@ -1,0 +1,199 @@
+body {
+    color: white;
+    font-family: var(--font-information-normal);
+}
+
+
+/* CATEGORY */
+
+.friends-category {
+
+    width: 88%;
+
+    margin: 1.8em auto .7em;
+
+    color: var(--text-information-light);
+
+    font-size: 1.1em;
+
+    font-family: var(--font-information-medium);
+}
+
+
+/* CARD */
+
+.friends-card {
+
+    width: 88%;
+
+    margin: auto;
+
+    margin-bottom: 1em;
+
+    background:
+        rgba(56, 33, 86, 0.35);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius: 20px;
+
+    backdrop-filter: blur(15px);
+
+    overflow: hidden;
+}
+
+
+/* ITEM */
+
+.friends-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 1em 1.2em;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    font-family: var(--font-information-medium);
+}
+
+.friends-item:hover {
+
+    background:
+        rgba(255,255,255,0.04);
+}
+
+
+/* HIDDEN CONTENT */
+
+.friends-hidden-content {
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    transition: 0.3s ease;
+
+    border-top:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.friends-hidden-content.active {
+
+    max-height: 1000px;
+}
+
+
+/* USER */
+
+.friend-user {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 1em 1.2em;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.friend-user:last-child {
+
+    border-bottom: none;
+}
+
+
+/* USERNAME */
+
+.friend-name {
+
+    font-family:
+        var(--font-information-medium);
+
+    color: white;
+}
+
+
+/* BUTTONS */
+
+.friend-buttons {
+
+    display: flex;
+
+    gap: 0.5em;
+}
+
+.friend-btn {
+
+    border: none;
+
+    padding: 0.7em 1em;
+
+    border-radius: 12px;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-family:
+        var(--font-information-medium);
+
+    transition: 0.2s;
+}
+
+
+/* BUTTON TYPES */
+
+.add-btn {
+
+    background-image:
+        var(--linear-gradient-button-purple);
+}
+
+.accept-btn {
+
+    background:
+        #1faa68;
+}
+
+.decline-btn {
+
+    background:
+        #d64545;
+}
+
+.remove-btn {
+
+    background-image:
+        var(--linear-gradient-button-grey);
+}
+
+
+/* HOVER */
+
+.friend-btn:hover {
+
+    transform: scale(1.03);
+}
+
+
+/* EMPTY */
+
+.empty {
+
+    padding: 1em 1.2em;
+
+    color:
+        var(--text-information);
+}
