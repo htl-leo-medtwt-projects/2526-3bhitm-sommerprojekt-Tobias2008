@@ -197,3 +197,27 @@ body {
     color:
         var(--text-information);
 }
+
+.friend-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.8em;
+}
+
+.friend-avatar {
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 2px solid rgba(255,255,255,0.08);
+
+    background: rgba(255,255,255,0.05);
+}

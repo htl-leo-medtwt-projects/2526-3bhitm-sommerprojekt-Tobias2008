@@ -64,7 +64,7 @@ function getAllUsers()
     $currentUser = $_SESSION['username'];
 
     $stmt = $conn->prepare("
-        SELECT username
+        SELECT username, image_src
         FROM user
         WHERE username != ?
     ");
@@ -78,12 +78,17 @@ function getAllUsers()
         $users = [];
 
         while ($row = $result->fetch_assoc()) {
-            $users[] = $row['username'];
+
+            $users[] = [
+                "username" => $row['username'],
+                "image_src" => $row['image_src']
+            ];
         }
 
         returnJSON(true, $users, null);
 
     } else {
+
         returnJSON(false, null, $stmt->error);
     }
 }
@@ -150,10 +155,12 @@ function getRequests()
     $currentUser = $_SESSION['username'];
 
     $stmt = $conn->prepare("
-        SELECT user_a
+        SELECT user.username, user.image_src
         FROM friend
-        WHERE user_b = ?
-        AND accepted = 0
+        JOIN user
+        ON friend.user_a = user.username
+        WHERE friend.user_b = ?
+        AND friend.accepted = 0
     ");
 
     $stmt->bind_param("s", $currentUser);
@@ -165,12 +172,17 @@ function getRequests()
         $requests = [];
 
         while ($row = $result->fetch_assoc()) {
-            $requests[] = $row['user_a'];
+
+            $requests[] = [
+                "username" => $row['username'],
+                "image_src" => $row['image_src']
+            ];
         }
 
         returnJSON(true, $requests, null);
 
     } else {
+
         returnJSON(false, null, $stmt->error);
     }
 }
@@ -235,19 +247,22 @@ function getFriends()
 
     $stmt = $conn->prepare("
         SELECT
-            CASE
-                WHEN user_a = ? THEN user_b
-                ELSE user_a
-            END as friend
+            user.username,
+            user.image_src
         FROM friend
-        WHERE
-        (user_a = ? OR user_b = ?)
-        AND accepted = 1
+
+        JOIN user
+        ON (
+            (friend.user_a = user.username AND friend.user_b = ?)
+            OR
+            (friend.user_b = user.username AND friend.user_a = ?)
+        )
+
+        WHERE friend.accepted = 1
     ");
 
     $stmt->bind_param(
-        "sss",
-        $currentUser,
+        "ss",
         $currentUser,
         $currentUser
     );
@@ -259,12 +274,17 @@ function getFriends()
         $friends = [];
 
         while ($row = $result->fetch_assoc()) {
-            $friends[] = $row['friend'];
+
+            $friends[] = [
+                "username" => $row['username'],
+                "image_src" => $row['image_src']
+            ];
         }
 
         returnJSON(true, $friends, null);
 
     } else {
+
         returnJSON(false, null, $stmt->error);
     }
 }

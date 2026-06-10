@@ -37,19 +37,64 @@ function toggleFriendsSection(id) {
 }
 
 
-/* TEMPLATE */
-
 function createUserHTML(
     username,
+    profilePicture,
     buttonsHTML
 ) {
+
+    let image =
+        "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
+
+    if (
+    profilePicture &&
+    profilePicture !== "null" &&
+    profilePicture !== null &&
+    profilePicture !== undefined
+) {
+
+    const value =
+        String(profilePicture).trim();
+
+    /* FERTIGER PFAD */
+
+    if (
+        value.includes("/") ||
+        value.includes(".jpg") ||
+        value.includes(".png") ||
+        value.includes(".jpeg") ||
+        value.includes("http")
+    ) {
+
+        image = value;
+    }
+
+    /* NUR FARBE */
+
+    else {
+
+        image =
+        `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
+    }
+}
 
     return `
 
     <div class="friend-user">
 
-        <div class="friend-name">
-            ${username}
+        <div class="friend-left">
+
+            <img
+                src="${image}"
+                class="friend-avatar"
+                alt="${username}"
+                onerror="this.src='../../ressources/images/profile/pre-saved-images/blackMonster.jpg'"
+            >
+
+            <div class="friend-name">
+                ${username}
+            </div>
+
         </div>
 
         <div class="friend-buttons">
@@ -129,7 +174,11 @@ function loadUsers() {
                     document.createElement("div");
 
                 wrapper.innerHTML =
-                    createUserHTML(user, "");
+                    createUserHTML(
+                        user.username,
+                        user.image_src,
+                        ""
+                    );
 
                 const card =
                     wrapper.firstElementChild;
@@ -140,7 +189,7 @@ function loadUsers() {
 
                 /* ALREADY ADDED */
 
-                if (relations[user]) {
+                if (relations[user.username]) {
 
                     const addedBtn =
                         document.createElement("button");
@@ -169,7 +218,7 @@ function loadUsers() {
                         createButton(
                             "Add",
                             "add-btn",
-                            () => addFriend(user, addBtn)
+                            () => addFriend(user.username, addBtn)
                         );
 
                     buttons.appendChild(addBtn);
@@ -295,7 +344,11 @@ function loadRequests() {
                     document.createElement("div");
 
                 wrapper.innerHTML =
-                    createUserHTML(user, "");
+                    createUserHTML(
+                        user.username,
+                        user.image_src,
+                        ""
+                    );
 
                 const card =
                     wrapper.firstElementChild;
@@ -307,14 +360,14 @@ function loadRequests() {
                     createButton(
                         "Accept",
                         "accept-btn",
-                        () => acceptRequest(user)
+                        () => acceptRequest(user.username)
                     );
 
                 const declineBtn =
                     createButton(
                         "Decline",
                         "decline-btn",
-                        () => declineRequest(user)
+                        () => declineRequest(user.username)
                     );
 
                 buttons.appendChild(acceptBtn);
@@ -460,7 +513,11 @@ function loadFriends() {
                     document.createElement("div");
 
                 wrapper.innerHTML =
-                    createUserHTML(user, "");
+                    createUserHTML(
+                        user.username,
+                        user.image_src,
+                        ""
+                    );
 
                 const card =
                     wrapper.firstElementChild;
@@ -472,7 +529,7 @@ function loadFriends() {
                     createButton(
                         "Remove",
                         "remove-btn",
-                        () => removeFriend(user)
+                        () => removeFriend(user.username)
                     );
 
                 buttons.appendChild(removeBtn);
