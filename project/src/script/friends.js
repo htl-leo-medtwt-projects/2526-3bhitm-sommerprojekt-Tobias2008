@@ -47,36 +47,36 @@ function createUserHTML(
         "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
 
     if (
-    profilePicture &&
-    profilePicture !== "null" &&
-    profilePicture !== null &&
-    profilePicture !== undefined
-) {
-
-    const value =
-        String(profilePicture).trim();
-
-    /* FERTIGER PFAD */
-
-    if (
-        value.includes("/") ||
-        value.includes(".jpg") ||
-        value.includes(".png") ||
-        value.includes(".jpeg") ||
-        value.includes("http")
+        profilePicture &&
+        profilePicture !== "null" &&
+        profilePicture !== null &&
+        profilePicture !== undefined
     ) {
 
-        image = value;
+        const value =
+            String(profilePicture).trim();
+
+        /* FERTIGER PFAD */
+
+        if (
+            value.includes("/") ||
+            value.includes(".jpg") ||
+            value.includes(".png") ||
+            value.includes(".jpeg") ||
+            value.includes("http")
+        ) {
+
+            image = value;
+        }
+
+        /* NUR FARBE */
+
+        else {
+
+            image =
+                `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
+        }
     }
-
-    /* NUR FARBE */
-
-    else {
-
-        image =
-        `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
-    }
-}
 
     return `
 
@@ -191,23 +191,61 @@ function loadUsers() {
 
                 if (relations[user.username]) {
 
-                    const addedBtn =
+                    const relation =
+                        relations[user.username];
+
+                    /* BEREITS FREUNDE */
+
+                    if (relation.accepted == 1) {
+
+                        return;
+                    }
+
+                    const button =
                         document.createElement("button");
 
-                    addedBtn.className =
-                        "friend-btn remove-btn";
+                    button.disabled = true;
 
-                    addedBtn.innerText =
-                        "Added";
+                    button.style.opacity = "0.5";
 
-                    addedBtn.disabled = true;
+                    button.style.cursor = "default";
 
-                    addedBtn.style.opacity = "0.5";
+                    /* ER HAT MICH GEADDED */
 
-                    addedBtn.style.cursor = "default";
+                    if (relation.user_a === user.username) {
 
-                    buttons.appendChild(addedBtn);
+                        button.className =
+                            "friend-btn accept-btn";
 
+                        button.innerText =
+                            "Add back";
+
+                        button.disabled = false;
+
+                        button.style.opacity = "1";
+
+                        button.style.cursor = "pointer";
+
+                        button.addEventListener(
+                            "click",
+                            () => acceptRequest(user.username)
+                        );
+                    } else {
+
+                        button.className =
+                            "friend-btn remove-btn";
+
+                        button.innerText =
+                            "Added";
+
+                        button.disabled = true;
+
+                        button.style.opacity = "0.5";
+
+                        button.style.cursor = "default";
+                    }
+
+                    buttons.appendChild(button);
                 }
 
                 /* NOT ADDED */

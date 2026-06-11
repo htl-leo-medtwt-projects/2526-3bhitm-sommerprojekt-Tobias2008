@@ -321,7 +321,8 @@ function removeFriend()
     }
 }
 
-function getRelations() {
+function getRelations()
+{
 
     global $conn;
 
@@ -348,24 +349,30 @@ function getRelations() {
         $currentUser
     );
 
-    if($stmt->execute()) {
+    if ($stmt->execute()) {
 
         $result =
-        $stmt->get_result();
+            $stmt->get_result();
 
         $relations = [];
 
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
 
             $otherUser =
-            $row['user_a'] == $currentUser
-            ? $row['user_b']
-            : $row['user_a'];
+                $row['user_a'] == $currentUser
+                ? $row['user_b']
+                : $row['user_a'];
 
             $relations[$otherUser] = [
 
                 "accepted" =>
-                    $row['accepted']
+                    $row['accepted'],
+
+                "user_a" =>
+                    $row['user_a'],
+
+                "user_b" =>
+                    $row['user_b']
             ];
         }
 
