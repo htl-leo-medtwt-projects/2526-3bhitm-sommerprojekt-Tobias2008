@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/register.css">
     <link rel="icon" type="image/png" sizes="32x32" href="../../../ressources/images/icon.png">
+    <script src="../../script/register.js" defer></script>
 </head>
 
 <body>

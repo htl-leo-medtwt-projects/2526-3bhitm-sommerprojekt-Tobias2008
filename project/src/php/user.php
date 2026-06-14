@@ -44,6 +44,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProfile') {
     updateProfile();
 }
 
+if (isset($_GET['action']) && $_GET['action'] === 'selectProfilePicture') {
+    selectProfilePicture();
+    exit();
+}
+
 if (isset($_POST['register'])) {
     registerUser();
 }
@@ -85,7 +90,7 @@ function registerUser()
 
     if ($stmt->execute()) {
         saveSessionData(true, "Registration successful!", null);
-        header("Location: ../pages/login-register/login.html");
+        header("Location: ../pages/login-register/login.php");
         exit();
     } else {
         saveSessionData(false, null, "Error during registration: " . $stmt->error);
@@ -412,4 +417,19 @@ function deleteAccount()
 
         returnJSON(false, null, $e->getMessage());
     }
+}
+
+function selectProfilePicture()
+{
+    if (!isset($_POST['profile-picture'])) {
+        returnJSON(false, null, "Kein Profilbild ausgewählt");
+        return;
+    }
+
+    $_SESSION['selectedProfilePicture'] =
+        "../../../ressources/images/profile/pre-saved-images/" .
+        $_POST['profile-picture'] .
+        "Monster.jpg";
+
+    returnJSON(true, "Profilbild gespeichert", null);
 }
