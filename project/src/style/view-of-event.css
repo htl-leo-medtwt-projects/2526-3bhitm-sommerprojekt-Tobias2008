@@ -138,10 +138,113 @@ body {
 }
 
 .item-already-done-button {
-    width: 10vw;
-    height: 10vw;
-    border-radius: 100%;
-    background-color: rgba(255, 0, 0, 0.6);
+
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition: all .25s ease;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    backdrop-filter:
+        blur(12px);
+
+    box-shadow:
+        0 0 15px rgba(0,0,0,.25);
+
+    position: relative;
+
+    flex-shrink: 0;
+}
+
+
+/* Kreis innen */
+
+.item-already-done-button::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 22px;
+    height: 22px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.15);
+
+    transition: all .25s ease;
+}
+
+
+/* Hover */
+
+.item-already-done-button:hover {
+
+    transform:
+        scale(1.08);
+
+    box-shadow:
+        0 0 20px rgba(174,95,255,.4);
+}
+
+
+/* DONE */
+
+.item-already-done-button.done {
+
+    background-image:
+        var(--linear-gradient-button-purple);
+
+    box-shadow:
+        0 0 20px rgba(174,95,255,.6);
+}
+
+
+.item-already-done-button.done::before {
+
+    width: 18px;
+    height: 18px;
+
+    background:
+        white;
+}
+
+.item-already-done-button.done::after {
+
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    color: white;
+
+    font-size: 1.2rem;
+
+    font-weight: 700;
+
+    font-family:
+        var(--font-information-medium);
 }
 
 #member-popup-overlay {
@@ -328,4 +431,299 @@ body.no-scroll {
 
 body {
     padding: 0%;
+}
+
+.create-attribute,
+.create-item {
+
+    width: 80vw;
+
+    margin: 1em auto;
+
+    padding: 1em;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-family: var(--font-information-medium);
+
+    background:
+        rgba(56, 33, 86, 0.35);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        0 0 20px rgba(0,0,0,0.15);
+
+    transition: 0.2s;
+}
+
+.create-attribute:hover,
+.create-item:hover {
+
+    background:
+        rgba(75,17,150,0.45);
+
+    transform: scale(1.02);
+
+    box-shadow:
+        0 0 25px rgba(126,45,193,0.3);
+}
+
+.popup {
+
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    color: white;
+
+    z-index: 9999;
+
+    transition: .3s;
+}
+
+.popup.success {
+
+    background: #1faa68;
+}
+
+.popup.error {
+
+    background: #d64545;
+}
+
+.popup.hidden {
+
+    opacity: 0;
+
+    transform: translateY(-10px);
+}
+
+.popup-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.65);
+
+    backdrop-filter:
+        blur(10px);
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+
+    animation:
+        fadeIn .25s ease;
+}
+
+.popup-overlay.active {
+
+    display: flex;
+}
+
+.popup-box {
+
+    width: 90%;
+    max-width: 380px;
+
+    padding: 1.8em;
+
+    background:
+        rgba(56, 33, 86, 0.45);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 24px;
+
+    backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.35);
+
+    animation:
+        popupShow .25s ease;
+
+    transform-origin:
+        center;
+}
+
+.popup-box h3 {
+
+    margin: 0 0 1em 0;
+
+    color: white;
+
+    font-size: 1.25em;
+
+    text-align: center;
+
+    font-family:
+        var(--font-information-medium);
+}
+
+.popup-box input {
+
+    width: 100%;
+
+    padding: 1em;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 16px;
+
+    box-sizing: border-box;
+
+    color: white;
+
+    font-size: 1em;
+
+    font-family:
+        var(--font-information-normal);
+
+    background:
+        rgba(255,255,255,0.06);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    transition: .2s;
+}
+
+.popup-box input:focus {
+
+    border:
+        1px solid rgba(255,255,255,0.2);
+
+    background:
+        rgba(255,255,255,0.1);
+}
+
+.popup-box input::placeholder {
+
+    color:
+        rgba(255,255,255,.45);
+}
+
+.popup-buttons {
+
+    display: flex;
+
+    gap: .8em;
+
+    margin-top: 1.4em;
+}
+
+.popup-buttons button {
+
+    flex: 1;
+
+    border: none;
+
+    padding: .9em;
+
+    border-radius: 16px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-size: .95em;
+
+    font-family:
+        var(--font-information-medium);
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+.popup-buttons button:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+.popup-buttons button:active {
+
+    transform:
+        scale(.97);
+}
+
+#popup-cancel {
+
+    background:
+        rgba(255,255,255,0.08);
+}
+
+#popup-ok {
+
+    background-image:
+        var(--linear-gradient-button-purple);
+}
+
+@keyframes popupShow {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(20px)
+            scale(.95);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+    }
+
+    to {
+
+        opacity: 1;
+    }
+}
+
+.single-item.done p {
+
+    text-decoration:
+        line-through;
+
+    opacity: .6;
 }

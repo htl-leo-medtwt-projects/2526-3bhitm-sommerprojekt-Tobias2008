@@ -98,6 +98,12 @@ switch ($action) {
         }
         getFavoriteStatus($_GET['event_id']);
         break;
+        case 'createAttribute':
+    createAttribute();
+    break;
+    case 'createItem':
+    createItem();
+    break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -324,45 +330,72 @@ function getItemDetails($eventID)
 {
     global $conn;
 
-    $stmt = $conn->prepare("SELECT * FROM item WHERE event_id = ?");
-    $stmt->bind_param('i', $eventID);
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM item
+        WHERE event_id = ?
+        ORDER BY id ASC
+    ");
+
+    $stmt->bind_param("i", $eventID);
 
     if ($stmt->execute()) {
+
         $result = $stmt->get_result();
+
         $items = [];
+
         while ($row = $result->fetch_assoc()) {
+
             $items[] = $row;
         }
-        saveSessionData(true, $items, null);
-        returnJSON(true, $items, null);
-    } else {
-        saveSessionData(false, null, $stmt->error);
-        exit;
-    }
 
+        returnJSON(true, $items, null);
+
+    } else {
+
+        returnJSON(false, null, $stmt->error);
+
+    }
 }
 
 function markItemDone($itemID, $eventID)
 {
     global $conn;
 
+    $stmt = $conn->prepare("
+        UPDATE item
+        SET is_done =
+        CASE
+            WHEN is_done = 1 THEN 0
+            ELSE 1
+        END
+        WHERE id = ?
+        AND event_id = ?
+    ");
 
-    $namestmt = $conn->prepare("SELECT name FROM item WHERE id = ?");
-    $namestmt->bind_param("i", $itemID);
-    $name = null;
-    if ($namestmt->execute()) {
-        $name = $namestmt->get_result()->fetch_assoc()['name'];
-    }
-
-
-
-    $stmt = $conn->prepare("INSERT INTO item (name, event_id, is_done, username) VALUES (?, ?, 1, ?)");
-    $stmt->bind_param('sis', $name, $eventID, $_SESSION['username']);
+    $stmt->bind_param(
+        "ii",
+        $itemID,
+        $eventID
+    );
 
     if ($stmt->execute()) {
-        saveSessionData(true, "Item als erledigt markiert", null);
+
+        returnJSON(
+            true,
+            null,
+            null
+        );
+
     } else {
-        saveSessionData(false, null, $stmt->error);
+
+        returnJSON(
+            false,
+            null,
+            $stmt->error
+        );
+
     }
 }
 
@@ -519,4 +552,90 @@ function getFavoriteStatus($eventID) {
     $result = $stmt->get_result()->fetch_assoc();
 
     returnJSON(true, $result['has_favorited'] ?? 0, null);
+}
+
+function createAttribute()
+{
+    global $conn;
+
+    $eventID = $_POST['event_id'];
+    $name = $_POST['name'];
+
+    $information = '';
+    $attributeType = 'text';
+    $username = $_SESSION['username'];
+
+    $stmt = $conn->prepare("
+        INSERT INTO attribute
+        (name, event_id, information, username, attribute_type)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+
+    $stmt->bind_param(
+        "sisss",
+        $name,
+        $eventID,
+        $information,
+        $username,
+        $attributeType
+    );
+
+    if ($stmt->execute()) {
+        returnJSON(true, null, null);
+    } else {
+        returnJSON(false, null, $stmt->error);
+    }
+}
+
+function createItem()
+{
+    global $conn;
+
+    $attributeID = $_POST['attribute_id'];
+    $eventID = $_POST['event_id'];
+    $name = trim($_POST['name']);
+
+    if (!$name) {
+        returnJSON(false, null, "Name fehlt");
+        return;
+    }
+
+    $stmt = $conn->prepare("
+        INSERT INTO item
+        (
+            name,
+            event_id,
+            attribute_id,
+            username,
+            is_done
+        )
+        VALUES (?, ?, ?, ?, 0)
+    ");
+
+    $stmt->bind_param(
+        "siis",
+        $name,
+        $eventID,
+        $attributeID,
+        $_SESSION['username']
+    );
+
+    if ($stmt->execute()) {
+
+        $newItem = [
+            "id" => $conn->insert_id,
+            "name" => $name,
+            "event_id" => $eventID,
+            "attribute_id" => $attributeID,
+            "username" => $_SESSION['username'],
+            "is_done" => 0
+        ];
+
+        returnJSON(true, $newItem, null);
+
+    } else {
+
+        returnJSON(false, null, $stmt->error);
+
+    }
 }

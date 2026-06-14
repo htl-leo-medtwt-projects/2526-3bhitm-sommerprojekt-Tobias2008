@@ -105,6 +105,74 @@ async function displayEvent() {
 
 
     document.getElementById('items').innerHTML = '';
+
+    const createAttributeButton = document.createElement('div');
+
+    createAttributeButton.classList.add('create-attribute');
+
+    createAttributeButton.innerHTML = '+ New Category';
+
+    createAttributeButton.onclick = async () => {
+
+        const name =
+            await showInputPopup(
+                "Category Name"
+            );
+
+        if (!name) return;
+
+        const response = await fetch('../php/event.php?action=createAttribute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `event_id=${eventID}&name=${encodeURIComponent(name)}`
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+
+            showPopup(
+                data.error,
+                "error"
+            );
+
+            return;
+        }
+
+        showPopup(
+            "Category created",
+            "success"
+        );
+
+        const item = document.createElement('div');
+
+        item.classList.add('item');
+
+        item.innerHTML = `
+        <div class="item-name">${name}</div>
+        <div class="item-button">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24">
+                <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 12h14m-7 7V5"/>
+            </svg>
+        </div>
+    `;
+
+        document.getElementById('items')
+            .appendChild(item);
+    };
+
+    document.getElementById('items').appendChild(createAttributeButton);
     items.forEach(item => {
         const itemElement = document.createElement('div');
         itemElement.classList.add('item');
@@ -134,9 +202,9 @@ async function displayEvent() {
 
 
 function loadItemDetails(attributeID, eventID) {
-
     const selectedItem = itemDetails.filter(item => item.attribute_id === attributeID);
     const selectedItemCategory = items.find(item => item.attribute_id === attributeID);
+
 
     if (!eventData) {
         console.error("Events konnten nicht geladen werden.");
@@ -160,8 +228,11 @@ function loadItemDetails(attributeID, eventID) {
     console.log("Event Details:", eventData);
 
     document.getElementById('view-event').innerHTML = '';
-    document.getElementById('view-event').style.display = 'none'
+    document.getElementById('view-event').style.display = 'none';
+    document.getElementById('item-details').innerHTML = '';
+
     const itemDetailsDiv = document.getElementById('item-details');
+    itemDetailsDiv.innerHTML = '';
     itemDetailsDiv.innerHTML = itemDetailTemplate;
 
     if (eventData.image_src) {
@@ -171,18 +242,83 @@ function loadItemDetails(attributeID, eventID) {
     }
     document.getElementById('item-title').innerHTML = selectedItemCategory.name;
 
+    const addButton = document.createElement('div');
+
+    addButton.classList.add('create-item');
+
+    addButton.innerHTML = '+ New Item';
+
+    addButton.onclick = async () => {
+
+        const name =
+            await showInputPopup(
+                "Item Name"
+            );
+
+        if (!name) return;
+
+        const response = await fetch('../php/event.php?action=createItem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body:
+                `attribute_id=${attributeID}` +
+                `&event_id=${eventID}` +
+                `&name=${encodeURIComponent(name)}`
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            showPopup(
+                "Item created",
+                "success"
+            );
+
+            const newItem = {
+                id: Date.now(),
+                name: name,
+                attribute_id: attributeID,
+                event_id: eventID,
+                is_done: 0
+            };
+
+            itemDetails.push(newItem);
+
+            loadItemDetails(
+                attributeID,
+                eventID
+            );
+
+        } else {
+
+            showPopup(
+                data.error,
+                "error"
+            );
+        }
+    };
+
+    document.getElementById('item-wrapper')
+        .appendChild(addButton);
+
     //document.getElementById('single-items').innerHTML = `<div id="single-item">${selectedItem.name}</div>`;
 
     selectedItem.forEach(item => {
         const singleItem = document.createElement('div');
-        singleItem.id = 'single-item';
+        singleItem.classList.add('single-item');
         singleItem.innerHTML = `<p>${item.name}</p>`;
         singleItem.innerHTML += `<div onclick="revealInfo()" class="item-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
 </svg>
 </div>`;
-        singleItem.innerHTML += `<div class="item-already-done-button" onclick="changeButton(${item.id})"></div>`;
-
+        singleItem.innerHTML += `
+<div
+class="item-already-done-button ${item.is_done == 1 ? 'done' : ''}"
+onclick="changeButton(${item.id})">
+</div>`;
         document.getElementById('single-items').appendChild(singleItem);
     });
 }
@@ -214,23 +350,44 @@ const itemDetailTemplate = `
     </div>`;
 
 function changeButton(itemID) {
-    const button = document.querySelector(`.item-already-done-button[onclick="changeButton(${itemID})"]`);
 
+    fetch(
+        '../php/event.php?action=markItemDone',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type':
+                    'application/x-www-form-urlencoded'
+            },
+            body:
+                `item_id=${itemID}` +
+                `&event_id=${eventID}`
+        }
+    )
 
-    if (button.classList.contains('done')) {
-        button.classList.remove('done');
-        button.style.backgroundColor = 'rgba(255, 0, 0, 0.6)';
+        .then(res => res.json())
 
-        fetch(`../php/event.php?action=markItemDone&item_id=${itemID}&event_id=${eventID}`, {
-            method: 'POST'
+        .then(data => {
+
+            if (!data.success) {
+
+                showPopup(data.error, "error");
+                return;
+            }
+
+            const button =
+                document.querySelector(
+                    `.item-already-done-button[onclick="changeButton(${itemID})"]`
+                );
+
+            button.classList.toggle("done");
+
+            const row =
+                button.closest("#single-item");
+
+            row.classList.toggle("done");
+
         });
-
-
-    } else {
-        button.classList.add('done');
-        button.style.backgroundColor = 'rgba(0, 255, 0, 0.6)';
-    }
-
 }
 
 const viewMemberButton =
@@ -343,3 +500,82 @@ document.addEventListener("click", (e) => {
         })
         .catch(err => console.error("Fetch Fehler:", err));
 });
+
+function showPopup(
+    message,
+    type = "success"
+) {
+
+    const popup =
+        document.createElement("div");
+
+    popup.classList.add(
+        "popup",
+        type
+    );
+
+    popup.innerText = message;
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+
+        popup.classList.add("hidden");
+
+        setTimeout(() => {
+
+            popup.remove();
+
+        }, 300);
+
+    }, 2500);
+}
+
+function showInputPopup(title) {
+
+    return new Promise(resolve => {
+
+        const popup =
+            document.getElementById("custom-popup");
+
+        const input =
+            document.getElementById("popup-input");
+
+        document.getElementById("popup-title")
+            .innerText = title;
+
+        input.value = "";
+
+        popup.classList.add("active");
+
+        setTimeout(() => {
+
+            input.focus();
+
+        }, 100);
+
+        input.onkeydown = (e) => {
+
+            if (e.key === "Enter") {
+
+                document
+                    .getElementById("popup-ok")
+                    .click();
+            }
+        };
+
+        document.getElementById("popup-ok").onclick = () => {
+
+            popup.classList.remove("active");
+
+            resolve(input.value.trim());
+        };
+
+        document.getElementById("popup-cancel").onclick = () => {
+
+            popup.classList.remove("active");
+
+            resolve(null);
+        };
+    });
+}
