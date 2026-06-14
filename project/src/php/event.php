@@ -125,12 +125,11 @@ function createEvent()
     global $conn;
 
 
-
     $eventName = $_POST['event-name'] ?? '';
     $eventTitle = $_POST['title-text'] ?? '';
     $eventDescription = $_POST['event-information'] ?? null;
     $eventDate = $_POST['event-date'] ?? null;
-    $eventLocation = $_POST['event-location9'] ?? null;
+    $eventLocation = $_POST['event-location'] ?? null;
     $eventMaxMembers = $_POST['max-members'] ?? null;
 
     $eventImageSrc = null;

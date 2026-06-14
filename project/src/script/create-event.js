@@ -2,6 +2,7 @@
 
 const box = document.getElementById("input-field-image");
 const input = document.getElementById("fileInput");
+const preview = document.getElementById("image-preview");
 
 // Klick → Explorer öffnen
 box.addEventListener("click", () => input.click());
@@ -19,13 +20,21 @@ box.addEventListener("dragleave", () => {
 
 // Drop
 box.addEventListener("drop", (e) => {
-  e.preventDefault();
-  box.classList.remove("dragover");
 
-  const files = e.dataTransfer.files;
-  input.files = files;
+    e.preventDefault();
 
-  console.log(files);
+    box.classList.remove("dragover");
+
+    const files = e.dataTransfer.files;
+
+    input.files = files;
+
+    if (files.length > 0) {
+
+        showPreview(files[0]);
+
+    }
+
 });
 
 // Drag & Drop für Bild-Upload Ende
@@ -64,3 +73,24 @@ function createEvent() {
     });
 
 }
+
+
+function showPreview(file) {
+
+    if (!file) return;
+
+    preview.src = URL.createObjectURL(file);
+
+    preview.hidden = false;
+
+    box.classList.add("has-image");
+}
+
+input.addEventListener("change", () => {
+
+    if (input.files.length > 0) {
+
+        showPreview(input.files[0]);
+
+    }
+});
