@@ -15,7 +15,7 @@ include "../../php/global.php";
     <title>Login</title>
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/login.css">
-    <link rel="icon" type="image/jpg" sizes="32x32" href="../../../ressources/images/icon.jpg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../ressources/images/icon.png">
 </head>
 
 <body>
