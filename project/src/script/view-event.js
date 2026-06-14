@@ -172,7 +172,7 @@ async function displayEvent() {
             .appendChild(item);
     };
 
-    document.getElementById('items').appendChild(createAttributeButton);
+    
     items.forEach(item => {
         const itemElement = document.createElement('div');
         itemElement.classList.add('item');
@@ -192,6 +192,7 @@ async function displayEvent() {
         itemElement.appendChild(itemName);
         itemElement.appendChild(itemButton);
         document.getElementById('items').appendChild(itemElement);
+        document.getElementById('items').appendChild(createAttributeButton);
     });
 
 

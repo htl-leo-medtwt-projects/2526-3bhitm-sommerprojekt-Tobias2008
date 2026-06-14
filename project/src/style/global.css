@@ -38,6 +38,9 @@
     --font-KoHo: 'KoHo';
 }
 
+
+
+
 body {
     background-image: var(--radial-gradient-background);
     background-size: cover;

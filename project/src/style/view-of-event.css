@@ -37,13 +37,21 @@ body {
     width: 72vw;
     min-width: 180px;
 
-    padding: 0.7em 1.2em;
 
-    background-image: var(--linear-gradient-button-purple);
+    background:
+        rgba(56, 33, 86, 0.35);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        0 0 20px rgba(0,0,0,0.15);
     color: var(--white);
 
     font-family: var(--font-information-normal);
-    font-size: 1.1em;
 
     border-radius: 15px;
     cursor: pointer;
@@ -433,6 +441,7 @@ body {
     padding: 0%;
 }
 
+#viewMemberButton,
 .create-attribute,
 .create-item {
 
@@ -467,6 +476,7 @@ body {
     transition: 0.2s;
 }
 
+#viewMemberButton:hover,
 .create-attribute:hover,
 .create-item:hover {
 
