@@ -65,17 +65,32 @@ function registerUser()
 
     global $conn;
 
-    if (!isset($_POST['first-name'], $_POST['last-name'], $_POST['username'], $_POST['password'], $_POST['confirm-password'], $_POST['email'], $_POST['birthday'], $_SESSION['selectedProfilePicture'])) {
+    if (
+        empty($_POST['first-name']) ||
+        empty($_POST['last-name']) ||
+        empty($_POST['username']) ||
+        empty($_POST['password']) ||
+        empty($_POST['confirm-password']) ||
+        empty($_POST['email']) ||
+        empty($_POST['birthday'])
+    ) {
         saveSessionData(false, null, "Please fill in all fields.");
         header("Location: ../pages/login-register/register.php");
         exit();
     }
 
-    if ($_POST['password'] !== $_POST['confirm-password']) {
-        saveSessionData(false, null, "The passwords do not match.");
+    if (!isset($_SESSION['selectedProfilePicture'])) {
+        saveSessionData(false, null, "Please select a profile picture.");
         header("Location: ../pages/login-register/register.php");
         exit();
     }
+
+    if ($_POST['password'] !== $_POST['confirm-password']) {
+        saveSessionData(false, null, "Passwords do not match.");
+        header("Location: ../pages/login-register/register.php");
+        exit();
+    }
+
 
     $firstName = $_POST['first-name'];
     $lastName = $_POST['last-name'];
@@ -84,18 +99,69 @@ function registerUser()
     $email = $_POST['email'];
     $birthday = $_POST['birthday'];
 
+    $check = $conn->prepare("
+    SELECT username
+    FROM user
+    WHERE username = ?
+");
+
+    $check->bind_param("s", $username);
+    $check->execute();
+
+    if ($check->get_result()->num_rows > 0) {
+        saveSessionData(false, null, "Username already exists.");
+        header("Location: ../pages/login-register/register.php");
+        exit();
+    }
+
+    $check = $conn->prepare("
+    SELECT email
+    FROM user
+    WHERE email = ?
+");
+
+    $check->bind_param("s", $email);
+    $check->execute();
+
+    if ($check->get_result()->num_rows > 0) {
+        saveSessionData(false, null, "Email already exists.");
+        header("Location: ../pages/login-register/register.php");
+        exit();
+    }
+
+
 
     $stmt = $conn->prepare("INSERT INTO user (first_name, last_name, username, email, password, date_of_birth, image_src) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssssss", $firstName, $lastName, $username, $email, $password, $birthday, $_SESSION['selectedProfilePicture']);
 
-    if ($stmt->execute()) {
-        saveSessionData(true, "Registration successful!", null);
-        header("Location: ../pages/login-register/login.php");
-        exit();
-    } else {
-        saveSessionData(false, null, "Error during registration: " . $stmt->error);
-        header("Location: ../pages/login-register/register.php");
 
+    try {
+
+        if ($stmt->execute()) {
+
+            saveSessionData(
+                true,
+                "Registration successful!",
+                null
+            );
+
+            header("Location: ../pages/login-register/login.php");
+            exit();
+
+        }
+
+    } catch (Exception $e) {
+
+        error_log($e->getMessage());
+
+        saveSessionData(
+            false,
+            null,
+            "Database error. Please try again later."
+        );
+
+        header("Location: ../pages/login-register/register.php");
+        exit();
     }
 
     $stmt->close();

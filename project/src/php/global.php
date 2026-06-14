@@ -16,21 +16,55 @@ function saveSessionData($success, $data = null, $error = null)
 
 if (isset($_GET['getSession'])) {
 
+    header('Content-Type: application/json');
+
     $param = $_GET['getSession'];
 
+    // gesamte session
     if ($param === "" || $param === null) {
-        saveSessionData(true, $_SESSION, null);
+        echo json_encode([
+            "success" => true,
+            "data" => $_SESSION,
+            "error" => null
+        ]);
+        exit();
     }
 
+    // username
     if ($param === "username") {
         if (isset($_SESSION['username'])) {
-            saveSessionData(true, $_SESSION['username'], null);
+            echo json_encode([
+                "success" => true,
+                "data" => $_SESSION['username'],
+                "error" => null
+            ]);
         } else {
-            saveSessionData(false, null, "Username nicht in Session gesetzt");
+            echo json_encode([
+                "success" => false,
+                "data" => null,
+                "error" => "Username nicht in Session"
+            ]);
         }
+        exit();
     }
 
-    saveSessionData(false, null, "Session-Variable '$param' existiert nicht.");
+    if ($param === "error") {
+        echo json_encode([
+            "success" => true,
+            "data" => $_SESSION['error'] ?? null,
+            "error" => null
+        ]);
+
+        unset($_SESSION['error']);
+        exit();
+    }
+
+    echo json_encode([
+        "success" => false,
+        "data" => null,
+        "error" => "Session-Variable existiert nicht"
+    ]);
+    exit();
 }
 
 

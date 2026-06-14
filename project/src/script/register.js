@@ -21,19 +21,85 @@ function fillProfilePictures() {
     }
 }
 function selectProfilePicture(path) {
+
+    document.querySelectorAll(".profile-picture").forEach(img => {
+        img.classList.remove("selected");
+    });
+
+    const selectedImg = document.querySelector(
+        `img[alt="${path}"]`
+    );
+
+    if (selectedImg) {
+        selectedImg.classList.add("selected");
+    }
+
     fetch("../../php/user.php?action=selectProfilePicture", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `action=selectProfilePicture&profile-picture=${path}`
-    }).then(response => {
-        if (response.ok) {
-            console.log("Profile picture selected successfully");
+        body: `profile-picture=${path}`
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+            showToast("Profile picture selected!", "success");
         } else {
-            console.error("Error selecting profile picture");
+            showToast("Selection failed ✕", "error");
         }
-    }).catch(error => {
-        console.error("Error selecting profile picture:", error);
+
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        showToast("Server error ✕", "error");
     });
+}
+
+function showToast(message, type = "success") {
+
+    const toast = document.createElement("div");
+
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add("show");
+    }, 10);
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+
+    }, 2500);
+}
+
+
+loadRegisterToast();
+
+function loadRegisterToast() {
+    fetch("../../php/global.php?getSession=error")
+        .then(res => res.json())
+        .then(data => {
+
+            if (!data.success || !data.data) return;
+
+            const err = data.data;
+
+            if (err.success) {
+                showToast(err.data || "Success", "success");
+            } else {
+                showToast(err.error || "Error", "error");
+            }
+        })
+        .catch(() => {});
 }

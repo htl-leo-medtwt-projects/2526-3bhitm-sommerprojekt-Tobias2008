@@ -18,7 +18,7 @@
 
 <h1 id="headline">Register</h1>
 
-<form action="../../php/user.php" method="POST">
+<form action="../../php/user.php" method="POST" novalidate>
 
     <input type="text" placeholder="First Name..." name="first-name">
 
@@ -35,12 +35,6 @@
     <input type="date" name="birthday">
 
     <input type="hidden" name="register" value="1">
-
-    <?php
-    if (isset($_SESSION['error']) && $_SESSION['error']['success'] === false) {
-        echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
-    }
-    ?>
 
     <label id="profile-pictures-text">
         which Profile Picture describes YOU the most?
