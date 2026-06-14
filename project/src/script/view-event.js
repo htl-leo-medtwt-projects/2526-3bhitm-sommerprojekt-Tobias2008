@@ -1,19 +1,5 @@
-
-/*
-
-<div id="event-image"></div>
-
-    <h1 id="event-title"></h1>
-    <p id="title-text"></p>
-    <p id="information"></p>
-    <div id="viewMemberButton">
-        View Members</div>
-
-    <div id="items"></div>
-
-*/
-
-
+let addMenuOpen = false;
+let isOwner = false;
 let eventID = new URLSearchParams(window.location.search).get('event_id');
 let eventData = null;
 let items = null;
@@ -21,10 +7,29 @@ let itemDetails = null;
 
 getData();
 
+
+document.addEventListener("click", e => {
+
+    const header =
+        document.getElementById(
+            "friends-dropdown-header"
+        );
+
+    if (!header) return;
+
+    if (e.target.closest("#friends-dropdown-header")) {
+
+        document
+            .getElementById("friends-dropdown")
+            .classList.toggle("open");
+    }
+});
+
 async function getData() {
     eventData = await getEventData();
     items = await getEventItems();
     itemDetails = await getItemDetails();
+    await checkOwner();
 
 
 
@@ -172,7 +177,7 @@ async function displayEvent() {
             .appendChild(item);
     };
 
-    
+
     items.forEach(item => {
         const itemElement = document.createElement('div');
         itemElement.classList.add('item');
@@ -429,7 +434,17 @@ popupOverlay.addEventListener("click", (e) => {
 let memberPreset = `
 <div class="member">
                     <div class="member-avatar"></div>
-                    <span class="member-name"></span>
+                    <div class="member-items">
+
+    <span class="member-name">
+        Max
+    </span>
+
+    <div class="member-menu">
+        ⋮
+    </div>
+
+</div>
                 </div>
 `;
 
@@ -468,15 +483,96 @@ function displayMembers() {
             memberElement.innerHTML = memberPreset;
             console.log("Member Data:", member);
             memberElement.querySelector('.member-name').innerText = member;
+            memberElement.querySelector('.member-menu').innerHTML = "⋮";
             if (member.image_src) {
                 memberElement.querySelector('.member-avatar').style.backgroundImage = `url(${member.image_src})`;
             } else {
                 memberElement.querySelector('.member-avatar').style.backgroundImage = 'url(../../ressources/images/profile/pre-saved-images/blackMonster.jpg)';
             }
+
+
+            if (isOwner) {
+
+                memberElement.querySelector(".member-menu")
+
+                    .onclick = async () => {
+
+                        const confirmed =
+                            await showConfirmPopup(
+                                `Do you really want to remove "${member}" from this event?`
+                            );
+
+                        if (!confirmed) return;
+
+                        const response =
+
+                            await fetch(
+
+                                "../php/event.php?action=removeMemberFromEvent",
+
+                                {
+
+                                    method: "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+
+                                            "application/x-www-form-urlencoded"
+
+                                    },
+
+                                    body:
+
+                                        `event_id=${eventID}` +
+
+                                        `&username=${member}`
+
+                                }
+
+                            );
+
+                        const data =
+
+                            await response.json();
+
+                        if (data.success) {
+
+                            showPopup(
+                                "Member removed",
+                                "success"
+                            );
+
+                            displayMembers();
+
+                        } else {
+
+                            showPopup(
+
+                                data.error,
+
+                                "error"
+
+                            );
+
+                        }
+
+                    };
+
+            } else {
+
+                memberElement.querySelector(".member-menu")
+
+                    .style.display = "none";
+
+            }
+
             membersContainer.appendChild(memberElement);
+
         });
-    });
-}
+
+    })
+};
 
 document.addEventListener("click", (e) => {
     const star = e.target.closest("#favorite-star");
@@ -577,6 +673,194 @@ function showInputPopup(title) {
             popup.classList.remove("active");
 
             resolve(null);
+        };
+    });
+}
+
+async function checkOwner() {
+
+    const response =
+        await fetch(
+            '../php/event.php?action=isEventOwner&event_id=' +
+            eventID
+        );
+
+    const data =
+        await response.json();
+
+    if (data.success) {
+
+        isOwner = data.data;
+
+        if (isOwner) {
+
+            document
+                .getElementById(
+                    "add-member-button"
+                )
+                .style.display = "block";
+            document
+
+                .getElementById("friends-dropdown-wrapper")
+
+                .style.display = "block";
+
+        }
+    }
+
+}
+
+async function getFriends() {
+
+    const response =
+        await fetch(
+            "../php/friends.php?action=getFriends"
+        );
+
+    const data =
+        await response.json();
+
+    if (data.success) {
+        return data.data;
+    }
+
+    return [];
+}
+
+
+document
+    .getElementById("add-member-button")
+    .addEventListener("click", () => {
+
+        document
+            .getElementById("friends-dropdown")
+            .classList.toggle("open");
+
+        loadFriendsForAdding();
+    });
+
+async function loadFriendsForAdding() {
+
+    const dropdown =
+        document.getElementById(
+            "friends-dropdown"
+        );
+
+    dropdown.innerHTML = "";
+
+    const friends =
+        await getFriends();
+
+    const members =
+        await getMembers(eventID);
+
+    const availableFriends =
+        friends.filter(friend =>
+            !members.includes(friend.username)
+        );
+
+    if (availableFriends.length === 0) {
+
+        dropdown.innerHTML = `
+        <div class="empty-friends">
+            No more friends
+        </div>
+    `;
+
+        return;
+    }
+
+    availableFriends.forEach(friend => {
+
+        const row =
+            document.createElement("div");
+
+        row.classList.add("friend-row");
+
+        row.innerHTML = `
+            <span>${friend.username}</span>
+
+            <div class="friend-add">+</div>
+        `;
+
+        row.querySelector(".friend-add")
+            .onclick = () =>
+                addFriendToEvent(friend.username);
+
+        dropdown.appendChild(row);
+    });
+}
+
+async function addFriendToEvent(username) {
+
+    const response =
+        await fetch(
+            "../php/event.php?action=addMemberToEvent",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body:
+                    `event_id=${eventID}` +
+                    `&username=${username}`
+            }
+        );
+
+    const data =
+        await response.json();
+
+    if (!data.success) {
+
+        showPopup(data.error, "error");
+        return;
+    }
+
+    showPopup(
+        "Member added",
+        "success"
+    );
+
+    document
+        .getElementById("friends-dropdown")
+        .classList.remove("open");
+
+    document
+        .getElementById("friends-dropdown")
+        .innerHTML = "";
+
+    addMenuOpen = false;
+
+    displayMembers();
+}
+
+
+
+function showConfirmPopup(message) {
+
+    return new Promise(resolve => {
+
+        const popup =
+            document.getElementById("confirm-popup");
+
+        document.getElementById("confirm-text")
+            .innerText = message;
+
+        popup.classList.add("active");
+
+        document.getElementById("confirm-ok").onclick = () => {
+
+            popup.classList.remove("active");
+
+            resolve(true);
+        };
+
+        document.getElementById("confirm-cancel").onclick = () => {
+
+            popup.classList.remove("active");
+
+            resolve(false);
         };
     });
 }

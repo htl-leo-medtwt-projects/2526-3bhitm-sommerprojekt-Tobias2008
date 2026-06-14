@@ -98,12 +98,24 @@ switch ($action) {
         }
         getFavoriteStatus($_GET['event_id']);
         break;
-        case 'createAttribute':
-    createAttribute();
-    break;
+    case 'createAttribute':
+        createAttribute();
+        break;
     case 'createItem':
-    createItem();
-    break;
+        createItem();
+        break;
+    case 'isEventOwner':
+        if (!isset($_GET['event_id'])) {
+            returnJSON(false, null, "Event-ID fehlt");
+        }
+        isEventOwner($_GET['event_id']);
+        break;
+    case 'addMemberToEvent':
+        addMemberToEvent();
+        break;
+    case 'removeMemberFromEvent':
+        removeMemberFromEvent();
+        break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -538,7 +550,8 @@ function toggleFavorite($eventID)
     }
 }
 
-function getFavoriteStatus($eventID) {
+function getFavoriteStatus($eventID)
+{
     global $conn;
 
     if (!isset($_SESSION['username'])) {
@@ -639,3 +652,164 @@ function createItem()
 
     }
 }
+
+function isEventOwner($eventID)
+{
+    global $conn;
+
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM attendance
+        WHERE event_id = ?
+        AND username = ?
+        AND is_creator = 1
+    ");
+
+    $stmt->bind_param(
+        "is",
+        $eventID,
+        $_SESSION['username']
+    );
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    returnJSON(
+        true,
+        $result->num_rows > 0,
+        null
+    );
+}
+
+function addMemberToEvent()
+{
+    global $conn;
+
+    $eventID = $_POST['event_id'];
+    $username = $_POST['username'];
+
+    // nur Owner darf hinzufügen
+
+    $checkOwner = $conn->prepare("
+        SELECT *
+        FROM attendance
+        WHERE event_id = ?
+        AND username = ?
+        AND is_creator = 1
+    ");
+
+    $checkOwner->bind_param(
+        "is",
+        $eventID,
+        $_SESSION['username']
+    );
+
+    $checkOwner->execute();
+
+    if ($checkOwner->get_result()->num_rows === 0) {
+        returnJSON(false, null, "Keine Berechtigung");
+        return;
+    }
+
+    // bereits im Event?
+
+    $checkMember = $conn->prepare("
+        SELECT *
+        FROM attendance
+        WHERE event_id = ?
+        AND username = ?
+    ");
+
+    $checkMember->bind_param(
+        "is",
+        $eventID,
+        $username
+    );
+
+    $checkMember->execute();
+
+    if ($checkMember->get_result()->num_rows > 0) {
+        returnJSON(false, null, "User bereits im Event");
+        return;
+    }
+
+    $stmt = $conn->prepare("
+        INSERT INTO attendance
+        (
+            username,
+            event_id,
+            is_creator,
+            has_favorited
+        )
+        VALUES (?, ?, 0, 0)
+    ");
+
+    $stmt->bind_param(
+        "si",
+        $username,
+        $eventID
+    );
+
+    if ($stmt->execute()) {
+        returnJSON(true, null, null);
+    } else {
+        returnJSON(false, null, $stmt->error);
+    }
+}
+
+function removeMemberFromEvent()
+{
+    global $conn;
+
+    $eventID = $_POST['event_id'];
+    $username = $_POST['username'];
+
+    $stmt = $conn->prepare("
+    SELECT is_creator
+    FROM attendance
+    WHERE event_id = ?
+    AND username = ?
+");
+
+    $stmt->bind_param(
+        "is",
+        $eventID,
+        $username
+    );
+
+    $stmt->execute();
+
+    $result = $stmt->get_result()->fetch_assoc();
+
+    if ($result && $result['is_creator'] == 1) {
+
+        returnJSON(
+            false,
+            null,
+            "The event owner cannot be removed"
+        );
+
+        return;
+    }
+
+    $stmt = $conn->prepare("
+        DELETE FROM attendance
+        WHERE event_id = ?
+        AND username = ?
+        AND is_creator = 0
+    ");
+
+    $stmt->bind_param(
+        "is",
+        $eventID,
+        $username
+    );
+
+    if ($stmt->execute()) {
+        returnJSON(true, null, null);
+    } else {
+        returnJSON(false, null, $stmt->error);
+    }
+}
+

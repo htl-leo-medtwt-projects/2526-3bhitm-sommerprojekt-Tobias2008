@@ -288,7 +288,17 @@ body {
     width: 400px;
     max-width: 90%;
 
-    background: #1e1e1e;
+    background:
+    rgba(56, 33, 86, 0.45);
+
+border:
+    1px solid rgba(255,255,255,0.08);
+
+backdrop-filter:
+    blur(20px);
+
+box-shadow:
+    0 20px 50px rgba(0,0,0,.35);
     color: var(--white);
 
     border-radius: 20px;
@@ -337,19 +347,49 @@ body {
     cursor: pointer;
 }
 
+.member-items {
+    display:flex;
+    justify-content: space-between;
+    width: 100%;
+
+}
+.member-items,
 .member {
     display: flex;
     align-items: center;
 
     gap: 15px;
 
-    background: rgba(255, 255, 255, 0.05);
 
-    padding: 15px;
+    padding: 8px 12px;
 
     border-radius: 12px;
 }
 
+.member {
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.05);
+
+    transition: .2s;
+}
+.member:hover {
+
+    background:
+        rgba(255,255,255,.08);
+}
+.member-menu {
+
+    cursor: pointer;
+
+    font-size: 22px;
+
+    padding: 0 8px;
+
+}
 .member-avatar {
     width: 40px;
     height: 40px;
@@ -736,4 +776,231 @@ body {
         line-through;
 
     opacity: .6;
+}
+
+#add-member-button {
+
+    margin-top: 10px;
+    margin-bottom: 15px;
+
+    padding: 12px;
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        rgba(75,17,150,.45);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    font-family:
+        var(--font-information-medium);
+}
+
+#friends-dropdown {
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    transition: .3s ease;
+
+    margin-bottom: 10px;
+}
+
+#friends-dropdown.open {
+
+    max-height: 500px;
+}
+
+.friend-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px;
+
+    margin-top: 8px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.05);
+}
+
+.friend-add {
+
+    cursor: pointer;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(126,45,193,.3);
+}
+
+.friend-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px;
+
+    margin-top: 8px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.05);
+}
+
+#friends-dropdown-wrapper {
+
+    margin-bottom: 15px;
+}
+
+#friends-dropdown-header {
+
+    padding: 12px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    cursor: pointer;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.05);
+}
+
+#friends-dropdown {
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    transition: .3s ease;
+}
+
+#friends-dropdown.open {
+
+    max-height: 500px;
+
+    margin-top: 10px;
+}
+
+.empty-friends {
+
+    text-align: center;
+
+    padding: 15px;
+
+    color:
+        var(--text-information-light);
+}
+
+#friends-dropdown-wrapper {
+    display: none;
+}
+
+
+#confirm-popup .popup-box h3 {
+    color: white;
+    font-family: var(--font-information-medium);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#confirm-text {
+    color: rgba(255,255,255,.85);
+    font-family: var(--font-information-normal);
+    font-size: 1.05rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+#confirm-popup .popup-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+#confirm-popup .popup-buttons button {
+    flex: 1;
+
+    border: none;
+    outline: none;
+
+    padding: 1rem;
+
+    border-radius: 18px;
+
+    cursor: pointer;
+
+    font-size: 1rem;
+    font-family: var(--font-information-medium);
+
+    color: white;
+
+    transition: all .2s ease;
+}
+
+#confirm-cancel {
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    backdrop-filter: blur(10px);
+}
+
+#confirm-cancel:hover {
+    background: rgba(255,255,255,.15);
+
+    transform: translateY(-2px);
+}
+
+#confirm-ok {
+    background-image: var(--linear-gradient-button-purple);
+
+    box-shadow: 0 0 18px rgba(126,45,193,.35);
+}
+
+#confirm-ok:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 0 25px rgba(126,45,193,.55);
+}
+
+#confirm-ok:active,
+#confirm-cancel:active {
+    transform: scale(.97);
 }
