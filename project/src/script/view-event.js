@@ -321,10 +321,7 @@ function loadItemDetails(attributeID, eventID) {
         const singleItem = document.createElement('div');
         singleItem.classList.add('single-item');
         singleItem.innerHTML = `<p>${item.name}</p>`;
-        singleItem.innerHTML += `<div onclick="revealInfo()" class="item-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
-</svg>
-</div>`;
+    
         singleItem.innerHTML += `
 <div
 class="item-already-done-button ${item.is_done == 1 ? 'done' : ''}"
@@ -393,10 +390,7 @@ function changeButton(itemID) {
 
             button.classList.toggle("done");
 
-            const row =
-                button.closest("#single-item");
-
-            row.classList.toggle("done");
+            
 
         });
 }

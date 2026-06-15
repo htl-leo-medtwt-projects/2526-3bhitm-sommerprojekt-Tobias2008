@@ -126,6 +126,9 @@ switch ($action) {
     case 'increaseMemberLimit':
         increaseMemberLimit();
         break;
+    case 'searchEvents':
+        searchEvents();
+        break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -995,8 +998,8 @@ function checkMemberLimit()
     returnJSON(
         true,
         [
-            "current" => (int)$members['members'],
-            "max" => (int)$event['max_members']
+            "current" => (int) $members['members'],
+            "max" => (int) $event['max_members']
         ],
         null
     );
@@ -1021,4 +1024,81 @@ function increaseMemberLimit()
     }
 
     returnJSON(true);
+}
+
+function searchEvents()
+{
+    global $conn;
+
+    if (!isset($_SESSION['username'])) {
+        returnJSON(false, null, "Nicht eingeloggt");
+        return;
+    }
+
+    $search = trim($_GET['query'] ?? '');
+
+    if ($search === '') {
+        returnJSON(true, [], null);
+        return;
+    }
+
+    $currentUser = $_SESSION['username'];
+
+    $searchLike = "%" . $search . "%";
+
+    $stmt = $conn->prepare("
+        SELECT DISTINCT
+            e.*,
+            creator.username AS owner
+
+        FROM event e
+
+        JOIN attendance a
+            ON e.event_id = a.event_id
+
+        JOIN attendance creator
+            ON e.event_id = creator.event_id
+            AND creator.is_creator = 1
+
+        JOIN friend f
+            ON (
+                (f.user_a = ? AND f.user_b = creator.username)
+                OR
+                (f.user_b = ? AND f.user_a = creator.username)
+            )
+
+        WHERE
+            a.username = ?
+
+        AND
+        (
+            e.name LIKE ?
+            OR e.title_text LIKE ?
+            OR e.information LIKE ?
+            OR creator.username LIKE ?
+        )
+    ");
+
+    $stmt->bind_param(
+        "sssssss",
+        $currentUser,
+        $currentUser,
+        $currentUser,
+        $searchLike,
+        $searchLike,
+        $searchLike,
+        $searchLike
+    );
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    $events = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $events[] = $row;
+    }
+
+    returnJSON(true, $events, null);
 }

@@ -1,5 +1,5 @@
 // CONSTANT PATTERNS
-
+const searchInput = document.getElementById("event-name");
 
 const favoriteEventForm =
     `<div class="favorite-event-image"></div>
@@ -151,12 +151,7 @@ function displayFavoriteEvents(user) {
                 eventElement.querySelector('.favorite-event-image').style.backgroundImage = 'url(../../ressources/images/placeholder_event.jpg)';
             }
 
-            for (let i = 0; i < event.length; i++) {
-                if (!event[i] == undefined || event[i] == null || event[i] == "") {
-                    event[i] = "-"
-                }
-
-            }
+    
 
             document.querySelectorAll('.eventTitle')[num].innerHTML = event.name;
             document.querySelectorAll('.title-text')[num].innerHTML = event.title_text;
@@ -237,3 +232,112 @@ function getEventInfo(event){
     return info;
 }
 
+
+
+searchInput.addEventListener("input", async (e) => {
+
+    const query = e.target.value.trim();
+
+    const favoriteSection = document.getElementById("favorite-events");
+    const favoriteSlider = document.getElementById("event-slider-padding");
+    const eventsForYou = document.getElementById("event-for-user");
+    const allEvents = document.getElementById("all-events");
+
+    const searchResults = document.getElementById("search-results");
+    const noResults = document.getElementById("no-search-results");
+
+    /*
+        Keine Suche -> normale Ansicht
+    */
+
+    if (query === "") {
+
+        favoriteSection.style.display = "block";
+        favoriteSlider.style.display = "block";
+        eventsForYou.style.display = "block";
+        allEvents.style.display = "block";
+
+        searchResults.innerHTML = "";
+        noResults.innerHTML = "";
+
+        return;
+    }
+
+    /*
+        Normale Events ausblenden
+    */
+
+    favoriteSection.style.display = "none";
+    favoriteSlider.style.display = "none";
+    eventsForYou.style.display = "none";
+    allEvents.style.display = "none";
+
+    /*
+        Suche
+    */
+
+    const response = await fetch(
+        `../php/event.php?action=searchEvents&query=${encodeURIComponent(query)}`
+    );
+
+    const data = await response.json();
+
+    searchResults.innerHTML = "";
+    noResults.innerHTML = "";
+
+    if (!data.success) {
+        noResults.innerHTML = "Fehler bei der Suche";
+        return;
+    }
+
+    if (data.data.length === 0) {
+        noResults.innerHTML = "Keine Events gefunden";
+        return;
+    }
+
+    data.data.forEach(event => {
+
+        const eventElement = document.createElement("div");
+
+        eventElement.classList.add("single-event");
+
+        eventElement.innerHTML = normalEventForm;
+
+        searchResults.appendChild(eventElement);
+
+        /*
+            Bild
+        */
+
+        if (event.image_src) {
+            eventElement.querySelector('.single-event-image')
+                .style.backgroundImage = `url(${event.image_src})`;
+        } else {
+            eventElement.querySelector('.single-event-image')
+                .style.backgroundImage =
+                'url(../../ressources/images/placeholder_event.jpg)';
+        }
+
+        /*
+            Daten
+        */
+
+        eventElement.querySelector('.single-event-owner')
+            .innerHTML = `Owner: ${event.owner}`;
+
+        eventElement.querySelector('.single-event-title')
+            .innerHTML = event.name;
+
+        eventElement.querySelector('.single-event-text-title')
+            .innerHTML = event.title_text;
+
+        eventElement.querySelector('.single-event-information')
+            .innerHTML = getEventInfo(event);
+
+        eventElement.querySelector('.single-event-button')
+            .innerHTML =
+            `<a href="./view-Event.html?event_id=${event.event_id}">
+                Read more...
+            </a>`;
+    });
+});
