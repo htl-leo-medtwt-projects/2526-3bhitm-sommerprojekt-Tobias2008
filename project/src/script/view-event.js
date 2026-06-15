@@ -101,17 +101,17 @@ async function displayEvent() {
 
 
 
-    if (eventData.image_url) {
-        document.getElementById('event-image').style.backgroundImage = `url(${eventData.image_url})`;
-    } else {
-        document.getElementById('event-image').style.backgroundImage = `url('../../ressources/images/profile/pre-saved-images/blackMonster.jpg')`;
-    }
-
     document.getElementById('event-title').innerText = eventData.name;
     document.getElementById('title-text').innerText = eventData.title_text;
     document.getElementById('information').innerText = eventData.information;
+    
+    let eventimage = eventData.image_src;
 
-
+    if (eventimage) {
+        document.getElementById('event-image').style.backgroundImage = `url(${eventimage})`;
+    } else {
+        document.getElementById('event-image').style.backgroundImage = `url('../../ressources/images/placeholder_event.jpg')`;
+    }
 
     document.getElementById('items').innerHTML = '';
 
@@ -482,6 +482,9 @@ function displayMembers() {
     membersContainer.innerHTML = '';
 
     getMembers(eventID).then(members => {
+        if (!members) {
+            return;
+        }
         members.forEach(member => {
             const memberElement = document.createElement('div');
             memberElement.classList.add('member');
@@ -792,8 +795,74 @@ async function loadFriendsForAdding() {
     });
 }
 
+async function getMemberLimit() {
+
+    const response =
+        await fetch(
+            "../php/event.php?action=checkMemberLimit&event_id=" +
+            eventID
+        );
+
+    const data =
+        await response.json();
+
+    if (data.success) {
+        return data.data;
+    }
+
+    return null;
+}
 async function addFriendToEvent(username) {
 
+    const limit =
+        await getMemberLimit();
+
+    if (!limit) {
+        showPopup("Could not check member limit", "error");
+        return;
+    }
+
+    if (limit.current >= limit.max) {
+
+        const confirmed =
+            await showMemberLimitPopup(
+                `The event is full (${limit.max}/${limit.max}).
+
+Adding another member will increase the limit to ${limit.max + 1}.`
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const increaseResponse =
+            await fetch(
+                "../php/event.php?action=increaseMemberLimit",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+                    body: `event_id=${eventID}`
+                }
+            );
+
+        const increaseData =
+            await increaseResponse.json();
+
+        if (!increaseData.success) {
+
+            showPopup(
+                increaseData.error,
+                "error"
+            );
+
+            return;
+        }
+    }
+
+    // AB HIER DEIN ALTER CODE
     const response =
         await fetch(
             "../php/event.php?action=addMemberToEvent",
@@ -938,4 +1007,39 @@ async function deleteEvent() {
             console.error(error);
 
         });
+}
+
+function showMemberLimitPopup(message) {
+
+    return new Promise(resolve => {
+
+        const popup =
+            document.getElementById(
+                "member-limit-popup"
+            );
+
+        document.getElementById(
+            "member-limit-text"
+        ).innerText = message;
+
+        popup.classList.add("active");
+
+        document.getElementById(
+            "member-limit-add"
+        ).onclick = () => {
+
+            popup.classList.remove("active");
+
+            resolve(true);
+        };
+
+        document.getElementById(
+            "member-limit-cancel"
+        ).onclick = () => {
+
+            popup.classList.remove("active");
+
+            resolve(false);
+        };
+    });
 }

@@ -119,6 +119,13 @@ switch ($action) {
     case 'deleteEvent':
         deleteEvent();
         break;
+    case 'checkMemberLimit':
+        checkMemberLimit();
+        break;
+
+    case 'increaseMemberLimit':
+        increaseMemberLimit();
+        break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -955,4 +962,63 @@ function deleteEvent()
             $e->getMessage()
         );
     }
+}
+
+function checkMemberLimit()
+{
+    global $conn;
+
+    $eventId = $_GET['event_id'];
+
+    $stmt = $conn->prepare("
+        SELECT max_members
+        FROM event
+        WHERE event_id = ?
+    ");
+
+    $stmt->bind_param("i", $eventId);
+    $stmt->execute();
+
+    $event = $stmt->get_result()->fetch_assoc();
+
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) as members
+        FROM attendance
+        WHERE event_id = ?
+    ");
+
+    $stmt->bind_param("i", $eventId);
+    $stmt->execute();
+
+    $members = $stmt->get_result()->fetch_assoc();
+
+    returnJSON(
+        true,
+        [
+            "current" => (int)$members['members'],
+            "max" => (int)$event['max_members']
+        ],
+        null
+    );
+}
+
+function increaseMemberLimit()
+{
+    global $conn;
+
+    $eventId = $_POST['event_id'];
+
+    $stmt = $conn->prepare("
+        UPDATE event
+        SET max_members = max_members + 1
+        WHERE event_id = ?
+    ");
+
+    $stmt->bind_param("i", $eventId);
+
+    if (!$stmt->execute()) {
+        returnJSON(false, null, "Could not increase limit");
+    }
+
+    returnJSON(true);
 }
