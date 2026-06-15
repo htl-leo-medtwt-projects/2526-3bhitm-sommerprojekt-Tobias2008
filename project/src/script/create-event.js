@@ -9,13 +9,13 @@ box.addEventListener("click", () => input.click());
 
 // Drag over
 box.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  box.classList.add("dragover");
+    e.preventDefault();
+    box.classList.add("dragover");
 });
 
 // Drag leave
 box.addEventListener("dragleave", () => {
-  box.classList.remove("dragover");
+    box.classList.remove("dragover");
 });
 
 // Drop
@@ -41,36 +41,36 @@ box.addEventListener("drop", (e) => {
 
 function createEvent() {
 
-  console.log("Erstelle Event...");
+    console.log("Erstelle Event...");
 
-  fetch("../php/event.php?action=create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: new URLSearchParams({
-      eventName: "Geburtstag",
-      eventTitle: "Max Party",
-      eventDescription: "Geburtstagsfeier mit Freunden",
-      eventDate: "2026-05-01",
-      eventLocation: "Linz",
-      eventMaxMembers: "20",
-      eventImageSrc: ""
+    fetch("../php/event.php?action=create", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+            eventName: "Geburtstag",
+            eventTitle: "Max Party",
+            eventDescription: "Geburtstagsfeier mit Freunden",
+            eventDate: "2026-05-01",
+            eventLocation: "Linz",
+            eventMaxMembers: "20",
+            eventImageSrc: ""
+        })
     })
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log("Server Antwort:", data);
+        .then(response => response.json())
+        .then(data => {
+            console.log("Server Antwort:", data);
 
-      if (data.success) {
-        console.log("Event ID:", data.data.id);
-      } else {
-        console.error("Fehler:", data.error);
-      }
-    })
-    .catch(err => {
-      console.error("Fetch Fehler:", err);
-    });
+            if (data.success) {
+                console.log("Event ID:", data.data.id);
+            } else {
+                console.error("Fehler:", data.error);
+            }
+        })
+        .catch(err => {
+            console.error("Fetch Fehler:", err);
+        });
 
 }
 
@@ -94,3 +94,241 @@ input.addEventListener("change", () => {
 
     }
 });
+
+let selectedMembers = [];
+
+document
+    .getElementById("add-members-box")
+    .addEventListener("click", async () => {
+
+        document
+            .getElementById("member-popup")
+            .classList.add("active");
+
+        await loadFriends();
+    });
+
+document
+    .getElementById("close-member-popup")
+    .addEventListener("click", () => {
+
+        document
+            .getElementById("member-popup")
+            .classList.remove("active");
+    });
+
+
+async function getFriends() {
+
+    const response =
+        await fetch(
+            "../php/friends.php?action=getFriends"
+        );
+
+    const data =
+        await response.json();
+
+    if (data.success) {
+        return data.data;
+    }
+
+    return [];
+}
+async function loadFriends() {
+
+    const container =
+        document.getElementById("friends-list");
+
+    container.innerHTML = "";
+
+    const friends =
+        await getFriends();
+
+    const availableFriends =
+        friends.filter(friend =>
+            !selectedMembers.some(
+                member =>
+                    member.username === friend.username
+            )
+        );
+
+    if (availableFriends.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-friends">
+                No friends available
+            </div>
+        `;
+
+        return;
+    }
+
+    availableFriends.forEach(friend => {
+
+        const row =
+            document.createElement("div");
+
+        row.classList.add("friend-row");
+
+        let image =
+            "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
+
+        if (
+            friend.image_src &&
+            friend.image_src !== "null" &&
+            friend.image_src !== null &&
+            friend.image_src !== undefined
+        ) {
+
+            const value =
+                String(friend.image_src).trim();
+
+            if (
+                value.includes("/") ||
+                value.includes(".jpg") ||
+                value.includes(".png") ||
+                value.includes(".jpeg") ||
+                value.includes("http")
+            ) {
+
+                image = value;
+            }
+            else {
+
+                image =
+                    `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
+            }
+        }
+
+        row.innerHTML = `
+    <div class="member-info">
+
+        <img
+            src="${image}"
+            class="member-avatar"
+            alt="${friend.username}"
+            onerror="this.src='../../ressources/images/profile/pre-saved-images/blackMonster.jpg'"
+        >
+
+        <span>${friend.username}</span>
+
+    </div>
+
+    <div class="friend-add">
+        +
+    </div>
+`;
+
+        row.querySelector(".friend-add")
+            .onclick = () =>
+                addMember(friend);
+        container.appendChild(row);
+    });
+}
+
+function addMember(friend) {
+
+    selectedMembers.push(friend);
+
+    updateSelectedMembers();
+
+    loadFriends();
+}
+
+function updateSelectedMembers() {
+
+    const container =
+        document.getElementById(
+            "selected-members"
+        );
+
+    container.innerHTML = "";
+
+    selectedMembers.forEach(user => {
+
+        let image =
+            "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
+
+        if (
+            user.image_src &&
+            user.image_src !== "null" &&
+            user.image_src !== null &&
+            user.image_src !== undefined
+        ) {
+
+            const value =
+                String(user.image_src).trim();
+
+            /* FERTIGER PFAD */
+
+            if (
+                value.includes("/") ||
+                value.includes(".jpg") ||
+                value.includes(".png") ||
+                value.includes(".jpeg") ||
+                value.includes("http")
+            ) {
+
+                image = value;
+            }
+
+            /* NUR FARBE */
+
+            else {
+
+                image =
+                    `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
+            }
+        }
+
+        const row =
+            document.createElement("div");
+
+        row.classList.add("member-row");
+
+        row.innerHTML = `
+
+        <div class="member-info">
+
+            <img
+                src="${image}"
+                class="member-avatar"
+                alt="${user.username}"
+                onerror="this.src='../../ressources/images/profile/pre-saved-images/blackMonster.jpg'"
+            >
+
+            <span>${user.username}</span>
+
+        </div>
+
+        <span class="remove-member">
+            ✕
+        </span>
+    `;
+
+        row.querySelector(".remove-member")
+            .onclick = () =>
+                removeMember(user.username);
+
+        container.appendChild(row);
+    });
+
+    document
+        .getElementById("members")
+        .value =
+        JSON.stringify(
+            selectedMembers
+        );
+}
+
+function removeMember(username) {
+
+    selectedMembers =
+        selectedMembers.filter(
+            member =>
+                member.username !== username
+        );
+
+    updateSelectedMembers();
+    loadFriends();
+}

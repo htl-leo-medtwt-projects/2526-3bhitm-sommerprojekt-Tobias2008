@@ -197,7 +197,7 @@ async function displayEvent() {
         itemElement.appendChild(itemName);
         itemElement.appendChild(itemButton);
         document.getElementById('items').appendChild(itemElement);
-        document.getElementById('items').appendChild(createAttributeButton);
+        document.getElementById('view-event').appendChild(createAttributeButton);
     });
 
 

@@ -183,10 +183,52 @@ function createEvent()
         ");
         $stmtAttendance->bind_param("si", $_SESSION['username'], $eventID);
         $stmtAttendance->execute();
+
+
+        $members = [];
+
+        if (!empty($_POST['members'])) {
+            $members = json_decode($_POST['members'], true);
+        }
+
+
+        /*
+         * Alle ausgewählten Mitglieder zum Event hinzufügen
+         */
+        if (!empty($members)) {
+
+            $stmtMember = $conn->prepare("
+        INSERT INTO attendance
+        (
+            username,
+            event_id,
+            is_creator,
+            has_favorited
+        )
+        VALUES (?, ?, 0, 0)
+    ");
+
+            foreach ($members as $member) {
+
+                $username = $member['username'];
+
+                $stmtMember->bind_param(
+                    "si",
+                    $username,
+                    $eventID
+                );
+
+                $stmtMember->execute();
+            }
+
+        }
+
         $stmtAttendance->close();
     } else {
         die($stmt->error);
     }
+
+
 
     header("Location: ../pages/event.html");
 }
