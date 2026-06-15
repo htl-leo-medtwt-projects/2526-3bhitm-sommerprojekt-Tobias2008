@@ -1004,3 +1004,82 @@ body {
 #confirm-cancel:active {
     transform: scale(.97);
 }
+
+.danger-card {
+    width: calc(100% - 40px);
+    max-width: 520px;
+
+    margin: 1.2em auto 4em auto;
+
+    padding: 1.5rem;
+    box-sizing: border-box;
+
+    border-radius: 18px;
+
+    background: rgba(255, 60, 60, 0.08);
+    border: 1px solid rgba(255, 80, 80, 0.2);
+
+    backdrop-filter: blur(10px);
+}
+
+.danger-title {
+    font-family: var(--font-headline);
+    color: #ff6b6b;
+
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.danger-text {
+    font-family: var(--font-information-normal);
+    color: var(--text-information-light);
+
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+#delete-event {
+    width: 100%;
+    padding: 0.9rem;
+
+    border: none;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        180deg,
+        #ff4d4d 0%,
+        #c92222 100%
+    );
+
+    color: white;
+
+    font-family: var(--font-information-medium);
+    font-size: 1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease,
+        box-shadow 0.2s ease;
+
+    box-shadow:
+        0 4px 14px rgba(255, 45, 45, 0.25);
+}
+
+#delete-event:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+
+    box-shadow:
+        0 8px 20px rgba(255, 45, 45, 0.35);
+}
+
+#delete-event:active {
+    transform: translateY(0);
+}
+
+#delete-event[hidden] {
+    display: none;
+}

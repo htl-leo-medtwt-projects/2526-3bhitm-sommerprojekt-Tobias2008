@@ -71,7 +71,11 @@ async function getItemDetails() {
 }
 
 async function displayEvent() {
-
+    if (isOwner) {
+        document
+            .getElementById("danger-zone")
+            .style.display = "block";
+    }
     if (!eventData) {
         console.error("Events konnten nicht geladen werden.");
         return;
@@ -197,8 +201,8 @@ async function displayEvent() {
         itemElement.appendChild(itemName);
         itemElement.appendChild(itemButton);
         document.getElementById('items').appendChild(itemElement);
-        document.getElementById('view-event').appendChild(createAttributeButton);
     });
+    document.getElementById('view-event').appendChild(createAttributeButton);
 
 
 
@@ -208,6 +212,7 @@ async function displayEvent() {
 
 
 function loadItemDetails(attributeID, eventID) {
+    document.getElementById("danger-zone").style.display = "none";
     const selectedItem = itemDetails.filter(item => item.attribute_id === attributeID);
     const selectedItemCategory = items.find(item => item.attribute_id === attributeID);
 
@@ -499,7 +504,8 @@ function displayMembers() {
 
                         const confirmed =
                             await showConfirmPopup(
-                                `Do you really want to remove "${member}" from this event?`
+                                `Do you really want to remove "${member}" from this event?`,
+                                "Remove Member"
                             );
 
                         if (!confirmed) return;
@@ -694,16 +700,11 @@ async function checkOwner() {
 
         if (isOwner) {
 
-            document
-                .getElementById(
-                    "add-member-button"
-                )
-                .style.display = "block";
-            document
+            document.getElementById("add-member-button").style.display = "block";
+            document.getElementById("friends-dropdown-wrapper").style.display = "block";
 
-                .getElementById("friends-dropdown-wrapper")
+            document.getElementById("danger-zone").style.display = "block";
 
-                .style.display = "block";
 
         }
     }
@@ -837,12 +838,18 @@ async function addFriendToEvent(username) {
 
 
 
-function showConfirmPopup(message) {
+function showConfirmPopup(
+    message,
+    title = "Confirmation"
+) {
 
     return new Promise(resolve => {
 
         const popup =
             document.getElementById("confirm-popup");
+
+        document.getElementById("confirm-title")
+            .innerText = title;
 
         document.getElementById("confirm-text")
             .innerText = message;
@@ -863,4 +870,72 @@ function showConfirmPopup(message) {
             resolve(false);
         };
     });
+}
+
+document
+    .getElementById("delete-event")
+    .addEventListener("click", deleteEvent);
+
+async function deleteEvent() {
+
+    const confirmed =
+        await showConfirmPopup(
+            "Do you really want to delete this event permanently?",
+            "Delete Event"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "event_id",
+        eventID
+    );
+
+    fetch(
+        "../php/event.php?action=deleteEvent",
+        {
+            method: "POST",
+            body: formData
+        }
+    )
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.success) {
+
+                showPopup(
+                    "Event deleted",
+                    "success"
+                );
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "event.html";
+
+                }, 1000);
+
+            } else {
+
+                showPopup(
+                    data.error,
+                    "error"
+                );
+            }
+
+        })
+        .catch(error => {
+
+            showPopup(
+                "An unexpected error occurred",
+                "error"
+            );
+
+            console.error(error);
+
+        });
 }

@@ -116,6 +116,9 @@ switch ($action) {
     case 'removeMemberFromEvent':
         removeMemberFromEvent();
         break;
+    case 'deleteEvent':
+        deleteEvent();
+        break;
     default:
         saveSessionData(false, null, "Ungültige Aktion");
 }
@@ -854,3 +857,102 @@ function removeMemberFromEvent()
     }
 }
 
+
+function deleteEvent()
+{
+    global $conn;
+
+    $eventID = $_POST['event_id'];
+
+    // Prüfen ob User Owner ist
+
+    $stmt = $conn->prepare("
+        SELECT *
+        FROM attendance
+        WHERE event_id = ?
+        AND username = ?
+        AND is_creator = 1
+    ");
+
+    $stmt->bind_param(
+        "is",
+        $eventID,
+        $_SESSION['username']
+    );
+
+    $stmt->execute();
+
+    if ($stmt->get_result()->num_rows === 0) {
+
+        returnJSON(
+            false,
+            null,
+            "Keine Berechtigung"
+        );
+
+        return;
+    }
+
+    $conn->begin_transaction();
+
+    try {
+
+        // Items löschen
+
+        $stmt = $conn->prepare("
+            DELETE FROM item
+            WHERE event_id = ?
+        ");
+
+        $stmt->bind_param("i", $eventID);
+        $stmt->execute();
+
+        // Attribute löschen
+
+        $stmt = $conn->prepare("
+            DELETE FROM attribute
+            WHERE event_id = ?
+        ");
+
+        $stmt->bind_param("i", $eventID);
+        $stmt->execute();
+
+        // Attendance löschen
+
+        $stmt = $conn->prepare("
+            DELETE FROM attendance
+            WHERE event_id = ?
+        ");
+
+        $stmt->bind_param("i", $eventID);
+        $stmt->execute();
+
+        // Event löschen
+
+        $stmt = $conn->prepare("
+            DELETE FROM event
+            WHERE event_id = ?
+        ");
+
+        $stmt->bind_param("i", $eventID);
+        $stmt->execute();
+
+        $conn->commit();
+
+        returnJSON(
+            true,
+            null,
+            null
+        );
+
+    } catch (Exception $e) {
+
+        $conn->rollback();
+
+        returnJSON(
+            false,
+            null,
+            $e->getMessage()
+        );
+    }
+}

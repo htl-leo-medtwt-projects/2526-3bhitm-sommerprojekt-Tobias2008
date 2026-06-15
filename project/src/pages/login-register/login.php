@@ -16,6 +16,7 @@ include "../../php/global.php";
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/login.css">
     <link rel="icon" type="image/png" sizes="32x32" href="../../../ressources/images/icon.png">
+    <script src="../../script/login.js" defer></script>
 </head>
 
 <body>
@@ -23,16 +24,8 @@ include "../../php/global.php";
     <h1 id="headline">Login</h1>
     <form action="../../php/user.php" method="POST">
         <input type="text" placeholder="Nickname..." name="username" id="username">
-        <?php if (isset($_SESSION['error']) && $_SESSION['error']['success'] === false && $_SESSION['error']['error'] === "Username is not registered.") {
-                    echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
-                }
-        ?>
         <div id="password-actions">
         <input type="password" placeholder="Password..." name="password" id="password">
-        <?php if (isset($_SESSION['error']) && $_SESSION['error']['success'] === false && $_SESSION['error']['error'] === "Password is wrong.") {
-                    echo '<p class="error">' . $_SESSION['error']['error'] . '</p>';
-                }
-        ?>
             <Label id="forgot-password">Forgot Password?</Label>
         </div>
 

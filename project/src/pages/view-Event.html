@@ -97,13 +97,13 @@
 
             <h2>Members</h2>
 
-            
+
 
             <div id="friends-dropdown-wrapper">
-<div id="add-member-button">
-                + Add Member
-            </div>
-                
+                <div id="add-member-button">
+                    + Add Member
+                </div>
+
 
                 <div id="friends-dropdown">
                 </div>
@@ -141,28 +141,41 @@
 
     <div id="confirm-popup" class="popup-overlay">
 
-    <div class="popup-box">
+        <div class="popup-box">
 
-        <h3>Remove Member</h3>
+            <h3 id="confirm-title">Confirmation</h3>
+            <p id="confirm-text"></p>
 
-        <p id="confirm-text"></p>
+            <div class="popup-buttons">
 
-        <div class="popup-buttons">
+                <button id="confirm-cancel">
+                    Cancel
+                </button>
 
-            <button id="confirm-cancel">
-                Cancel
-            </button>
+                <button id="confirm-ok">
+                    Remove
+                </button>
 
-            <button id="confirm-ok">
-                Remove
-            </button>
+            </div>
 
         </div>
 
     </div>
 
-</div>
-    
+    <div id="danger-zone" class="danger-card" style="display: none;">
+        <h3 class="danger-title">
+            Danger Zone
+        </h3>
+
+        <p class="danger-text">
+            Deleting this event will permanently remove
+            all members, categories and items.
+        </p>
+
+        <button id="delete-event">
+            Delete Event
+        </button>
+    </div>
 
     <footer class="speacialfooter">
         <p>&copy; 2026 Payreder Management. All rights reserved.</p>
