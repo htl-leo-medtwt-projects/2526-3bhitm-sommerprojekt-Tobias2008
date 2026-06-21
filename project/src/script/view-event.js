@@ -359,40 +359,34 @@ const itemDetailTemplate = `
 
 function changeButton(itemID) {
 
-    fetch(
-        '../php/event.php?action=markItemDone',
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type':
-                    'application/x-www-form-urlencoded'
-            },
-            body:
-                `item_id=${itemID}` +
-                `&event_id=${eventID}`
-        }
-    )
+    fetch('../php/event.php?action=markItemDone', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body:
+            `item_id=${itemID}` +
+            `&event_id=${eventID}`
+    })
+    .then(res => res.json())
+    .then(async data => {
 
-        .then(res => res.json())
+    if (!data.success) {
+        showPopup(data.error, "error");
+        return;
+    }
 
-        .then(data => {
+    showPopup(data.error, "success");
 
-            if (!data.success) {
+    itemDetails = await getItemDetails();
 
-                showPopup(data.error, "error");
-                return;
-            }
+    const currentAttribute =
+        itemDetails.find(i => i.id == itemID).attribute_id;
 
-            const button =
-                document.querySelector(
-                    `.item-already-done-button[onclick="changeButton(${itemID})"]`
-                );
+    loadItemDetails(currentAttribute, eventID);
 
-            button.classList.toggle("done");
+});
 
-            
-
-        });
 }
 
 const viewMemberButton =
@@ -855,8 +849,6 @@ Adding another member will increase the limit to ${limit.max + 1}.`
             return;
         }
     }
-
-    // AB HIER DEIN ALTER CODE
     const response =
         await fetch(
             "../php/event.php?action=addMemberToEvent",

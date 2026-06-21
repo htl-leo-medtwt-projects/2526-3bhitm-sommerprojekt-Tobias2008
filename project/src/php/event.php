@@ -169,6 +169,8 @@ function createEvent()
         }
     }
 
+    $eventImageSrc = str_replace('../../', './', $eventImageSrc);
+
     $stmt = $conn->prepare("
         INSERT INTO event
         (name, title_text, information, event_date, location, max_members, image_src)
@@ -429,13 +431,68 @@ function markItemDone($itemID, $eventID)
 {
     global $conn;
 
+    $username = $_SESSION['username'];
+
+    // aktuellen Status holen
+    $stmt = $conn->prepare("
+        SELECT is_done, done_by
+        FROM item
+        WHERE id = ?
+        AND event_id = ?
+    ");
+
+    $stmt->bind_param("ii", $itemID, $eventID);
+    $stmt->execute();
+
+    $item = $stmt->get_result()->fetch_assoc();
+
+    if (!$item) {
+        returnJSON(false, null, "Item nicht gefunden");
+        return;
+    }
+
+    // Item abhaken
+    if ($item['is_done'] == 0) {
+
+        $stmt = $conn->prepare("
+            UPDATE item
+            SET is_done = 1,
+                done_by = ?
+            WHERE id = ?
+            AND event_id = ?
+        ");
+
+        $stmt->bind_param(
+            "sii",
+            $username,
+            $itemID,
+            $eventID
+        );
+
+        $stmt->execute();
+
+        returnJSON(true, null, "Item wurde abgehakt");
+        return;
+    }
+
+    // Item wieder entfernen -> nur gleicher User
+    if ($item['done_by'] !== $username) {
+
+        returnJSON(
+            false,
+            [
+                "done_by" => $item['done_by']
+            ],
+            $item['done_by']  . " hat dieses Item bereits übernommen"
+        );
+
+        return;
+    }
+
     $stmt = $conn->prepare("
         UPDATE item
-        SET is_done =
-        CASE
-            WHEN is_done = 1 THEN 0
-            ELSE 1
-        END
+        SET is_done = 0,
+            done_by = NULL
         WHERE id = ?
         AND event_id = ?
     ");
@@ -446,23 +503,9 @@ function markItemDone($itemID, $eventID)
         $eventID
     );
 
-    if ($stmt->execute()) {
+    $stmt->execute();
 
-        returnJSON(
-            true,
-            null,
-            null
-        );
-
-    } else {
-
-        returnJSON(
-            false,
-            null,
-            $stmt->error
-        );
-
-    }
+    returnJSON(true, null, "Item wurde entfernt");
 }
 
 

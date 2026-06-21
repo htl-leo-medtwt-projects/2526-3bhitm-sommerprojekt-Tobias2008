@@ -88,6 +88,7 @@ footer {
 
 .right {
     font-size: 0.8em;
+    width: 100%;
     white-space: nowrap;
     text-align: right;
     color: var(--text-information-light)
@@ -417,4 +418,35 @@ a {
 
     width: 24px;
     height: 24px;
+}
+
+.left,
+.right,
+.single-event-left,
+.single-event-right {
+    min-width: 0;
+}
+
+.eventTitle,
+.single-event-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.single-event-information,
+.informationText {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.single-event {
+    grid-template-columns: 1fr 1fr;
+}
+
+.single-event {
+    overflow: hidden;
 }

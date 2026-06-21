@@ -493,7 +493,7 @@ function selectProfilePicture()
     }
 
     $_SESSION['selectedProfilePicture'] =
-        "../../../ressources/images/profile/pre-saved-images/" .
+        "./ressources/images/profile/pre-saved-images/" .
         $_POST['profile-picture'] .
         "Monster.jpg";
 

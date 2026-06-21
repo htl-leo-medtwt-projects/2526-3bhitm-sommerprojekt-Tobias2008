@@ -252,10 +252,10 @@ searchInput.addEventListener("input", async (e) => {
 
     if (query === "") {
 
-        favoriteSection.style.display = "block";
-        favoriteSlider.style.display = "block";
-        eventsForYou.style.display = "block";
-        allEvents.style.display = "block";
+        favoriteSection.style.display = "flex";
+        favoriteSlider.style.display = "flex";
+        eventsForYou.style.display = "flex";
+        allEvents.style.display = "flex";
 
         searchResults.innerHTML = "";
         noResults.innerHTML = "";
@@ -341,3 +341,4 @@ searchInput.addEventListener("input", async (e) => {
             </a>`;
     });
 });
+
