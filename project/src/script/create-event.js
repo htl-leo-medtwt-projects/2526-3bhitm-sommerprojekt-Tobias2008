@@ -170,8 +170,6 @@ async function loadFriends() {
 
         row.classList.add("friend-row");
 
-        let image =
-            "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
 
         if (
             friend.image_src &&
@@ -180,34 +178,17 @@ async function loadFriends() {
             friend.image_src !== undefined
         ) {
 
-            const value =
+            const value = '../../' + 
                 String(friend.image_src).trim();
-
-            if (
-                value.includes("/") ||
-                value.includes(".jpg") ||
-                value.includes(".png") ||
-                value.includes(".jpeg") ||
-                value.includes("http")
-            ) {
-
-                image = value;
-            }
-            else {
-
-                image =
-                    `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
-            }
         }
 
         row.innerHTML = `
     <div class="member-info">
 
         <img
-            src="${image}"
+            src="${value}"
             class="member-avatar"
             alt="${friend.username}"
-            onerror="this.src='../../ressources/images/profile/pre-saved-images/blackMonster.jpg'"
         >
 
         <span>${friend.username}</span>
@@ -246,9 +227,6 @@ function updateSelectedMembers() {
 
     selectedMembers.forEach(user => {
 
-        let image =
-            "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
-
         if (
             user.image_src &&
             user.image_src !== "null" &&
@@ -256,29 +234,8 @@ function updateSelectedMembers() {
             user.image_src !== undefined
         ) {
 
-            const value =
+            const value = '../.' +
                 String(user.image_src).trim();
-
-            /* FERTIGER PFAD */
-
-            if (
-                value.includes("/") ||
-                value.includes(".jpg") ||
-                value.includes(".png") ||
-                value.includes(".jpeg") ||
-                value.includes("http")
-            ) {
-
-                image = value;
-            }
-
-            /* NUR FARBE */
-
-            else {
-
-                image =
-                    `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
-            }
         }
 
         const row =
@@ -291,10 +248,9 @@ function updateSelectedMembers() {
         <div class="member-info">
 
             <img
-                src="${image}"
+                src="${value}"
                 class="member-avatar"
                 alt="${user.username}"
-                onerror="this.src='../../ressources/images/profile/pre-saved-images/blackMonster.jpg'"
             >
 
             <span>${user.username}</span>

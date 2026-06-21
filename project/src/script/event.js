@@ -146,7 +146,7 @@ function displayFavoriteEvents(user) {
             favoriteEventsContainer.appendChild(eventElement);
 
             if (event.image_src) {
-                eventElement.querySelector('.favorite-event-image').style.backgroundImage = `url(${event.image_src})`;
+                eventElement.querySelector('.favorite-event-image').style.backgroundImage = `url(${'../.' + event.image_src})`;
             } else {
                 eventElement.querySelector('.favorite-event-image').style.backgroundImage = 'url(../../ressources/images/placeholder_event.jpg)';
             }
@@ -184,7 +184,7 @@ function displayAllEvents(user) {
             allEventsContainer.appendChild(eventElement);
 
             if (event.image_src) {
-                eventElement.querySelector('.single-event-image').style.backgroundImage = `url(${event.image_src})`;
+                eventElement.querySelector('.single-event-image').style.backgroundImage = `url(${'../.' + event.image_src})`;
             } else {
                 eventElement.querySelector('.single-event-image').style.backgroundImage = 'url(../../ressources/images/placeholder_event.jpg)';
             }
@@ -311,7 +311,7 @@ searchInput.addEventListener("input", async (e) => {
 
         if (event.image_src) {
             eventElement.querySelector('.single-event-image')
-                .style.backgroundImage = `url(${event.image_src})`;
+                .style.backgroundImage = `url(${'../.' + event.image_src})`;
         } else {
             eventElement.querySelector('.single-event-image')
                 .style.backgroundImage =

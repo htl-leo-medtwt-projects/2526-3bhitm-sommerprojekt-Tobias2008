@@ -43,9 +43,7 @@ function createUserHTML(
     buttonsHTML
 ) {
 
-    let image =
-        "../../ressources/images/profile/pre-saved-images/blackMonster.jpg";
-
+    let value;
     if (
         profilePicture &&
         profilePicture !== "null" &&
@@ -53,29 +51,9 @@ function createUserHTML(
         profilePicture !== undefined
     ) {
 
-        const value =
+        value = '../.' +
             String(profilePicture).trim();
 
-        /* FERTIGER PFAD */
-
-        if (
-            value.includes("/") ||
-            value.includes(".jpg") ||
-            value.includes(".png") ||
-            value.includes(".jpeg") ||
-            value.includes("http")
-        ) {
-
-            image = value;
-        }
-
-        /* NUR FARBE */
-
-        else {
-
-            image =
-                `../../ressources/images/profile/pre-saved-images/${value}Monster.jpg`;
-        }
     }
 
     return `
@@ -85,7 +63,7 @@ function createUserHTML(
         <div class="friend-left">
 
             <img
-                src="${image}"
+                src="${value}"
                 class="friend-avatar"
                 alt="${username}"
                 onerror="this.src='../../ressources/images/profile/pre-saved-images/blackMonster.jpg'"

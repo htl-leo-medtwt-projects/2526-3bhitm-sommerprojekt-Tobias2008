@@ -108,7 +108,7 @@ async function displayEvent() {
     let eventimage = eventData.image_src;
 
     if (eventimage) {
-        document.getElementById('event-image').style.backgroundImage = `url(${eventimage})`;
+        document.getElementById('event-image').style.backgroundImage = `url(${'../.' + eventimage})`;
     } else {
         document.getElementById('event-image').style.backgroundImage = `url('../../ressources/images/placeholder_event.jpg')`;
     }
@@ -247,7 +247,7 @@ function loadItemDetails(attributeID, eventID) {
     itemDetailsDiv.innerHTML = itemDetailTemplate;
 
     if (eventData.image_src) {
-        document.getElementById('item-image').style.backgroundImage = `url(${eventData.image_src})`;
+        document.getElementById('item-image').style.backgroundImage = `url(${'../.' + eventData.image_src})`;
     } else {
         document.getElementById('item-image').style.backgroundImage = `url('../../ressources/images/profile/pre-saved-images/blackMonster.jpg')`;
     }
@@ -487,7 +487,7 @@ function displayMembers() {
             memberElement.querySelector('.member-name').innerText = member;
             memberElement.querySelector('.member-menu').innerHTML = "⋮";
             if (member.image_src) {
-                memberElement.querySelector('.member-avatar').style.backgroundImage = `url(${member.image_src})`;
+                memberElement.querySelector('.member-avatar').style.backgroundImage = `url(${'../.' + member.image_src})`;
             } else {
                 memberElement.querySelector('.member-avatar').style.backgroundImage = 'url(../../ressources/images/profile/pre-saved-images/blackMonster.jpg)';
             }
