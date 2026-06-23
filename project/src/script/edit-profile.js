@@ -20,7 +20,7 @@ function loadProfile(){
                     "../../ressources/images/profile/pre-saved-images/" + user.image_src + "Monster.jpg";
                 } else if (user.image_src) {
                     document.getElementById("profilePicture").src =
-                    user.image_src;
+                    '../.'+user.image_src;
                 } else {
                     document.getElementById("profilePicture").src =
                     "../../ressources/images/profile/pre-saved-images/lightblueMonster.jpg"
